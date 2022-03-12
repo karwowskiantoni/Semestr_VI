@@ -1,14 +1,13 @@
-package model;
+package model.xml;
 
 import jakarta.xml.bind.annotation.*;
-
-import java.util.List;
 
 @XmlRootElement(name = "REUTERS")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Reuters {
   @XmlElement(name = "PLACES")
   private Places PLACES;
+
   @XmlElement(name = "TEXT")
   private Text TEXT;
 

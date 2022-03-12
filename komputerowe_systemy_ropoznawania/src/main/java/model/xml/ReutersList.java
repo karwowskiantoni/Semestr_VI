@@ -1,4 +1,4 @@
-package model;
+package model.xml;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -11,14 +11,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReutersList {
 
-    @XmlElement(name = "REUTERS")
-    private List<Reuters> reutersList;
+  @XmlElement(name = "REUTERS")
+  private List<Reuters> reutersList;
 
-    public List<Reuters> getReutersList() {
-        return reutersList;
-    }
+  public List<Reuters> getReutersList() {
+    return reutersList;
+  }
 
-    public void setReutersList(List<Reuters> reutersList) {
-        this.reutersList = reutersList;
-    }
+  public void setReutersList(List<Reuters> reutersList) {
+    this.reutersList = reutersList;
+  }
 }
