@@ -1,21 +1,30 @@
 package model;
 
-import java.util.Date;
+import jakarta.xml.bind.annotation.*;
+
 import java.util.List;
 
+@XmlRootElement(name = "REUTERS")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Reuters {
-    private Date DATE;
-    private List<Object> TOPICS;
-    private Places PLACES;
-    private Object PEOPLE;
-    private Object ORGS;
-    private Object EXCHANGES;
-    private Object COMPANIES;
-    private String UNKNOWN;
-    private Text TEXT;
-    private String LEWISSPLIT;
-    private String CGISPLIT;
-    private int OLDID;
-    private int NEWID;
-    private String text;
+  @XmlElement(name = "PLACES")
+  private Places PLACES;
+  @XmlElement(name = "TEXT")
+  private Text TEXT;
+
+  public Text getTEXT() {
+    return TEXT;
+  }
+
+  public void setTEXT(Text TEXT) {
+    this.TEXT = TEXT;
+  }
+
+  public Places getPLACES() {
+    return PLACES;
+  }
+
+  public void setPLACES(Places PLACES) {
+    this.PLACES = PLACES;
+  }
 }
