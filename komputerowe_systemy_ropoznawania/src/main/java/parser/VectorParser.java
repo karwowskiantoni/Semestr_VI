@@ -13,8 +13,14 @@ public class VectorParser {
   public static List<Vector> parse(ReutersList reutersList) {
     return reutersList.getReutersList().stream()
         .filter(VectorParser::filterFunction)
-        .map(reuters -> new Vector(reuters.getTEXT().getDATELINE().split(" ")[0]))
+        .map(reuters -> new Vector(
+                  firstWordInDateLine(reuters)
+                ))
         .toList();
+  }
+
+  private static String firstWordInDateLine(Reuters reuters) {
+    return reuters.getTEXT().getDATELINE().split(" ")[0];
   }
 
   private static boolean filterFunction(Reuters reuters) {
