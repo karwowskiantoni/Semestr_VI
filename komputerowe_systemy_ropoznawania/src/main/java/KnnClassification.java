@@ -14,6 +14,6 @@ public class KnnClassification {
     ReutersList reutersList = ReutersParser.parse(data);
     List<Vector> vectorList = VectorParser.parse(reutersList);
     System.out.println(vectorList.size());
-    vectorList.forEach(vector -> System.out.println(vector.firstWordInDateline()));
+    vectorList.forEach(System.out::println);
     }
 }
