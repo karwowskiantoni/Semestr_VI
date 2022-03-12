@@ -1,7 +1,7 @@
 package model;
 
 public class Text {
-    public String TITLE;
-    public String DATELINE;
-    public String BODY;
+    private String TITLE;
+    private String DATELINE;
+    private String BODY;
 }

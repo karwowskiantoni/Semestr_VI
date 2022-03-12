@@ -4,18 +4,18 @@ import java.util.Date;
 import java.util.List;
 
 public class Reuters {
-    public Date DATE;
-    public List<Object> TOPICS;
-    public Places PLACES;
-    public Object PEOPLE;
-    public Object ORGS;
-    public Object EXCHANGES;
-    public Object COMPANIES;
-    public String UNKNOWN;
-    public Text TEXT;
-    public String LEWISSPLIT;
-    public String CGISPLIT;
-    public int OLDID;
-    public int NEWID;
-    public String text;
+    private Date DATE;
+    private List<Object> TOPICS;
+    private Places PLACES;
+    private Object PEOPLE;
+    private Object ORGS;
+    private Object EXCHANGES;
+    private Object COMPANIES;
+    private String UNKNOWN;
+    private Text TEXT;
+    private String LEWISSPLIT;
+    private String CGISPLIT;
+    private int OLDID;
+    private int NEWID;
+    private String text;
 }

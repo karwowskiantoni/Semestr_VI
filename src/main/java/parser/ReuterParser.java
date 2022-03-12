@@ -1,29 +1,17 @@
 package parser;
 
-import model.Reuters;
+import model.ReutersList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.List;
 
 public class ReuterParser {
-    public static List<Reuters> read(String filename) {
-        try {
+    public static ReutersList read(String filename) throws JAXBException {
             File file = new File(filename);
-            JAXBContext jaxbContext = JAXBContext.newInstance(Reuters.class);
-
+            JAXBContext jaxbContext = JAXBContext.newInstance(ReutersList.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Reuters e = (Reuters) jaxbUnmarshaller.unmarshal(file);
-
-        } catch (
-                JAXBException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String toXmlFormat() {
-
+            return (ReutersList) jaxbUnmarshaller.unmarshal(new File(""));
     }
 }

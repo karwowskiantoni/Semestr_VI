@@ -1,5 +1,5 @@
 package model;
 
 public class Places {
-    public String D;
+    private String D;
 }

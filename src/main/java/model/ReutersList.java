@@ -1,2 +1,7 @@
-package model;public class ReutersList {
+package model;
+
+import java.util.List;
+
+public class ReutersList {
+    private List<Reuters> reutersList;
 }
