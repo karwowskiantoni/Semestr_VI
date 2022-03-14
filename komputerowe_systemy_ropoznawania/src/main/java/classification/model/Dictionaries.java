@@ -1,12 +1,9 @@
-package model;
+package classification.model;
 
 import java.util.List;
 
 public class Dictionaries {
-    public static final List<String> AVAILABLE_COUNTRIES =
-            List.of("west-germany", "usa", "france", "uk", "canada", "japan");
-
-    public static final List<String> COUNTRIES_NAMES =
+    public static final List<String> COUNTRIES =
             List.of("west-germany", "usa", "france", "uk", "canada", "japan");
 
     public static final List<String> WEST_GERMANY_KEYWORDS =

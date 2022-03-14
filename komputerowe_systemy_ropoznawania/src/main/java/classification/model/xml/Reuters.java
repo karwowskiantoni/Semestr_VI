@@ -1,4 +1,4 @@
-package model.xml;
+package classification.model.xml;
 
 import jakarta.xml.bind.annotation.*;
 

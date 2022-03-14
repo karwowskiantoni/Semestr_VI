@@ -1,9 +1,11 @@
+package classification;
+
 import jakarta.xml.bind.JAXBException;
-import model.internal.Vector;
-import model.xml.ReutersList;
-import parser.FileReader;
-import parser.ReutersParser;
-import parser.VectorParser;
+import classification.model.internal.Vector;
+import classification.model.xml.ReutersList;
+import classification.parser.FileReader;
+import classification.parser.ReutersParser;
+import classification.parser.VectorParser;
 
 import java.io.IOException;
 import java.util.List;

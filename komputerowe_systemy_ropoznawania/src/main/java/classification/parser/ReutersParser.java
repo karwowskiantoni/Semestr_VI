@@ -1,9 +1,9 @@
-package parser;
+package classification.parser;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import model.xml.ReutersList;
+import classification.model.xml.ReutersList;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ public class ReutersParser {
   }
 
   private static String formatXml(String xml) {
-    return xml.replaceAll("&", "").replaceAll(System.lineSeparator(), "").replaceAll("#", "");
+    return xml.replace("&", "").replace(System.lineSeparator(), "").replace("#", "");
   }
 
   private static InputStream stringToStream(String data) {
