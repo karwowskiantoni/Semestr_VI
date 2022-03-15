@@ -56,14 +56,14 @@ def unit_jump(parameters, x):
 
 
 def unit_impulse(params, x):
-    if x * params.f == params.ns:
+    if int(x * params.f) == params.ns:
         return params.A
     else:
         return 0
 
 
 def noise_impulse(params, x):
-    if np.random.rand() >= params.p:
+    if np.random.rand() <= params.p:
         return params.A
     else:
         return 0

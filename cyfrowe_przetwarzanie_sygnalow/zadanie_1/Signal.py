@@ -16,13 +16,16 @@ class Signal:
         self.type = function.__name__
         self.ticks = generate_ticks(function, parameters)
 
-    def print_plot(self):
+    def print_plot(self, linear=True):
         plt.figure().suptitle(self.type)
-        plt.plot([i/self.parameters.f for i in range(len(self.ticks))], self.ticks)
+        if linear:
+            plt.plot([i/self.parameters.f for i in range(len(self.ticks))], self.ticks)
+        else:
+            plt.scatter([i/self.parameters.f for i in range(len(self.ticks))], self.ticks, s=1)
         plt.show()
 
     def print_histogram(self, divisions_number):
-        plt.hist(self.ticks, [i for i in range(len(self.ticks))])
+        plt.hist(self.ticks, bins=divisions_number)
         plt.show()
 
     def serialize(self, filename):
