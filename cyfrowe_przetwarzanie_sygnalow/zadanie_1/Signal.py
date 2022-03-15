@@ -3,25 +3,31 @@ import matplotlib.pyplot as plt
 
 
 def generate_ticks(function, parameters):
-    return [function(parameters, x) for x in range((parameters.d - parameters.t1) * parameters.f)]
+    try:
+        return [function(parameters, x/parameters.f) for x in range((parameters.d - parameters.t1) * parameters.f)]
+    except Exception:
+        print("empty parameter in function " + function.__name__)
+        return [0]
 
 
 class Signal:
     def __init__(self, function, parameters):
         self.parameters = parameters
+        self.type = function.__name__
         self.ticks = generate_ticks(function, parameters)
+
+    def print_plot(self):
+        plt.figure().suptitle(self.type)
+        plt.plot([i/self.parameters.f for i in range(len(self.ticks))], self.ticks)
+        plt.show()
+
+    def print_histogram(self, divisions_number):
+        plt.hist(self.ticks, [i for i in range(len(self.ticks))])
+        plt.show()
 
     def serialize(self, filename):
         with open(filename, "w") as file:
             file.write(json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4))
-
-    def print_plot(self):
-        plt.plot([i for i in range(len(self.ticks))], self.ticks)
-        plt.show()
-
-    def print_histogram(self):
-        plt.plot(self.ticks, [i for i in range(len(self.ticks))])
-        plt.show()
 
     @staticmethod
     def deserialize(filename):
