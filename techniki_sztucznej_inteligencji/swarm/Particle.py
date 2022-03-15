@@ -1,27 +1,29 @@
 import numpy as np
-import random
-from Fitness import fitness
 
 INERTIA_WEIGHT = 1
 COGNITIVE_CONSTANT = 1
 SOCIAL_CONSTANT = 2
+DIMENSIONS = 20
 
 
-global_best_position = [0] * 100
+global_best_position = [0] * DIMENSIONS
 
 rng = np.random.default_rng()
 
 
 class Particle():
-    def __init__(self, dimensions, lower_bound, upper_bound):
+    def __init__(self, function, dimensions, domain):
+        lower_bound = domain[0]
+        upper_bound = domain[1]
         self.velocity = [0] * dimensions
-        self.position = random.sample(range(1, dimensions), dimensions)
+        self.position = rng.uniform(lower_bound, upper_bound, dimensions)
         self.adaptation = 0
         self.best_position = [0] * dimensions
         self.best_adaptation = np.inf
         self.dimensions = dimensions
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.function = function
 
     def calculate_inertia(self):
         return [INERTIA_WEIGHT * velocity for velocity in self.velocity]
@@ -48,7 +50,7 @@ class Particle():
                 self.position[i] = self.lower_bound
 
     def find_best_adaptation(self):
-        self.adaptation = fitness(self)
+        self.adaptation = self.function(self.position)
         if self.adaptation < self.best_adaptation:
             self.best_position = self.position.copy()
             self.best_adaptation = self.adaptation
