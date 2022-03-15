@@ -1,13 +1,10 @@
-import sys
-sys.path.append("..")
-
-import numpy as np
-import Particle
-from functions import *
 import matplotlib.pyplot as plt
+from functions import *
+import Particle
+import numpy as np
 
 
-ITERATIONS = 100
+ITERATIONS = 1000
 
 
 def generate_swarm(function, dimensions, domain, population_size):
@@ -34,8 +31,9 @@ def find_minimum(swarm):
 
 
 if __name__ == '__main__':
-    swarm = generate_swarm(sphere, 20, SPHERE_DOMAIN, 100)
+    swarm = generate_swarm(rosenbrock, 2, ROSENBROCK_DOMAIN, 100)
     best_positions, best_adaptations = find_minimum(swarm)
-    print(best_positions)
+    print(best_positions[-1])
+    print(best_adaptations[-1])
     plt.plot(np.arange(ITERATIONS), best_adaptations)
     plt.show()
