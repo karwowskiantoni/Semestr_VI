@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from functions import *
+from zadanie_1.functions import *
 import Particle
 import numpy as np
 

@@ -1,5 +1,4 @@
 from typing import List
-import numpy as np
 
 SPHERE_DOMAIN = tuple((-100, 100))
 
