@@ -1,4 +1,8 @@
 import cli
 
 if __name__ == '__main__':
-    cli.main()
+    try:
+        cli.main()
+    except Exception:
+        print("unknown error")
+        cli.main()

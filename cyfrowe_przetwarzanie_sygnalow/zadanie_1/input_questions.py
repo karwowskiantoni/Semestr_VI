@@ -62,8 +62,16 @@ available_signals = {
     'type': 'list',
     'name': 'available_signals',
     'message': 'choose one of available signals:',
-    'choices': lambda x: [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
+    'choices': [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
 }
+
+
+def generate_available_signals():
+    signals = available_signals
+    signals['choices'] = [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
+    return signals
+
+
 divisions = {
     'type': 'list',
     'name': 'divisions',
@@ -158,3 +166,9 @@ name = {
     "message": "Enter the signal name",
     "filter": lambda val: val
 }
+
+
+def get_name(default):
+    selected_name = name
+    name['default'] = default
+    return selected_name

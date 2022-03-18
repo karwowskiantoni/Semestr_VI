@@ -3,7 +3,8 @@ from PyInquirer import prompt
 from Parameters import Parameters
 from functions import uniform_noise, sinus, half_rectified_sinus, rectified_sinus, rectangular, symmetrical_rectangular, \
     triangular, unit_jump, unit_impulse, noise_impulse, gauss_noise
-from input_questions import command_type, signal_type, t1, f, d, A, name, T, kw, p, ns, ts, available_signals, divisions
+from input_questions import command_type, signal_type, t1, f, d, A, name, T, kw, p, ns, ts, generate_available_signals, \
+    divisions, get_name
 from Signal import Signal
 
 
@@ -34,34 +35,35 @@ def main():
             signal = Signal.generate(unit_impulse, Parameters(**(prompt([t1, f, d, A, ns]))))
         elif function == "noise impulse":
             signal = Signal.generate(noise_impulse, Parameters(**(prompt([t1, f, d, A, p]))))
-        signal.print_plot().serialize(prompt([name])["name"])
+        signal.print_plot().serialize(prompt([get_name(signal.type)])["name"])
 
     elif command == "plot":
-        Signal.deserialize(prompt([available_signals])["available_signals"]).print_plot()
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"]).print_plot()
     elif command == "hist":
-        Signal.deserialize(prompt([available_signals])["available_signals"]).print_histogram(prompt([divisions])["divisions"])
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"]).print_histogram(prompt([divisions])["divisions"])
     elif command == "stat":
-        Signal.deserialize(prompt([available_signals])["available_signals"]).print_stats()
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"]).print_stats()
     elif command == "sum":
-        Signal.deserialize(prompt([available_signals])["available_signals"])\
-            .sum(Signal.deserialize(prompt([available_signals])["available_signals"]))\
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"])\
+            .sum(Signal.deserialize(prompt([generate_available_signals()])["available_signals"]))\
             .print_plot()\
             .serialize(prompt([name])["name"])
     elif command == "difference":
-        Signal.deserialize(prompt([available_signals])["available_signals"]) \
-            .difference(Signal.deserialize(prompt([available_signals])["available_signals"])) \
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"]) \
+            .difference(Signal.deserialize(prompt([generate_available_signals()])["available_signals"])) \
             .print_plot() \
             .serialize(prompt([name])["name"])
     elif command == "product":
-        Signal.deserialize(prompt([available_signals])["available_signals"]) \
-            .product(Signal.deserialize(prompt([available_signals])["available_signals"])) \
+        Signal.deserialize(prompt([generate_available_signals()])["available_signals"]) \
+            .product(Signal.deserialize(prompt([generate_available_signals()])["available_signals"])) \
             .print_plot() \
             .serialize(prompt([name])["name"])
     elif command == "divide":
-        Signal.deserialize(prompt([available_signals])["available_signals"]) \
-            .divide(Signal.deserialize(prompt([available_signals])["available_signals"])) \
-            .print_plot() \
-            .serialize(prompt([name])["name"])
+        signal = Signal.deserialize(prompt([generate_available_signals()])["available_signals"]) \
+            .divide(Signal.deserialize(prompt([generate_available_signals()])["available_signals"])) \
+            .print_plot()
+        signal.serialize(prompt([get_name(signal.type)])["name"])
+
     elif command == "exit":
         exit(0)
     main()

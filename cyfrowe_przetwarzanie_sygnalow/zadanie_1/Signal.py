@@ -39,7 +39,10 @@ class Signal:
     def divide(self, signal):
         ticks = []
         for i in range(min(len(self.ticks), len(signal.ticks))):
-            ticks.append(self.ticks[i] / signal.ticks[i])
+            if signal.ticks[i] == 0:
+                ticks.append(self.ticks[i])
+            else:
+                ticks.append(self.ticks[i] / signal.ticks[i])
         return Signal(self.parameters, ticks, self.type + " divide " + signal.type)
 
     def print_plot(self, linear=True):
