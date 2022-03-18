@@ -7,12 +7,15 @@ import numpy as np
 ITERATIONS = 1000
 
 
-def generate_swarm(function, dimensions, domain, population_size):
+def particle_swarm_optimization_algorithm(function, dimensions, inertia_weight, cognitive_constant, social_constant, domain, population_size):
     Particle.DIMENSIONS = dimensions
-    return [Particle.Particle(function, dimensions, domain) for _ in range(population_size)]
+    Particle.global_best_position = [0] * dimensions
+    Particle.INERTIA_WEIGHT = inertia_weight
+    Particle.SOCIAL_CONSTANT = social_constant
+    Particle.COGNITIVE_CONSTANT = cognitive_constant
+    swarm = [Particle.Particle(function, dimensions, domain)
+             for _ in range(population_size)]
 
-
-def find_minimum(swarm):
     global_best_adaptation = np.inf
     best_positions = []
     best_adaptations = []
@@ -31,8 +34,8 @@ def find_minimum(swarm):
 
 
 if __name__ == '__main__':
-    swarm = generate_swarm(rosenbrock, 2, ROSENBROCK_DOMAIN, 100)
-    best_positions, best_adaptations = find_minimum(swarm)
+    best_positions, best_adaptations = particle_swarm_optimization_algorithm(
+        rosenbrock, 2, 0.2, 1, 2, ROSENBROCK_DOMAIN, 100)
     print(best_positions[-1])
     print(best_adaptations[-1])
     plt.plot(np.arange(ITERATIONS), best_adaptations)
