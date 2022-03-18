@@ -3,13 +3,14 @@ import random
 from zadanie_1.evolution.Individual import Individual
 
 
-def differential_evolution_algorithm(function,
-                                     domain,
-                                     dimensions_number,
-                                     population_size,
-                                     iteration_number,
-                                     amplification_factor,
-                                     crossing_factor):
+def differential_evolution_algorithm(
+        function,
+        domain,
+        dimensions_number,
+        population_size,
+        iteration_number,
+        amplification_factor,
+        crossing_factor):
     population = [Individual(
         genome=[random.uniform(domain[0], domain[1]) for _ in range(dimensions_number)],
         fitness_function=function,
@@ -32,4 +33,3 @@ def best_in_population(population):
         if best_individual.fitness() > individual.fitness():
             best_individual = individual
     return best_individual
-
