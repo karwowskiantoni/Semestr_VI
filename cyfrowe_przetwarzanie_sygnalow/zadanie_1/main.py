@@ -1,12 +1,15 @@
 import cli
+import cli_v2
+
 from Signal import Signal
 from Parameters import Parameters
 from functions import gauss_noise, uniform_noise, sinus, half_rectified_sinus, rectified_sinus, unit_jump, rectangular, \
     symmetrical_rectangular, triangular, unit_impulse, noise_impulse
 
 if __name__ == '__main__':
-    while True:
-        cli.execute()
+    cli_v2.main()
+
+
 
     signal = Signal.generate(gauss_noise, Parameters(t1=0, f=60, d=10, A=10))
     signal.print_plot()

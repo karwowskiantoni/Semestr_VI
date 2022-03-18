@@ -1,6 +1,6 @@
 def execute():
     print("->", end='')
-    commands = input().split(" ")
+    commands = input("->").split(" ")
 
     if commands[0] == "ls":
         ls()
@@ -37,7 +37,7 @@ def generate():
     print_colored("generate", WARNING)
 
 
-def generate():
+def chuj():
     print_colored("generate", WARNING)
 
 
