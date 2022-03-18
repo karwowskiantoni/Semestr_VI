@@ -1,3 +1,5 @@
+from os import listdir
+
 from prompt_toolkit.validation import Validator, ValidationError
 
 
@@ -34,22 +36,53 @@ class ZeroToOneValidator(Validator):
                                   cursor_position=len(document.text))
 
 
-command = {
+command_type = {
     'type': 'list',
-    'name': 'command',
-    'message': 'Welcome to SignalGenerator',
-    'choices': ["generate", "sum", "difference", "product", "divide", "exit"]
+    'name': 'command_type',
+    'message': 'choose option:',
+    'choices': ["generate", "sum", "difference", "product", "divide", "plot", "hist", "stat", "exit"]
+}
+signal_type = {
+    'type': 'list',
+    'name': 'signal_type',
+    'message': 'choose function to generate signal:',
+    'choices': ["uniform noise",
+                "gauss noise",
+                "sinus",
+                "half rectified sinus",
+                "rectified sinus",
+                "rectangular",
+                "symmetrical rectangular",
+                "triangular",
+                "unit jump",
+                "unit impulse",
+                "noise impulse"]
+}
+available_signals = {
+    'type': 'list',
+    'name': 'available_signals',
+    'message': 'choose one of available signals:',
+    'choices': lambda x: [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
+}
+divisions = {
+    'type': 'list',
+    'name': 'divisions',
+    'message': 'select histogram number of divisions',
+    'choices': ["5", "10", "15", "20", "25"],
+    'filter': lambda val: int(val)
 }
 A = {
     'type': "input",
     "name": "A",
     "message": "Enter the signal amplitude (A)",
+    "default": "5",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
 T = {
     'type': "input",
     "name": "T",
+    "default": "2",
     "message": "Enter the signal interval (T)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -57,6 +90,7 @@ T = {
 t1 = {
     'type': "input",
     "name": "t1",
+    "default": "0",
     "message": "Enter the signal starting time (t1)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -64,6 +98,7 @@ t1 = {
 d = {
     'type': "input",
     "name": "d",
+    "default": "10",
     "message": "Enter the signal length (d)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -71,6 +106,7 @@ d = {
 kw = {
     'type': "input",
     "name": "kw",
+    "default": "0.5",
     "message": "Enter the fill factor (kw)",
     "validate": ZeroToOneValidator,
     "filter": lambda val: float(val)
@@ -78,6 +114,7 @@ kw = {
 ts = {
     'type': "input",
     "name": "ts",
+    "default": "5",
     "message": "Enter the probe jump time (ts)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -85,6 +122,7 @@ ts = {
 f = {
     'type': "input",
     "name": "f",
+    "default": "60",
     "message": "Enter the signal frequency (f)",
     "validate": IntegerValidator,
     "filter": lambda val: int(val)
@@ -92,6 +130,7 @@ f = {
 p = {
     'type': "input",
     "name": "p",
+    "default": "0.2",
     "message": "Enter the signal noise probability (p)",
     "validate": ZeroToOneValidator,
     "filter": lambda val: float(val)
@@ -99,6 +138,7 @@ p = {
 n1 = {
     'type': "input",
     "name": "n1",
+    "default": "0",
     "message": "Enter the signal first probe number (n1)",
     "validate": IntegerValidator,
     "filter": lambda val: int(val)
@@ -106,7 +146,15 @@ n1 = {
 ns = {
     'type': "input",
     "name": "ns",
+    "default": "100",
     "message": "Enter the signal chosen probe (ns)",
     "validate": IntegerValidator,
     "filter": lambda val: int(val)
+}
+name = {
+    'type': "input",
+    "name": "name",
+    "default": "test",
+    "message": "Enter the signal name",
+    "filter": lambda val: val
 }
