@@ -23,7 +23,7 @@ class Particle:
         self.current_iteration = 0
 
     def calculate_inertia(self):
-        return [self.inertia_weight * velocity for velocity in self.velocity]
+        return [(self.inertia_weight * velocity) * (self.current_iteration / self.iteration_number) for velocity in self.velocity]
 
     def calculate_cognitive_components(self):
         return [self.cognitive_constant * rng.random() * (self.best_position[i] - self.position[i]) for i in range(self.dimensions)]
@@ -33,7 +33,7 @@ class Particle:
 
     def calculate_new_velocity(self, global_best_position):
         self.current_iteration += 1
-        inertia = self.calculate_inertia() * (self.current_iteration / self.iteration_number)
+        inertia = self.calculate_inertia()
         cognitive = self.calculate_cognitive_components()
         social = self.calculate_social_components(global_best_position)
         for i in range(self.dimensions):
