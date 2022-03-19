@@ -13,7 +13,7 @@ def particle_swarm_optimization_algorithm(
         domain,
         population_size):
     global_best_position = [0] * dimensions_number
-    swarm = [Particle(function, dimensions_number, domain, inertia_weight, cognitive_constant, social_constant)
+    swarm = [Particle(function, dimensions_number, domain, inertia_weight, cognitive_constant, social_constant, iteration_number)
              for _ in range(population_size)]
 
     global_best_adaptation = np.inf
