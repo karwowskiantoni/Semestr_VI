@@ -22,7 +22,6 @@ def differential_evolution_algorithm(
     for _ in range(iteration_number):
         for i in range(len(population)):
             population[i] = population[i].offspring(best_in_population(population), random.sample(population, 2))
-        # print(best_in_population(population).fitness())
 
     return best_in_population(population).fitness()
 

@@ -32,7 +32,7 @@ class Individual:
     def cross(self, mutant):
         trial = mutant.copy()
         for i in range(len(trial.genome)):
-            if random.random() > self.crossing_factor:
+            if random.random() < self.crossing_factor:
                 trial.genome[i] = self.genome[i]
         return trial
 
