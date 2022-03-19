@@ -6,7 +6,7 @@ def uniform_noise(params, x):
 
 
 def gauss_noise(params, x):
-    return np.random.randn() * params.A  # todo why is this not generating numbers in range [0, 1]
+    return np.random.randn()
 
 
 def sinus(params, x):
