@@ -45,17 +45,19 @@ class Signal:
                 ticks.append(self.ticks[i] / signal.ticks[i])
         return Signal(self.parameters, ticks, self.type + " divide " + signal.type)
 
-    def print_plot(self, linear=True):
+    def print_plot(self):
         plt.figure().suptitle(self.type)
-        if linear:
-            plt.plot([i / self.parameters.f for i in range(len(self.ticks))], self.ticks)
-        else:
+        if self.type == "unit_impulse" or self.type == "noise_impulse":
             plt.scatter([i / self.parameters.f for i in range(len(self.ticks))], self.ticks, s=1)
+        else:
+            plt.plot([i / self.parameters.f for i in range(len(self.ticks))], self.ticks)
+        plt.savefig("plots/" + self.type)
         plt.show()
         return self
 
     def print_histogram(self, divisions_number):
         plt.hist(self.ticks, bins=divisions_number)
+        plt.savefig("hists/" + self.type)
         plt.show()
         return self
 
@@ -98,13 +100,13 @@ class Signal:
         return value
 
     def serialize(self, filename):
-        with open(filename + ".signal", "w") as file:
+        with open("signals/" + filename + ".signal", "w") as file:
             file.write(js.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4))
         return self
 
     @staticmethod
     def deserialize(filename):
-        with open(filename + ".signal", "r") as file:
+        with open("signals/" + filename + ".signal", "r") as file:
             dictionary = js.loads(file.read())
             signal = Signal(
                 Parameters(
