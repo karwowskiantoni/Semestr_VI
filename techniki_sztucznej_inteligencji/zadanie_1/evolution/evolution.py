@@ -1,5 +1,7 @@
 import random
 
+import numpy as np
+
 from zadanie_1.evolution.Individual import Individual
 
 
@@ -11,7 +13,8 @@ def differential_evolution_algorithm(
         amplification_factor,
         crossing_factor,
         iteration_number=None,
-        expected_fitness=None):
+        expected_fitness=None,
+        customization=False):
     population = [Individual(
         genome=[random.uniform(domain[0], domain[1]) for _ in range(dimensions_number)],
         fitness_function=function,
@@ -24,7 +27,13 @@ def differential_evolution_algorithm(
 
         for _ in range(iteration_number):
             for i in range(len(population)):
-                population[i] = population[i].offspring(best_in_population(population), random.sample(population, 2))
+
+                if customization:
+                    chosen = np.array(sorted(list(population), key=lambda individual: individual.fitness()))[-3:]
+                    population[i] = population[i].offspring(chosen[0], chosen[1:])
+                else:
+                    population[i] = population[i].offspring(best_in_population(population), random.sample(population, 2))
+
         return best_in_population(population).fitness()
 
     elif iteration_number is None and expected_fitness is not None:
@@ -37,7 +46,7 @@ def differential_evolution_algorithm(
         return best_fitness
 
     else:
-        print("weź się kurwa chłopie na coś zdecyduj")
+        print("wrong stop condition")
         return 0
 
 

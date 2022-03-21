@@ -32,7 +32,7 @@ def particle_swarm_optimization_algorithm(
                     global_best_adaptation = particle.best_adaptation
             global_best_position = best_positions[-1]
             best_adaptations.append(global_best_adaptation)
-    elif iteration_number is None and expected_fitness is not None:
+    elif expected_fitness is not None:
         for particle in swarm:
             particle.find_best_adaptation()
             particle.calculate_new_velocity(global_best_position)
