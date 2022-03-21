@@ -62,13 +62,13 @@ available_signals = {
     'type': 'list',
     'name': 'available_signals',
     'message': 'choose one of available signals:',
-    'choices': [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
+    'choices': [file.replace(".signal", "") for file in listdir("signals") if file.__contains__(".signal")]
 }
 
 
 def generate_available_signals():
     signals = available_signals
-    signals['choices'] = [file.replace(".signal", "") for file in listdir() if file.__contains__(".signal")]
+    signals['choices'] = [file.replace(".signal", "") for file in listdir("signals") if file.__contains__(".signal")]
     return signals
 
 
