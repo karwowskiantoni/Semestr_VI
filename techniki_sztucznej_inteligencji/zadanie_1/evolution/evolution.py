@@ -29,7 +29,7 @@ def differential_evolution_algorithm(
             for i in range(len(population)):
 
                 if customization:
-                    chosen = np.array(sorted(list(population), key=lambda individual: individual.fitness()))[-3:]
+                    chosen = np.array(sorted(list(population), key=lambda individual: individual.fitness()))[:3]
                     population[i] = population[i].offspring(chosen[0], chosen[1:])
                 else:
                     population[i] = population[i].offspring(best_in_population(population), random.sample(population, 2))

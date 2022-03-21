@@ -45,7 +45,7 @@ def evolution_with_params(customization=False):
     return results
 
 
-def swarm_with_params():
+def swarm_with_params(customization=False):
     results = []
     for i in tqdm(range(STEPS), ncols=100, position=0, colour="#f5459a"):
         results.append(particle_swarm_optimization_algorithm(
@@ -56,7 +56,8 @@ def swarm_with_params():
             population_size=POPULATION_SIZE,
             inertia_weight=INERTIA_WEIGHT,
             cognitive_constant=COGNITIVE_CONSTANT,
-            social_constant=SOCIAL_CONSTANT
+            social_constant=SOCIAL_CONSTANT,
+            customization=customization
         ))
     return results
 
@@ -67,17 +68,23 @@ if __name__ == '__main__':
     evolution_result_sets = []
     evolution_customization_result_sets = []
     # swarm_result_sets = []
+    # swarm_customization_result_sets = []
 
     for i in range(10):
         evolution_result_sets.append(evolution_with_params())
         evolution_customization_result_sets.append(evolution_with_params(True))
+        # swarm_result_sets.append(swarm_with_params())
+        # swarm_customization_result_sets.append(swarm_with_params(True))
 
     evolution_averages = np.array(evolution_result_sets).mean(axis=0)
     evolution_customization_averages = np.array(evolution_customization_result_sets).mean(axis=0)
     # swarm_averages = np.array(swarm_result_sets).mean(axis=0)
+    # swarm_customization_averages = np.array(swarm_customization_result_sets).mean(axis=0)
 
     plt.plot(x_values, evolution_averages, "#2684ff")
     plt.plot(x_values, evolution_customization_averages, "#f5459a")
+    # plt.plot(x_values, swarm_averages, "#2684ff")
+    # plt.plot(x_values, swarm_customization_averages, "#f5459a")
     plt.title(FUNCTION.__name__ + " function")
     plt.legend(["evolution", "evolution customized"])
     plt.xlabel("iteration number")

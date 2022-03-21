@@ -4,7 +4,7 @@ rng = np.random.default_rng()
 
 
 class Particle:
-    def __init__(self, function, dimensions, domain, inertia_weight, cognitive_constant, social_constant, iteration_number):
+    def __init__(self, function, dimensions, domain, inertia_weight, cognitive_constant, social_constant, iteration_number, customization=False):
         lower_bound = domain[0]
         upper_bound = domain[1]
         self.velocity = [0] * dimensions
@@ -21,9 +21,13 @@ class Particle:
         self.social_constant = social_constant
         self.iteration_number = iteration_number
         self.current_iteration = 0
+        self.customization = customization
 
     def calculate_inertia(self):
-        return [(self.inertia_weight * velocity) * (self.current_iteration / self.iteration_number) for velocity in self.velocity]
+        if self.customization:
+            return [(self.inertia_weight * velocity) * (self.current_iteration / self.iteration_number) for velocity in self.velocity]
+        else:
+            return [(self.inertia_weight * velocity) for velocity in self.velocity]
 
     def calculate_cognitive_components(self):
         return [self.cognitive_constant * rng.random() * (self.best_position[i] - self.position[i]) for i in range(self.dimensions)]
