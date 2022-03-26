@@ -5,7 +5,7 @@ import classification.model.Text;
 
 import java.util.List;
 
-public class QualityMeasuresCounter {
+public class QualityMeasuresCalculator {
     public static float accuracy(List<Text> textList) {
         int TP = 0;
         for (Text text : textList) {
