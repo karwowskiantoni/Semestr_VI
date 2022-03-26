@@ -1,4 +1,4 @@
-package classification.parser;
+package classification.extraction;
 
 import java.io.IOException;
 import java.util.Objects;

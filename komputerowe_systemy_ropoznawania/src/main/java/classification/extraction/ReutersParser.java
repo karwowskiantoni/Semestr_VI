@@ -1,17 +1,19 @@
-package classification.parser;
+package classification.extraction;
 
+import classification.extraction.xml.Reuters;
+import classification.extraction.xml.ReutersList;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import classification.model.xml.ReutersList;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 public class ReutersParser {
-  public static ReutersList parse(String data) throws JAXBException {
+  public static List<Reuters> parse(String data) throws JAXBException {
     Unmarshaller unmarshaller = JAXBContext.newInstance(ReutersList.class).createUnmarshaller();
-    return (ReutersList) unmarshaller.unmarshal(stringToStream(formatXml(data)));
+    return ((ReutersList) unmarshaller.unmarshal(stringToStream(formatXml(data)))).getReutersList();
   }
 
   private static String formatXml(String xml) {

@@ -1,4 +1,4 @@
-package classification.model.internal;
+package classification.model;
 
 public record Vector(
         String firstWordInDateline,
