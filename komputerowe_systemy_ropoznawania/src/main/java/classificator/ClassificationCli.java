@@ -28,7 +28,7 @@ public class ClassificationCli implements Callable<Integer> {
   public Integer call() throws Exception {
     List<Text> texts = Extractor.extractAll();
     List<Result> results = Classificator.classifyAll(texts, texts, 100);
-    QualityMeasuresCalculator.printStatistics(results);
+    QualityMeasuresCalculator.printMetrics(results);
     return 0;
   }
 

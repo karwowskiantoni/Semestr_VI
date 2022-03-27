@@ -3,20 +3,57 @@ package classificator.classification;
 import classificator.model.internal.Label;
 import classificator.model.internal.Result;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class QualityMeasuresCalculator {
 
-    public static void printStatistics(List<Result> results) {
-        float precision = precisionForSet(results);
-        float recall = recallForSet(results);
-        System.out.println("Accuracy for data set = " + accuracy(results));
-        System.out.println("Precision for data set = " + precisionForSet(results));
-        System.out.println("Recall for data set = " + recallForSet(results));
-        System.out.println("F1 for data set = " + F1(precision, recall));
+    public static void printMetrics(List<Result> results) {
+        Map<Label, Float> precisionsByLabel = Arrays
+                .stream(Label.values())
+                .collect(
+                        Collectors.toMap(
+                                label -> label,
+                                label -> precisionPerLabel(results, label)
+                        )
+                );
+        Map<Label, Float> recallByLabel = Arrays
+                .stream(Label.values())
+                .collect(
+                        Collectors.toMap(
+                                label -> label,
+                                label -> recallPerLabel(results, label)
+                        )
+                );
+        Map<Label, Float> f1ByLabel = Arrays
+                .stream(Label.values())
+                .collect(
+                        Collectors.toMap(
+                                label -> label,
+                                label -> F1PerLabel(
+                                        precisionsByLabel.get(label),
+                                        recallByLabel.get(label)
+                                )
+                        )
+                );
+
+        float precisionForSet = precisionForSet(results, precisionsByLabel);
+        float recallForSet = recallForSet(results, recallByLabel);
+        float f1ForSet = F1(precisionForSet, recallForSet);
+        float accuracyForSet = accuracy(results);
+
+        precisionsByLabel.forEach((label, precision) -> System.out.println("Precision for label " + label + " = " + precision));
+        recallByLabel.forEach((label, recall) -> System.out.println("Recall for label " + label + " = " + recall));
+        f1ByLabel.forEach((label, f1) -> System.out.println("F1 for label " + label + " = " + f1));
+        System.out.println("Precision for data set = " + precisionForSet);
+        System.out.println("Recall for data set = " + recallForSet);
+        System.out.println("F1 for data set = " + f1ForSet);
+        System.out.println("Accuracy for data set = " + accuracyForSet);
     }
 
-    public static float accuracy(List<Result> results) {
+    private static float accuracy(List<Result> results) {
         int TP = 0;
         for (Result result : results) {
             if (result.correctLabel() == result.predictedLabel()) {
@@ -26,7 +63,7 @@ public class QualityMeasuresCalculator {
         return TP * 1.0f / results.size();
     }
 
-    public static float precisionForSet(List<Result> results) {
+    private static float precisionForSet(List<Result> results, Map<Label, Float> precisionByLabel) {
         Label[] labels = Label.values();
         float PPV = 0.0f;
         for (Label label : labels) {
@@ -34,13 +71,15 @@ public class QualityMeasuresCalculator {
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
-            float precision = precisionPerClass(results, label);
-            PPV += (occurrences * precision) / occurrences;
+            if (occurrences != 0) {
+                float precision = precisionByLabel.get(label);
+                PPV += (occurrences * precision) / occurrences;
+            }
         }
         return PPV;
     }
 
-    public static float recallForSet(List<Result> results) {
+    private static float recallForSet(List<Result> results, Map<Label, Float> recallByLabel) {
         Label[] labels = Label.values();
         float TPR = 0.0f;
         for (Label label : labels) {
@@ -48,23 +87,19 @@ public class QualityMeasuresCalculator {
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
-            float recall = recallPerClass(results, label);
-            TPR += (occurrences * recall) / occurrences;
+            if (occurrences != 0) {
+                float recall = recallByLabel.get(label);
+                TPR += (occurrences * recall) / occurrences;
+            }
         }
         return TPR;
     }
 
-    public static float F1(float precision, float recall) {
+    private static float F1(float precision, float recall) {
         return 2 * ((recall * precision) / (recall + precision));
     }
 
-    public static float F1(List<Result> results) {
-        float PPV = precisionForSet(results);
-        float TPR = recallForSet(results);
-        return 2 * ((TPR * PPV) / (TPR + PPV));
-    }
-
-    public static float precisionPerClass(List<Result> results, Label label) {
+    private static float precisionPerLabel(List<Result> results, Label label) {
         int TP = 0;
         int FP = 0;
         for (Result result : results) {
@@ -74,10 +109,13 @@ public class QualityMeasuresCalculator {
                 FP += 1;
             }
         }
+        if (TP + FP == 0) {
+            return 0;
+        }
         return TP * 1.0f / (TP + FP);
     }
 
-    public static float recallPerClass(List<Result> results, Label label) {
+    private static float recallPerLabel(List<Result> results, Label label) {
         int TP = 0;
         int FN = 0;
         for (Result result : results) {
@@ -87,12 +125,16 @@ public class QualityMeasuresCalculator {
                 FN += 1;
             }
         }
+        if (TP + FN == 0) {
+            return 0;
+        }
         return TP * 1.0f / (TP + FN);
     }
 
-    public static float F1PerClass(List<Result> results, Label label) {
-        float PPV = precisionPerClass(results, label);
-        float TPR = recallPerClass(results, label);
-        return 2 * ((TPR * PPV) / (TPR + PPV));
+    private static float F1PerLabel(float precision, float recall) {
+        if (recall + precision == 0) {
+            return 0;
+        }
+        return 2 * ((recall * precision) / (recall + precision));
     }
 }
