@@ -1,3 +1,3 @@
 package classification.model;
 
-public record Text(Label correctLabel, Label predictedLabel, Vector vector) { }
+public record Text(Label label, Vector vector) { }

@@ -16,7 +16,6 @@ public class TextParser {
             reuters ->
                 new Text(
                     Label.valueOfLiteral(reuters.getPLACES().getD().get(0)),
-                    null,
                     FeatureExtractor.extract(reuters)))
         .toList();
   }

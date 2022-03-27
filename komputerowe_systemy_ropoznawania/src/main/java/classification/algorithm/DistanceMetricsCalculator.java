@@ -1,17 +1,17 @@
 package classification.algorithm;
 
-import classification.model.Text;
+import classification.model.Vector;
 
 public class DistanceMetricsCalculator {
-    public static float taxiCabDistance (Text firstText, Text secondText){
-        return 1.0f * firstText.vector().firstDate() + secondText.vector().firstDate();
+    public static float taxiCabDistance (Vector firstVector, Vector secondVector){
+        return 1.0f * firstVector.firstDate() + secondVector.firstDate();
     }
 
-    public static float euclideanDistance (Text firstText, Text secondText){
-        return 1.0f * firstText.vector().firstDate() + secondText.vector().firstDate();
+    public static float euclideanDistance (Vector firstVector, Vector secondVector){
+        return 1.0f * firstVector.firstDate() + secondVector.firstDate();
     }
 
-    public static float chebyshevDistance (Text firstText, Text secondText){
-        return 1.0f * firstText.vector().firstDate() + secondText.vector().firstDate();
+    public static float chebyshevDistance (Vector firstVector, Vector secondVector){
+        return 1.0f * firstVector.firstDate() + secondVector.firstDate();
     }
 }

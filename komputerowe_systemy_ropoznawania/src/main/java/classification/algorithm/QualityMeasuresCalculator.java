@@ -1,54 +1,54 @@
 package classification.algorithm;
 
 import classification.model.Label;
-import classification.model.Text;
+import classification.model.Result;
 
 import java.util.List;
 
 public class QualityMeasuresCalculator {
 
-    public static void results(List<Text> textList) {
-        float precision = precisionForSet(textList);
-        float recall = recallForSet(textList);
-        System.out.println("Accuracy for data set = " + accuracy(textList));
-        System.out.println("Precision for data set = " + precisionForSet(textList));
-        System.out.println("Recall for data set = " + recallForSet(textList));
+    public static void printResults(List<Result> results) {
+        float precision = precisionForSet(results);
+        float recall = recallForSet(results);
+        System.out.println("Accuracy for data set = " + accuracy(results));
+        System.out.println("Precision for data set = " + precisionForSet(results));
+        System.out.println("Recall for data set = " + recallForSet(results));
         System.out.println("F1 for data set = " + F1(precision, recall));
     }
 
-    public static float accuracy(List<Text> textList) {
+    public static float accuracy(List<Result> results) {
         int TP = 0;
-        for (Text text : textList) {
-            if (text.correctLabel() == text.predictedLabel()) {
+        for (Result result : results) {
+            if (result.correctLabel() == result.predictedLabel()) {
                 TP += 1;
             }
         }
-        return TP * 1.0f / textList.size();
+        return TP * 1.0f / results.size();
     }
 
-    public static float precisionForSet(List<Text> textList) {
+    public static float precisionForSet(List<Result> results) {
         Label[] labels = Label.values();
         float PPV = 0.0f;
         for (Label label : labels) {
-            long occurrences = textList
+            long occurrences = results
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
-            float precision = precisionPerClass(textList, label);
+            float precision = precisionPerClass(results, label);
             PPV += (occurrences * precision) / occurrences;
         }
         return PPV;
     }
 
-    public static float recallForSet(List<Text> textList) {
+    public static float recallForSet(List<Result> results) {
         Label[] labels = Label.values();
         float TPR = 0.0f;
         for (Label label : labels) {
-            long occurrences = textList
+            long occurrences = results
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
-            float recall = recallPerClass(textList, label);
+            float recall = recallPerClass(results, label);
             TPR += (occurrences * recall) / occurrences;
         }
         return TPR;
@@ -58,41 +58,41 @@ public class QualityMeasuresCalculator {
         return 2 * ((recall * precision) / (recall + precision));
     }
 
-    public static float F1(List<Text> textList) {
-        float PPV = precisionForSet(textList);
-        float TPR = recallForSet(textList);
+    public static float F1(List<Result> results) {
+        float PPV = precisionForSet(results);
+        float TPR = recallForSet(results);
         return 2 * ((TPR * PPV) / (TPR + PPV));
     }
 
-    public static float precisionPerClass(List<Text> textList, Label label) {
+    public static float precisionPerClass(List<Result> results, Label label) {
         int TP = 0;
         int FP = 0;
-        for (Text text : textList) {
-            if (label == text.correctLabel() && text.correctLabel() == text.predictedLabel()) {
+        for (Result result : results) {
+            if (label == result.correctLabel() && result.correctLabel() == result.predictedLabel()) {
                 TP += 1;
-            } else if (label != text.correctLabel() && text.correctLabel() != text.predictedLabel()) {
+            } else if (label != result.correctLabel() && result.correctLabel() != result.predictedLabel()) {
                 FP += 1;
             }
         }
         return TP * 1.0f / (TP + FP);
     }
 
-    public static float recallPerClass(List<Text> textList, Label label) {
+    public static float recallPerClass(List<Result> results, Label label) {
         int TP = 0;
         int FN = 0;
-        for (Text text : textList) {
-            if (text.correctLabel() == label && text.correctLabel() == text.predictedLabel()) {
+        for (Result result : results) {
+            if (result.correctLabel() == label && result.correctLabel() == result.predictedLabel()) {
                 TP += 1;
-            } else if (label == text.correctLabel()) {
+            } else if (label == result.correctLabel()) {
                 FN += 1;
             }
         }
         return TP * 1.0f / (TP + FN);
     }
 
-    public static float F1PerClass(List<Text> textList, Label label) {
-        float PPV = precisionPerClass(textList, label);
-        float TPR = recallPerClass(textList, label);
+    public static float F1PerClass(List<Result> results, Label label) {
+        float PPV = precisionPerClass(results, label);
+        float TPR = recallPerClass(results, label);
         return 2 * ((TPR * PPV) / (TPR + PPV));
     }
 }
