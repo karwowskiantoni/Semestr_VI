@@ -6,6 +6,16 @@ import classification.model.Text;
 import java.util.List;
 
 public class QualityMeasuresCalculator {
+
+    public static void results(List<Text> textList) {
+        float precision = precisionForSet(textList);
+        float recall = recallForSet(textList);
+        System.out.println("Accuracy for data set = " + accuracy(textList));
+        System.out.println("Precision for data set = " + precisionForSet(textList));
+        System.out.println("Recall for data set = " + recallForSet(textList));
+        System.out.println("F1 for data set = " + F1(precision, recall));
+    }
+
     public static float accuracy(List<Text> textList) {
         int TP = 0;
         for (Text text : textList) {
@@ -42,6 +52,10 @@ public class QualityMeasuresCalculator {
             TPR += (occurrences * recall) / occurrences;
         }
         return TPR;
+    }
+
+    public static float F1(float precision, float recall) {
+        return 2 * ((recall * precision) / (recall + precision));
     }
 
     public static float F1(List<Text> textList) {
