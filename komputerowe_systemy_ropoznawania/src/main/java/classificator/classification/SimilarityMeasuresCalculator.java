@@ -1,7 +1,9 @@
 package classificator.classification;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 public class SimilarityMeasuresCalculator {
-    public static float wordSimilarity(String firstWord, String secondWord) {
-        return firstWord.length() * 1.0f / secondWord.length();
+
+    public static int wordSimilarity(String firstWord, String secondWord) {
+        return LevenshteinDistance.getDefaultInstance().apply(firstWord, secondWord);
     }
 }
