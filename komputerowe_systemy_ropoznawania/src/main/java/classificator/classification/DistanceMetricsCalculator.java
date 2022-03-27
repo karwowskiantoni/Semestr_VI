@@ -1,6 +1,6 @@
-package classification.algorithm;
+package classificator.classification;
 
-import classification.model.Vector;
+import classificator.model.internal.Vector;
 
 public class DistanceMetricsCalculator {
     public static float taxiCabDistance (Vector firstVector, Vector secondVector){

@@ -1,7 +1,7 @@
-package classification.extraction;
+package classificator.extraction;
 
-import classification.extraction.xml.Reuters;
-import classification.extraction.xml.ReutersList;
+import classificator.model.xml.Reuters;
+import classificator.model.xml.ReutersList;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;

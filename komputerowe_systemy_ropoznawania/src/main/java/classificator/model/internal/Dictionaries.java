@@ -1,4 +1,4 @@
-package classification.model;
+package classificator.model.internal;
 
 import java.util.List;
 

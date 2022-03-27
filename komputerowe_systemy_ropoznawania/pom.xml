@@ -45,7 +45,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>classification.ClassificationCli</mainClass>
+                            <mainClass>classificator.ClassificationCli</mainClass>
                         </manifest>
                     </archive>
 <!--                    <outputDirectory></outputDirectory>-->

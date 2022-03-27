@@ -1,13 +1,13 @@
-package classification.algorithm;
+package classificator.classification;
 
-import classification.model.Label;
-import classification.model.Result;
+import classificator.model.internal.Label;
+import classificator.model.internal.Result;
 
 import java.util.List;
 
 public class QualityMeasuresCalculator {
 
-    public static void printResults(List<Result> results) {
+    public static void printStatistics(List<Result> results) {
         float precision = precisionForSet(results);
         float recall = recallForSet(results);
         System.out.println("Accuracy for data set = " + accuracy(results));

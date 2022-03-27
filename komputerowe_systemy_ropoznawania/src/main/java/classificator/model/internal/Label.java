@@ -1,4 +1,4 @@
-package classification.model;
+package classificator.model.internal;
 
 public enum Label {
   WEST_GERMANY("west-germany"),

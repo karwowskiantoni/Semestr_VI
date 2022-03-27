@@ -1,11 +1,10 @@
-package classification.algorithm;
+package classificator.classification;
 
-import classification.model.Label;
-import classification.model.Result;
-import classification.model.Text;
+import classificator.model.internal.Label;
+import classificator.model.internal.Result;
+import classificator.model.internal.Text;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Classificator {
 

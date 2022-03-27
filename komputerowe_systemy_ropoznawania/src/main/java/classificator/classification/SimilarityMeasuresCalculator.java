@@ -1,4 +1,4 @@
-package classification.algorithm;
+package classificator.classification;
 
 public class SimilarityMeasuresCalculator {
     public static float wordSimilarity(String firstWord, String secondWord) {

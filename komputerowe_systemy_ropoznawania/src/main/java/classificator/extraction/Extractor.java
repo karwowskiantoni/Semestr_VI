@@ -1,6 +1,6 @@
-package classification.extraction;
+package classificator.extraction;
 
-import classification.model.Text;
+import classificator.model.internal.Text;
 import jakarta.xml.bind.JAXBException;
 
 import java.util.ArrayList;
@@ -10,17 +10,17 @@ public class Extractor {
 
   private Extractor() {}
 
-  public static List<Text> extract(String filename) {
+  public static List<Text> extractAll() {
+    return FILENAMES.stream().flatMap(s -> extract(s).stream()).toList();
+  }
+
+  private static List<Text> extract(String filename) {
     try {
-      return TextParser.parse(ReutersParser.parse(FileReader.read(filename)));
+      return TextGenerator.generate(ReutersParser.parse(FileReader.read(filename)));
     } catch (JAXBException e) {
       e.printStackTrace();
       return new ArrayList<>();
     }
-  }
-
-  public static List<Text> extractAll() {
-    return FILENAMES.stream().flatMap(s -> extract(s).stream()).toList();
   }
 
   public static final List<String> FILENAMES =
