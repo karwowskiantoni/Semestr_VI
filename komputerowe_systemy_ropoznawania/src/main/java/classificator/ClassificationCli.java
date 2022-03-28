@@ -57,7 +57,7 @@ public class ClassificationCli implements Callable<Integer> {
     List<Text> textsToClassify = randomChoices(texts, dsSize);
     List<Text> trainingTexts = randomChoices(textsToClassify, tsSize);
     List<Result> results = Classificator.classifyAll(textsToClassify, trainingTexts, K);
-    QualityMeasuresCalculator.printStatistics(results);
+    QualityMeasuresCalculator.printMetrics(results);
     return 0;
   }
 
