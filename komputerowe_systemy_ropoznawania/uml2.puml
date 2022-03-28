@@ -1,0 +1,140 @@
+@startuml
+class model.xml.Reuters {
+- Places PLACES
+- Text TEXT
++ Text getTEXT()
++ void setTEXT(Text)
++ Places getPLACES()
++ void setPLACES(Places)
+}
+class model.xml.ReutersList {
+- List<Reuters> reutersList
++ List<Reuters> getReutersList()
++ void setReutersList(List<Reuters>)
+}
+class model.xml.Text {
+- String TITLE
+- String DATELINE
+- String BODY
++ String getTITLE()
++ void setTITLE(String)
++ String getDATELINE()
++ void setDATELINE(String)
++ String getBODY()
++ void setBODY(String)
+}
+enum model.internal.Label {
++  WEST_GERMANY
++  USA
++  FRANCE
++  UK
++  CANADA
++  JAPAN
++ String literal
++ {static} Label valueOfLiteral(String)
+}
+class classification.Classificator {
++ {static} List<Result> classifyAll(List<Text>,List<Text>,int)
++ {static} Result classifyOne(Text,List<Text>,int)
+- float distance(Text,Text)
+}
+class model.xml.Places {
+- List<String> D
++ List<String> getD()
++ void setD(List<String>)
+}
+
+class extraction.ReutersParser {
++ {static} List<Reuters> parse(String)
+- {static} String formatXml(String)
+- {static} InputStream stringToStream(String)
+}
+class extraction.TextGenerator {
++ {static} List<Text> generate(List<Reuters>)
+- {static} Text generateOne(Reuters)
+- {static} boolean filterFunction(Reuters)
+- {static} Vector extractFeatures(Reuters)
+- {static} String firstWordInDateLine(Reuters)
+- {static} int numberOfWordsInDictionary(List<String>,String)
+- {static} List<String> wordsInDictionary(List<String>,String)
+- {static} String mostCommonWord(String)
+- {static} List<Integer> getAllValidDates(String)
+}
+class classification.SimilarityMeasuresCalculator {
++ {static} float wordSimilarity(String,String)
+}
+class model.internal.Dictionaries {
++ {static} List<String> COUNTRIES
++ {static} List<String> WEST_GERMANY_KEYWORDS
++ {static} List<String> USA_KEYWORDS
++ {static} List<String> FRANCE_KEYWORDS
++ {static} List<String> UK_KEYWORDS
++ {static} List<String> CANADA_KEYWORDS
++ {static} List<String> JAPAN_KEYWORDS
+}
+class extraction.FileReader {
++ {static} String read(String)
+}
+
+class classification.QualityMeasuresCalculator {
++ {static} void printStatistics(List<Result>)
++ {static} float accuracy(List<Result>)
++ {static} float precisionForSet(List<Result>)
++ {static} float recallForSet(List<Result>)
++ {static} float F1(float,float)
++ {static} float F1(List<Result>)
++ {static} float precisionPerClass(List<Result>,Label)
++ {static} float recallPerClass(List<Result>,Label)
++ {static} float F1PerClass(List<Result>,Label)
+}
+
+class extraction.Extractor {
++ {static} List<String> FILENAMES
++ {static} List<Text> extractAll()
+- {static} List<Text> extract(String)
+}
+
+class classification.DistanceMetricsCalculator {
++ {static} float taxiCabDistance(Vector,Vector)
++ {static} float euclideanDistance(Vector,Vector)
++ {static} float chebyshevDistance(Vector,Vector)
+}
+class model.internal.Text {
++ Label label;
++ Vector vector;
+}
+class model.internal.Result {
++ Label correctLabel;
++ Label predictedLabel;
+}
+class model.internal.Vector {
++ String firstWordInDateline
++ String firstCountryInTitle
++ String mostCommonWord
++ int firstDate
++ int lastDate
++ int westGermanyWordCount
++ int usaWordCount
++ int franceWordCount
++ int ukWordCount
++ int canadaWordCount
++ int japanWordCount
+}
+
+model.xml.ReutersList o-- model.xml.Reuters
+model.xml.Reuters o-- model.xml.Places
+model.xml.Reuters o-- model.xml.Text
+
+model.internal.Result "many"*--"2" model.internal.Label
+model.internal.Text "many"*--"1" model.internal.Label
+model.internal.Text "1"*--"1" model.internal.Vector
+model.internal.Vector ..> model.internal.Dictionaries
+
+extraction.Extractor ..> extraction.TextGenerator
+extraction.Extractor ..> extraction.FileReader
+extraction.Extractor ..> extraction.ReutersParser
+
+classification.DistanceMetricsCalculator ..> classification.SimilarityMeasuresCalculator
+classification.Classificator ..> classification.QualityMeasuresCalculator
+classification.Classificator ..> classification.DistanceMetricsCalculator
+@enduml
