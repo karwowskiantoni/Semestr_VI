@@ -66,33 +66,37 @@ public class QualityMeasuresCalculator {
     private static float precisionForSet(List<Result> results, Map<Label, Float> precisionByLabel) {
         Label[] labels = Label.values();
         float PPV = 0.0f;
+        int allOccurrencies = 0;
         for (Label label : labels) {
             long occurrences = results
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
+            allOccurrencies += occurrences;
             if (occurrences != 0) {
                 float precision = precisionByLabel.get(label);
-                PPV += (occurrences * precision) / occurrences;
+                PPV += (occurrences * precision);
             }
         }
-        return PPV;
+        return PPV/allOccurrencies;
     }
 
     private static float recallForSet(List<Result> results, Map<Label, Float> recallByLabel) {
         Label[] labels = Label.values();
         float TPR = 0.0f;
+        int allOccurrencies = 0;
         for (Label label : labels) {
             long occurrences = results
                     .stream()
                     .filter(text -> text.correctLabel() == label)
                     .count();
+            allOccurrencies += occurrences;
             if (occurrences != 0) {
                 float recall = recallByLabel.get(label);
-                TPR += (occurrences * recall) / occurrences;
+                TPR += (occurrences * recall);
             }
         }
-        return TPR;
+        return TPR/allOccurrencies;
     }
 
     private static float F1(float precision, float recall) {
