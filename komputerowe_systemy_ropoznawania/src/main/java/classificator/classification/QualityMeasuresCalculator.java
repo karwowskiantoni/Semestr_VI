@@ -43,14 +43,15 @@ public class QualityMeasuresCalculator {
         float recallForSet = recallForSet(results, recallByLabel);
         float f1ForSet = F1(precisionForSet, recallForSet);
         float accuracyForSet = accuracy(results);
-
-        precisionsByLabel.forEach((label, precision) -> System.out.println("Precision for label " + label + " = " + precision));
-        recallByLabel.forEach((label, recall) -> System.out.println("Recall for label " + label + " = " + recall));
-        f1ByLabel.forEach((label, f1) -> System.out.println("F1 for label " + label + " = " + f1));
-        System.out.println("Precision for data set = " + precisionForSet);
-        System.out.println("Recall for data set = " + recallForSet);
-        System.out.println("F1 for data set = " + f1ForSet);
-        System.out.println("Accuracy for data set = " + accuracyForSet);
+        Arrays.stream(Label.values()).forEach(label -> System.out.print(label + ";"));
+        System.out.println("data_set");
+        Arrays.stream(Label.values()).forEach(label -> System.out.print(precisionsByLabel.get(label) + ";"));
+        System.out.println(precisionForSet + ";");
+        Arrays.stream(Label.values()).forEach(label -> System.out.print(recallByLabel.get(label) + ";"));
+        System.out.println(recallForSet + ";");
+        Arrays.stream(Label.values()).forEach(label -> System.out.print(f1ByLabel.get(label) + ";"));
+        System.out.println(f1ForSet + ";");
+        System.out.println("Accuracy = " + accuracyForSet);
     }
 
     private static float accuracy(List<Result> results) {
