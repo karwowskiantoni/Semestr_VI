@@ -6,17 +6,20 @@ import java.util.List;
 
 public class DistanceMetricsCalculator {
     public static int euclideanDistance(Vector firstVector, Vector secondVector) {
-        return (int) (Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.firstWordInDateline(), secondVector.firstWordInDateline()), 2)
-                + Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.firstCountryInTitle(), secondVector.firstCountryInTitle()), 2)
-                + Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.mostCommonWord(), secondVector.mostCommonWord()), 2)
-                + Math.pow(firstVector.firstDate() - secondVector.firstDate(), 2)
-                + Math.pow(firstVector.lastDate() - secondVector.lastDate(), 2)
-                + Math.pow(firstVector.westGermanyWordCount() - secondVector.westGermanyWordCount(), 2)
-                + Math.pow(firstVector.usaWordCount() - secondVector.usaWordCount(), 2)
-                + Math.pow(firstVector.franceWordCount() - secondVector.franceWordCount(), 2)
-                + Math.pow(firstVector.ukWordCount() - secondVector.ukWordCount(), 2)
-                + Math.pow(firstVector.canadaWordCount() - secondVector.canadaWordCount(), 2)
-                + Math.pow(firstVector.japanWordCount() - secondVector.japanWordCount(), 2));
+        return (int)
+                (
+                        Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.firstWordInDateline(), secondVector.firstWordInDateline()), 2)
+                  + Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.firstCountryInTitle(), secondVector.firstCountryInTitle()), 2)
+                  + Math.pow(SimilarityMeasuresCalculator.wordSimilarity(firstVector.mostCommonWord(), secondVector.mostCommonWord()), 2)
+                  + Math.pow(firstVector.firstDate() - secondVector.firstDate(), 2)
+                  + Math.pow(firstVector.lastDate() - secondVector.lastDate(), 2)
+                  + Math.pow(firstVector.westGermanyWordCount() - secondVector.westGermanyWordCount(), 2)
+                  + Math.pow(firstVector.usaWordCount() - secondVector.usaWordCount(), 2)
+                  + Math.pow(firstVector.franceWordCount() - secondVector.franceWordCount(), 2)
+                  + Math.pow(firstVector.ukWordCount() - secondVector.ukWordCount(), 2)
+                  + Math.pow(firstVector.canadaWordCount() - secondVector.canadaWordCount(), 2)
+                  + Math.pow(firstVector.japanWordCount() - secondVector.japanWordCount(), 2)
+                );
     }
 
     public static int taxiCabDistance(Vector firstVector, Vector secondVector) {

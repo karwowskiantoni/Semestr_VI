@@ -9,9 +9,6 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -48,20 +45,10 @@ public class ClassificationCli implements Callable<Integer> {
     int pivotPosition = (int) (dataSet.size() * (pivot * 1.0 / 100));
     List<Text> testSet = dataSet.subList(0, pivotPosition);
     List<Text> trainingSet = dataSet.subList(pivotPosition, dataSet.size());
-    List<Result> results = Classificator.classifyAll(testSet, trainingSet, K, "chebyshev");
-    QualityMeasuresCalculator.printMetrics(results);
-    System.out.println();
-    System.out.println();
 
     List<Result> results2 = Classificator.classifyAll(testSet, trainingSet, K, "euclidean");
     QualityMeasuresCalculator.printMetrics(results2);
-    System.out.println();
-    System.out.println();
 
-    List<Result> results3 = Classificator.classifyAll(testSet, trainingSet, K, "taxicab");
-    QualityMeasuresCalculator.printMetrics(results3);
-    System.out.println();
-    System.out.println();
 
     return 0;
   }
