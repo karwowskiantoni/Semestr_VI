@@ -9,6 +9,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,19 +26,14 @@ public class ClassificationCli implements Callable<Integer> {
       names = {"-k", "--K"},
       description = "K, number of nearest neighbours considered in classification algorithm",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer K = 10;
+  private Integer K = 1;
 
   @Option(
-      names = {"-ds", "--datasize"},
-      description = "size of texts set from database used for classification (chosen randomly)",
+      names = {"-p", "--pivot"},
+      description =
+          "pivot in which dataset is splitted into test set and training set, (value between 0 and 100)",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer dsSize = 1000;
-
-  @Option(
-      names = {"-ts", "-testsize"},
-      description = "size of texts training set (chosen randomly, shouldn't be bigger than number parameter)",
-      showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer tsSize = 200;
+  private Integer pivot = 20;
 
   @Option(
       names = {"-m", "--metric"},
@@ -45,19 +41,28 @@ public class ClassificationCli implements Callable<Integer> {
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
   private String metricType = "chebyshev";
 
-  public static List<Text> randomChoices(List<Text> textList, int size) {
-    textList = new ArrayList<>(textList);
-    Collections.shuffle(textList);
-    return textList.subList(0, size);
-  }
-
   @Override
   public Integer call() throws Exception {
-    List<Text> texts = Extractor.extractAll();
-    List<Text> textsToClassify = randomChoices(texts, dsSize);
-    List<Text> trainingTexts = randomChoices(textsToClassify, tsSize);
-    List<Result> results = Classificator.classifyAll(textsToClassify, trainingTexts, K);
+    List<Text> dataSet = Extractor.extractAll().stream().limit(5000).toList();
+
+    int pivotPosition = (int) (dataSet.size() * (pivot * 1.0 / 100));
+    List<Text> testSet = dataSet.subList(0, pivotPosition);
+    List<Text> trainingSet = dataSet.subList(pivotPosition, dataSet.size());
+    List<Result> results = Classificator.classifyAll(testSet, trainingSet, K, "chebyshev");
     QualityMeasuresCalculator.printMetrics(results);
+    System.out.println();
+    System.out.println();
+
+    List<Result> results2 = Classificator.classifyAll(testSet, trainingSet, K, "euclidean");
+    QualityMeasuresCalculator.printMetrics(results2);
+    System.out.println();
+    System.out.println();
+
+    List<Result> results3 = Classificator.classifyAll(testSet, trainingSet, K, "taxicab");
+    QualityMeasuresCalculator.printMetrics(results3);
+    System.out.println();
+    System.out.println();
+
     return 0;
   }
 

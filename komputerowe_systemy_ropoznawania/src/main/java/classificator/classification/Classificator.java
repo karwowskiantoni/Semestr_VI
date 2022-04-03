@@ -10,15 +10,21 @@ import java.util.stream.Collectors;
 
 public class Classificator {
 
-  public static List<Result> classifyAll(List<Text> texts, List<Text> trainingTexts, int K) {
-    return texts.stream().map(text -> classifyOne(text, trainingTexts, K)).toList();
+  public static List<Result> classifyAll(List<Text> texts, List<Text> trainingTexts, int K, String method) {
+    List<Result> results = new ArrayList<>();
+    for (int i = 0; i < texts.size(); i++) {
+////      System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
+//      System.out.print(i*100.0/texts.size() + "%");
+      results.add(classifyOne(texts.get(i), trainingTexts, K, method));
+    }
+//    System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
+    return results;
   }
 
-  public static Result classifyOne(Text text, List<Text> trainingTexts, int K) {
-//    Collections.reverse();
+  public static Result classifyOne(Text text, List<Text> trainingTexts, int K, String method) {
     Label predictedLabel =
         trainingTexts.stream()
-            .sorted(Comparator.comparingDouble(value -> distance(text, value)))
+            .sorted(Comparator.comparingDouble(value -> distance(text, value, method)))
             .limit(K)
             .map(Text::label)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
@@ -30,7 +36,13 @@ public class Classificator {
     return new Result(text.label(), predictedLabel);
   }
 
-  private static float distance(Text firstText, Text secondText) {
-    return DistanceMetricsCalculator.euclideanDistance(firstText.vector(), secondText.vector());
+  private static float distance(Text firstText, Text secondText, String method) {
+    if(method.equals("euclidean")) {
+      return DistanceMetricsCalculator.euclideanDistance(firstText.vector(), secondText.vector());
+    } else if(method.equals("chebyshev")) {
+      return DistanceMetricsCalculator.chebyshevDistance(firstText.vector(), secondText.vector());
+    } else {
+      return DistanceMetricsCalculator.taxiCabDistance(firstText.vector(), secondText.vector());
+    }
   }
 }
