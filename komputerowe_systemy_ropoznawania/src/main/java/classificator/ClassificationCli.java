@@ -36,19 +36,18 @@ public class ClassificationCli implements Callable<Integer> {
       names = {"-m", "--metric"},
       description = "distance metric used for classification, (chebyshev/euclidean/taxicab)",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private String metricType = "chebyshev";
+  private String metricType = "euclidean";
 
   @Override
   public Integer call() throws Exception {
-    List<Text> dataSet = Extractor.extractAll().stream().limit(5000).toList();
+    List<Text> dataSet = Extractor.extractAll();
 
     int pivotPosition = (int) (dataSet.size() * (pivot * 1.0 / 100));
     List<Text> testSet = dataSet.subList(0, pivotPosition);
     List<Text> trainingSet = dataSet.subList(pivotPosition, dataSet.size());
 
-    List<Result> results2 = Classificator.classifyAll(testSet, trainingSet, K, "euclidean");
-    QualityMeasuresCalculator.printMetrics(results2);
-
+    List<Result> results = Classificator.classifyAll(testSet, trainingSet, K, metricType);
+    QualityMeasuresCalculator.printMetrics(results);
 
     return 0;
   }

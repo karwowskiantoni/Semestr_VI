@@ -13,11 +13,9 @@ public class Classificator {
   public static List<Result> classifyAll(List<Text> texts, List<Text> trainingTexts, int K, String method) {
     List<Result> results = new ArrayList<>();
     for (int i = 0; i < texts.size(); i++) {
-////      System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
-//      System.out.print(i*100.0/texts.size() + "%");
+      printPercentage(i, texts.size());
       results.add(classifyOne(texts.get(i), trainingTexts, K, method));
     }
-//    System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
     return results;
   }
 
@@ -43,6 +41,15 @@ public class Classificator {
       return DistanceMetricsCalculator.chebyshevDistance(firstText.vector(), secondText.vector());
     } else {
       return DistanceMetricsCalculator.taxiCabDistance(firstText.vector(), secondText.vector());
+    }
+  }
+
+  private static void printPercentage(int iterator, int size) {
+    System.out.print("\b\b\b\b\b\b\b");
+    System.out.printf("%.2f", iterator * 100.0 / size);
+    System.out.print( " %");
+    if(size <= iterator + 1) {
+      System.out.print("\b\b\b\b\b\b\b");
     }
   }
 }

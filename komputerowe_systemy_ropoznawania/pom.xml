@@ -59,7 +59,6 @@
                             <mainClass>classificator.ClassificationCli</mainClass>
                         </manifest>
                     </archive>
-<!--                    <outputDirectory></outputDirectory>-->
                 </configuration>
                 <executions>
                     <execution>
