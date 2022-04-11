@@ -1,59 +1,78 @@
 import numpy as np
 
-from zadanie_1.swarm.Particle import Particle
+from Bat import Bat
 
 
-def particle_swarm_optimization_algorithm(
+def bat_optimization_algorithm(
         function,
-        dimensions_number,
-        inertia_weight,
-        cognitive_constant,
-        social_constant,
+        dimensions,
         domain,
+        frequency_bounds,
+        pulse_rate,
+        pulse_rate_multiplier,
+        loudness,
+        loudness_multiplier,
         population_size,
         iteration_number=None,
-        expected_fitness=None,
-        customization=False):
-    global_best_position = [0] * dimensions_number
-    swarm = [Particle(function, dimensions_number, domain, inertia_weight, cognitive_constant, social_constant, iteration_number, customization)
+        expected_fitness=None):
+    global_best_position = [0] * dimensions
+    swarm = [Bat(function, dimensions, domain, frequency_bounds,
+                 pulse_rate, pulse_rate_multiplier, loudness, loudness_multiplier)
              for _ in range(population_size)]
-
-    global_best_adaptation = np.inf
-    best_positions = []
-    best_adaptations = []
     if iteration_number is not None and expected_fitness is None:
-        for _ in range(iteration_number):
-            for particle in swarm:
-                particle.find_best_adaptation()
-                particle.calculate_new_velocity(global_best_position)
-                particle.move_to_new_position()
+        global_best_position = swarm[0].position
+        global_best_adaptation = np.inf
+        for i in range(iteration_number):
+            average_loudness = np.average(
+                list(map(lambda x: x.loudness, swarm)))
+            for bat in swarm:
+                bat.move(global_best_position, average_loudness)
 
-                if particle.best_adaptation < global_best_adaptation:
-                    best_positions.append(particle.best_position)
-                    global_best_adaptation = particle.best_adaptation
-            global_best_position = best_positions[-1]
-            best_adaptations.append(global_best_adaptation)
+                if bat.adaptation < global_best_adaptation:
+                    global_best_position = bat.position.copy()
+                    global_best_adaptation = bat.adaptation
     elif expected_fitness is not None:
-        for particle in swarm:
-            particle.find_best_adaptation()
-            particle.calculate_new_velocity(global_best_position)
-            particle.move_to_new_position()
+        global_best_position = swarm[0].position
+        average_loudness = np.average(
+            list(map(lambda x: x.loudness, swarm)))
+        for bat in swarm:
+            bat.move(global_best_position, average_loudness)
 
-            if particle.best_adaptation < global_best_adaptation:
-                best_positions.append(particle.best_position)
-                global_best_adaptation = particle.best_adaptation
-        global_best_position = best_positions[-1]
-        best_adaptations.append(global_best_adaptation)
-        while best_adaptations[-1] > expected_fitness:
-            for particle in swarm:
-                particle.find_best_adaptation()
-                particle.calculate_new_velocity(global_best_position)
-                particle.move_to_new_position()
+            if bat.adaptation < global_best_adaptation:
+                global_best_position = bat.position.copy()
+                global_best_adaptation = bat.adaptation
+        while global_best_adaptation > expected_fitness:
+            average_loudness = np.average(
+                list(map(lambda x: x.loudness, swarm)))
+            for bat in swarm:
+                bat.move(global_best_position, average_loudness)
 
-                if particle.best_adaptation < global_best_adaptation:
-                    best_positions.append(particle.best_position)
-                    global_best_adaptation = particle.best_adaptation
-            global_best_position = best_positions[-1]
-            best_adaptations.append(global_best_adaptation)
+                if bat.adaptation < global_best_adaptation:
+                    global_best_position = bat.position.copy()
+                    global_best_adaptation = bat.adaptation
 
-    return best_adaptations[-1]
+    return global_best_adaptation
+
+
+if __name__ == "__main__":
+    def sphere(params):
+        return sum([x**2 for x in params])
+
+    def rosenbrock(params):
+        return sum([100 * (params[i + 1] - params[i]**2)**2 + (params[i] - 1)**2 for i in range(len(params) - 1)])
+    SPHERE_DOMAIN = tuple((-100, 100))
+    ROSENBROCK_DOMAIN = tuple((-2.048, 2.048))
+
+    result = bat_optimization_algorithm(
+        function=sphere,
+        dimensions=10,
+        domain=SPHERE_DOMAIN,
+        frequency_bounds=tuple((0.0, 2.0)),
+        pulse_rate=0.5,
+        pulse_rate_multiplier=0.1,
+        loudness=0.5,
+        loudness_multiplier=0.1,
+        population_size=100,
+        iteration_number=100)
+
+    print(result)
