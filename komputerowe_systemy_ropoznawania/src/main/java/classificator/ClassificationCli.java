@@ -23,14 +23,14 @@ public class ClassificationCli implements Callable<Integer> {
       names = {"-k", "--K"},
       description = "K, number of nearest neighbours considered in classification algorithm",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer K = 1;
+  private Integer K = 2;
 
   @Option(
       names = {"-p", "--pivot"},
       description =
           "pivot in which dataset is splitted into test set and training set, (value between 0 and 100)",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer pivot = 20;
+  private Integer pivot = 50;
 
   @Option(
       names = {"-m", "--metric"},
@@ -40,7 +40,7 @@ public class ClassificationCli implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    List<Text> dataSet = Extractor.extractAll();
+    List<Text> dataSet = Extractor.extractAll().stream().limit(20000).toList();
 
     int pivotPosition = (int) (dataSet.size() * (pivot * 1.0 / 100));
     List<Text> testSet = dataSet.subList(0, pivotPosition);

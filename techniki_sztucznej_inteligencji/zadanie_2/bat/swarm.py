@@ -1,6 +1,6 @@
 import numpy as np
 
-from Bat import Bat
+from zadanie_2.bat.Bat import Bat
 
 
 def bat_optimization_algorithm(

@@ -35,13 +35,14 @@ public class Classificator {
   }
 
   private static float distance(Text firstText, Text secondText, String method) {
-    if(method.equals("euclidean")) {
-      return DistanceMetricsCalculator.euclideanDistance(firstText.vector(), secondText.vector());
-    } else if(method.equals("chebyshev")) {
-      return DistanceMetricsCalculator.chebyshevDistance(firstText.vector(), secondText.vector());
-    } else {
-      return DistanceMetricsCalculator.taxiCabDistance(firstText.vector(), secondText.vector());
-    }
+    return 1;
+//    if(method.equals("euclidean")) {
+//      return DistanceMetricsCalculator.euclideanDistance(firstText.vector(), secondText.vector());
+//    } else if(method.equals("chebyshev")) {
+//      return DistanceMetricsCalculator.chebyshevDistance(firstText.vector(), secondText.vector());
+//    } else {
+//      return DistanceMetricsCalculator.taxiCabDistance(firstText.vector(), secondText.vector());
+//    }
   }
 
   private static void printPercentage(int iterator, int size) {
