@@ -51,12 +51,14 @@ def swarm_with_params(customization=False):
         results.append(particle_swarm_optimization_algorithm(
             function=FUNCTION,
             domain=DOMAIN,
-            dimensions_number=DIMENSIONS_NUMBER,
+            dimensions=DIMENSIONS_NUMBER,
             iteration_number=i_function(i),
             population_size=POPULATION_SIZE,
-            inertia_weight=INERTIA_WEIGHT,
-            cognitive_constant=COGNITIVE_CONSTANT,
-            social_constant=SOCIAL_CONSTANT,
+            frequency_bounds=FREQUENCY_BOUNDS,
+            pulse_rate=PULSE_RATE,
+            pulse_rate_multiplier=PULSE_RATE_MULTIPLIER,
+            loudness=LOUDNESS,
+            loudness_multiplier=LOUDNESS_MULTIPLIER,
             customization=customization
         ))
     return results
