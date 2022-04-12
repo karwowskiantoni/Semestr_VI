@@ -9,8 +9,8 @@ from zadanie_2.butterfly.algorithm import butterfly_optimization_algorithm
 
 # RUN CONFIGURATION
 
-STEPS = 40
-BEGIN = 10
+STEPS = 50
+BEGIN = 2
 END = 50
 i_function = lambda i: int(((END - BEGIN) / STEPS) * i) + BEGIN
 
@@ -42,8 +42,8 @@ def butterfly_with_params(measured_parameter=None):
             function=FUNCTION,
             domain=DOMAIN,
             dimensions_number=DIMENSIONS_NUMBER,
-            expected_fitness=i_function(i),
-            population_size=POPULATION_SIZE,
+            iteration_number=ITERATION_NUMBER,
+            population_size=i_function(i),
             sensor_modality=SENSOR_MODALITY,
             intensity_index=INTENSITY_INDEX,
             probability=PROBABILITY,
@@ -59,8 +59,8 @@ def bat_with_params(measured_parameter=None):
             function=FUNCTION,
             domain=DOMAIN,
             dimensions=DIMENSIONS_NUMBER,
-            expected_fitness=i_function(i),
-            population_size=POPULATION_SIZE,
+            iteration_number=ITERATION_NUMBER,
+            population_size=i_function(i),
             frequency_bounds=FREQUENCY_BOUNDS,
             pulse_rate=PULSE_RATE,
             pulse_rate_multiplier=PULSE_RATE_MULTIPLIER,
@@ -75,14 +75,14 @@ if __name__ == '__main__':
     x_values = [i_function(i) for i in range(STEPS)]
 
     result_sets_1 = [butterfly_with_params() for _ in range(10)]
-    # result_sets_2 = [butterfly_with_params() for _ in range(10)]
+    result_sets_2 = [bat_with_params() for _ in range(10)]
 
     plt.plot(x_values, np.array(result_sets_1).mean(axis=0), "#2684FF")
-    # plt.plot(x_values, np.array(result_sets_2).mean(axis=0), "#F5459A")
+    plt.plot(x_values, np.array(result_sets_2).mean(axis=0), "#F5459A")
 
-    plt.title("butterfly with " + FUNCTION.__name__ + " function")
-    plt.legend([""])
+    plt.title(FUNCTION.__name__ + " function")
+    plt.legend(["butterfly", "bat"])
 
-    plt.xlabel("iteration number")
+    plt.xlabel("population size")
     plt.ylabel("best result")
     plt.show()

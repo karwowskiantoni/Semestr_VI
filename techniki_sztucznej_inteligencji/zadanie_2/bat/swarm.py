@@ -33,6 +33,7 @@ def bat_optimization_algorithm(
                     global_best_position = bat.position.copy()
                     global_best_adaptation = bat.adaptation
     elif expected_fitness is not None:
+        global_best_adaptation = np.inf
         global_best_position = swarm[0].position
         average_loudness = np.average(
             list(map(lambda x: x.loudness, swarm)))
