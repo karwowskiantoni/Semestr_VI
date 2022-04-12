@@ -75,28 +75,28 @@ if __name__ == '__main__':
     x_values = [i_function(i) for i in range(STEPS)]
 
     butterfly_result_sets = []
-    # butterfly_customization_result_sets = []
-    bat_result_sets = []
+    butterfly_customization_result_sets = []
+    # bat_result_sets = []
     # swarm_customization_result_sets = []
 
     for i in range(10):
         butterfly_result_sets.append(butterfly_with_params())
-        # butterfly_customization_result_sets.append(butterfly_with_params(True))
-        bat_result_sets.append(bat_with_params(customization=True))
+        butterfly_customization_result_sets.append(butterfly_with_params(True))
+        # bat_result_sets.append(bat_with_params(customization=True))
         # swarm_customization_result_sets.append(swarm_with_params(True))
 
     butterfly_averages = np.array(butterfly_result_sets).mean(axis=0)
-    # evolution_customization_averages = np.array(butterfly_customization_result_sets).mean(axis=0)
-    bat_averages = np.array(bat_result_sets).mean(axis=0)
+    butterfly_customization_averages = np.array(butterfly_customization_result_sets).mean(axis=0)
+    # bat_averages = np.array(bat_result_sets).mean(axis=0)
     # swarm_customization_averages = np.array(swarm_customization_result_sets).mean(axis=0)
 
     plt.plot(x_values, butterfly_averages, "#2684ff")
-    # plt.plot(x_values, evolution_customization_averages, "#f5459a")
-    plt.plot(x_values, bat_averages, "#f5459a")
+    plt.plot(x_values, butterfly_customization_averages, "#f5459a")
+    # plt.plot(x_values, bat_averages, "#f5459a")
     # plt.plot(x_values, swarm_customization_averages, "#f5459a")
 
     plt.title(FUNCTION.__name__ + " function")
-    plt.legend(["butterfly", "bat"])
+    plt.legend(["butterfly", "butterfly customized"])
     plt.xlabel("iteration number")
     plt.ylabel("best result")
     plt.show()

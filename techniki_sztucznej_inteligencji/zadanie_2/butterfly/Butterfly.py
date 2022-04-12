@@ -13,20 +13,24 @@ class Butterfly:
     def copy(self):
         return Butterfly(self.position.copy(), self.fitness_function, self.sensor_modality, self.intensity_index, self.probability, self.domain)
 
-    def move(self, best, other_two, customization):
+    def move(self, best, other_two, customization=False):
         r = random.random()
         if r < self.probability:
-            return self.__move_to_best(best, r)
+            return self.__move_to_best(best, r, customization)
         else:
             return self.__move_random(other_two, r)
 
     def fitness(self):
         return self.fitness_function(self.position)
 
-    def __move_to_best(self, best, r):
+    def __move_to_best(self, best, r, customization=False):
         new_butterfly = self.copy()
         for i in range(len(self.position)):
-            new_butterfly.position[i] = self.__bound_with_domain(self.position[i] + (r ** 2 * best.position[i] - self.position[i]) * self.__smell())
+            if customization:
+                exponent = 0.3
+            else:
+                exponent = 2
+            new_butterfly.position[i] = self.__bound_with_domain(self.position[i] + (r ** exponent * best.position[i] - self.position[i]) * self.__smell())
         return new_butterfly
 
     def __move_random(self, other_two, r):
