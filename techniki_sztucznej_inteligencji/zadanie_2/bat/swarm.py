@@ -14,10 +14,11 @@ def bat_optimization_algorithm(
         loudness_multiplier,
         population_size,
         iteration_number=None,
-        expected_fitness=None):
+        expected_fitness=None,
+        customization=False):
     global_best_position = [0] * dimensions
     swarm = [Bat(function, dimensions, domain, frequency_bounds,
-                 pulse_rate, pulse_rate_multiplier, loudness, loudness_multiplier)
+                 pulse_rate, pulse_rate_multiplier, loudness, loudness_multiplier, customization)
              for _ in range(population_size)]
     if iteration_number is not None and expected_fitness is None:
         global_best_position = swarm[0].position
@@ -64,15 +65,16 @@ if __name__ == "__main__":
     ROSENBROCK_DOMAIN = tuple((-2.048, 2.048))
 
     result = bat_optimization_algorithm(
-        function=sphere,
+        function=rosenbrock,
         dimensions=10,
-        domain=SPHERE_DOMAIN,
+        domain=ROSENBROCK_DOMAIN,
         frequency_bounds=tuple((0.0, 2.0)),
         pulse_rate=0.5,
         pulse_rate_multiplier=0.1,
         loudness=0.5,
         loudness_multiplier=0.1,
         population_size=100,
-        iteration_number=100)
+        iteration_number=100,
+        customization=True)
 
     print(result)

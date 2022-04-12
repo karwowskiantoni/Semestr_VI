@@ -5,7 +5,7 @@ rng = np.random.default_rng()
 
 
 class Bat:
-    def __init__(self, function, dimensions, domain, frequency_bounds, pulse_rate, pulse_rate_multiplier, loudness, loudness_multiplier):
+    def __init__(self, function, dimensions, domain, frequency_bounds, pulse_rate, pulse_rate_multiplier, loudness, loudness_multiplier, customization):
         self.function = function
         self.velocity = [0] * dimensions
         self.lower_position_bound = domain[0]
@@ -23,6 +23,7 @@ class Bat:
         self.loudness_multiplier = loudness_multiplier
         self.frequency = self.initialize_frequency()
         self.current_iteration = 1
+        self.customization = customization
 
     def initialize_frequency(self):
         return self.lower_frequency_bound + (self.upper_frequency_bound - self.lower_frequency_bound) * rng.random()
@@ -50,6 +51,8 @@ class Bat:
             self.loudness *= self.loudness_multiplier
             self.pulse_rate = self.initial_pulse_rate * \
                 (1 - math.exp(-self.pulse_rate_multiplier * self.current_iteration))
+            if self.customization and self.loudness < 0.05:
+                self.loudness = 0.05
         else:
             self.position = position_copy
         self.current_iteration += 1
