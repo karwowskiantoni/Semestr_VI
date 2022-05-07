@@ -36,11 +36,30 @@ class ZeroToOneValidator(Validator):
                                   cursor_position=len(document.text))
 
 
-command_type = {
+command_1 = {
     'type': 'list',
     'name': 'command_type',
     'message': 'choose option:',
-    'choices': ["generate", "quantize", "sum", "difference", "product", "divide", "plot", "hist", "stat", "exit"]
+    'choices': ["generate",
+                "sum",
+                "difference",
+                "product",
+                "divide",
+                "plot",
+                "hist",
+                "stat",
+                "exit"]
+}
+
+command_2 = {
+    'type': 'list',
+    'name': 'command_type',
+    'message': 'choose option:',
+    'choices': ["sample",
+                "quantize",
+                "interpolate",
+                "compare",
+                "exit"]
 }
 
 signal_type = {
@@ -73,6 +92,18 @@ def existing_signal():
     return question
 
 
+interpolation_type = {
+    'type': 'list',
+    'name': 'interpolation_type',
+    'message': 'choose interpolation type:',
+    'choices': ["zero order hold", "first order hold", "sinc function"]
+}
+quantize_type = {
+    'type': 'list',
+    'name': 'quantize_type',
+    'message': 'choose quantization type:',
+    'choices': ["flat", "round"]
+}
 divisions = {
     'type': 'list',
     'name': 'divisions',
@@ -80,8 +111,14 @@ divisions = {
     'choices': ["5", "10", "15", "20", "25"],
     'filter': lambda val: int(val)
 }
-
-
+samples_number = {
+    'type': "input",
+    "name": "samples_number",
+    "message": "enter number of samples for new signal",
+    "default": "5",
+    "validate": IntegerValidator,
+    "filter": lambda val: int(val)
+}
 level = {
     'type': "input",
     "name": "level",
@@ -90,8 +127,6 @@ level = {
     "validate": IntegerValidator,
     "filter": lambda val: int(val)
 }
-
-
 A = {
     'type': "input",
     "name": "A",
@@ -144,9 +179,9 @@ f = {
     'type': "input",
     "name": "f",
     "default": "60",
-    "message": "Enter the signal frequency (f)",
-    "validate": IntegerValidator,
-    "filter": lambda val: int(val)
+    "message": "enter sampling frequency (f)",
+    "validate": FloatValidator,
+    "filter": lambda val: float(val)
 }
 p = {
     'type': "input",

@@ -18,17 +18,17 @@ class Signal:
 
     @staticmethod
     def sample(function, parameters):
-        return [function(parameters, x / parameters.f) for x in range(int(parameters.d - parameters.t1) * parameters.f)]
+        return [function(parameters, x / parameters.f) for x in range(int((parameters.d - parameters.t1) * parameters.f))]
 
     def quantize_flat(self, level):
         step = (max(self.samples) - min(self.samples)) / level
-        samples = step * np.round(np.array(self.samples)/step)
-        return Signal(self.parameters, list(samples), self.type + "_quantized_" + str(level))
+        samples = step * np.floor(np.array(self.samples)/step)
+        return Signal(self.parameters, list(samples), self.type + "_quantized_flat_" + str(level))
 
     def quantize_round(self, level):
         step = (max(self.samples) - min(self.samples)) / level
-        samples = step * np.round(np.array(self.samples)/step) - step
-        return Signal(self.parameters, samples, self.type + "_quantized_" + str(level))
+        samples = step * np.round(np.array(self.samples)/step)
+        return Signal(self.parameters, list(samples), self.type + "_quantized_round_" + str(level))
 
     def interpolate_zero(self, samples_number):
         return self
@@ -66,12 +66,12 @@ class Signal:
                 samples.append(self.samples[i] / signal.samples[i])
         return Signal(self.parameters, samples, self.type + "_divide_" + signal.type)
 
-    def print_plot(self):
+    def print_plot(self, signal=None):
         plt.figure().suptitle(self.type)
-        if self.type == "unit_impulse" or self.type == "noise_impulse":
-            plt.scatter([i / self.parameters.f for i in range(len(self.samples))], self.samples, s=1)
-        else:
-            plt.plot([i / self.parameters.f for i in range(len(self.samples))], self.samples)
+        plt.plot([i / self.parameters.f for i in range(len(self.samples))], self.samples)
+        if signal is not None:
+            plt.plot([i / signal.parameters.f for i in range(len(signal.samples))], signal.samples)
+
         plt.savefig("plots/" + self.type)
         plt.show()
         return self
@@ -175,3 +175,7 @@ class Signal:
 
 def print_yellow(text):
     print('\033[93m' + text + '\033[0m')
+
+# if self.type == "unit_impulse" or self.type == "noise_impulse":
+#     plt.scatter([i / self.parameters.f for i in range(len(self.samples))], self.samples, s=1)
+# else:
