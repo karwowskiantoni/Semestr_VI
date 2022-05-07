@@ -6,57 +6,78 @@ from Parameters import Parameters
 
 
 class Signal:
-    def __init__(self, parameters, ticks, type):
+    def __init__(self, parameters, samples, type):
         self.parameters = parameters
-        self.ticks = ticks
+        self.samples = samples
         self.type = type
 
     @staticmethod
     def generate(function, parameters):
-        return Signal(parameters,
-                      [function(parameters, x / parameters.f) for x
-                      in range(int(parameters.d - parameters.t1) * parameters.f)],
-                      function.__name__)
+        samples = Signal.sample(function, parameters)
+        return Signal(parameters, samples, function.__name__)
+
+    @staticmethod
+    def sample(function, parameters):
+        return [function(parameters, x / parameters.f) for x in range(int(parameters.d - parameters.t1) * parameters.f)]
+
+    def quantize_flat(self, level):
+        step = (max(self.samples) - min(self.samples)) / level
+        samples = step * np.round(np.array(self.samples)/step)
+        return Signal(self.parameters, list(samples), self.type + "_quantized_" + str(level))
+
+    def quantize_round(self, level):
+        step = (max(self.samples) - min(self.samples)) / level
+        samples = step * np.round(np.array(self.samples)/step) - step
+        return Signal(self.parameters, samples, self.type + "_quantized_" + str(level))
+
+    def interpolate_zero(self, samples_number):
+        return self
+
+    def interpolate_first(self, samples_number):
+        return self
+
+    def interpolate_sin(self, samples_number):
+        return self
 
     def sum(self, signal):
-        ticks = []
-        for i in range(min(len(self.ticks), len(signal.ticks))):
-            ticks.append(self.ticks[i] + signal.ticks[i])
-        return Signal(self.parameters, ticks, self.type + " sum " + signal.type)
+        samples = []
+        for i in range(min(len(self.samples), len(signal.samples))):
+            samples.append(self.samples[i] + signal.samples[i])
+        return Signal(self.parameters, samples, self.type + "_sum_" + signal.type)
 
     def difference(self, signal):
-        ticks = []
-        for i in range(min(len(self.ticks), len(signal.ticks))):
-            ticks.append(self.ticks[i] - signal.ticks[i])
-        return Signal(self.parameters, ticks, self.type + " difference " + signal.type)
+        samples = []
+        for i in range(min(len(self.samples), len(signal.samples))):
+            samples.append(self.samples[i] - signal.samples[i])
+        return Signal(self.parameters, samples, self.type + "_difference_" + signal.type)
 
     def product(self, signal):
-        ticks = []
-        for i in range(min(len(self.ticks), len(signal.ticks))):
-            ticks.append(self.ticks[i] * signal.ticks[i])
-        return Signal(self.parameters, ticks, self.type + " product " + signal.type)
+        samples = []
+        for i in range(min(len(self.samples), len(signal.samples))):
+            samples.append(self.samples[i] * signal.samples[i])
+        return Signal(self.parameters, samples, self.type + "_product_" + signal.type)
 
     def divide(self, signal):
-        ticks = []
-        for i in range(min(len(self.ticks), len(signal.ticks))):
-            if signal.ticks[i] == 0:
-                ticks.append(self.ticks[i])
+        samples = []
+        for i in range(min(len(self.samples), len(signal.samples))):
+            if signal.samples[i] == 0:
+                samples.append(self.samples[i])
             else:
-                ticks.append(self.ticks[i] / signal.ticks[i])
-        return Signal(self.parameters, ticks, self.type + " divide " + signal.type)
+                samples.append(self.samples[i] / signal.samples[i])
+        return Signal(self.parameters, samples, self.type + "_divide_" + signal.type)
 
     def print_plot(self):
         plt.figure().suptitle(self.type)
         if self.type == "unit_impulse" or self.type == "noise_impulse":
-            plt.scatter([i / self.parameters.f for i in range(len(self.ticks))], self.ticks, s=1)
+            plt.scatter([i / self.parameters.f for i in range(len(self.samples))], self.samples, s=1)
         else:
-            plt.plot([i / self.parameters.f for i in range(len(self.ticks))], self.ticks)
+            plt.plot([i / self.parameters.f for i in range(len(self.samples))], self.samples)
         plt.savefig("plots/" + self.type)
         plt.show()
         return self
 
     def print_histogram(self, divisions_number):
-        plt.hist(self.ticks, bins=divisions_number)
+        plt.hist(self.samples, bins=divisions_number)
         plt.savefig("hists/" + self.type)
         plt.show()
         return self
@@ -73,33 +94,59 @@ class Signal:
 
     def average(self):
         value = (1 / self.parameters.d) * np.sum(
-            self.ticks) * self.parameters.d / len(self.ticks)
+            self.samples) * self.parameters.d / len(self.samples)
         return value
 
     def absolute_average(self):
         value = (1 / self.parameters.d) * np.sum(
-            np.absolute(self.ticks)
-        ) * self.parameters.d / len(self.ticks)
+            np.absolute(self.samples)
+        ) * self.parameters.d / len(self.samples)
         return value
 
     def average_power(self):
         value = (1 / self.parameters.d) * np.sum(
-            np.power(self.ticks, 2)
-        ) * self.parameters.d / len(self.ticks)
+            np.power(self.samples, 2)
+        ) * self.parameters.d / len(self.samples)
         return value
 
     def variance(self):
         avg_signal_val = self.average()
         value = (1 / self.parameters.d) * np.sum(
-            np.power(np.subtract(self.ticks, avg_signal_val), 2)
-        ) * self.parameters.d / len(self.ticks)
+            np.power(np.subtract(self.samples, avg_signal_val), 2)
+        ) * self.parameters.d / len(self.samples)
         return value
 
     def root_mean_square(self):
         value = np.sqrt(self.average_power())
         return value
 
-    def serialize(self, filename):
+    def print_comparison(self, signal):
+        if len(signal.samples) != len(self.samples):
+            print_yellow("signals with different sampling, cannot compare")
+            return self
+        print_yellow("--------------comparison--------------")
+        print_yellow("| mean square error: " + str(self.mean_square_error(signal)))
+        print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
+        print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
+        print_yellow("| max difference: " + str(self.max_difference(signal)))
+        print_yellow("--------------------------------------")
+        return self
+
+    def mean_square_error(self, signal):
+        return 0
+
+    def signal_to_noise_ratio(self, signal):
+        return 0
+
+    def max_signal_to_noise_ratio(self, signal):
+        return 0
+
+    def max_difference(self, signal):
+        return 0
+
+    def serialize(self, filename=None):
+        if filename is None:
+            filename = self.type
         with open("signals/" + filename + ".signal", "w") as file:
             file.write(js.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4))
         return self
@@ -121,7 +168,7 @@ class Signal:
                     n1=dictionary['parameters']['n1'],
                     ns=dictionary['parameters']['ns']
                 ),
-                dictionary['ticks'],
+                dictionary['samples'],
                 dictionary['type'])
             return signal
 
