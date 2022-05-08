@@ -2,6 +2,7 @@ import json as js
 import matplotlib.pyplot as plt
 import numpy as np
 
+from math import log10
 from Parameters import Parameters
 
 
@@ -38,6 +39,15 @@ class Signal:
 
     def interpolate_sin(self, samples_number):
         return self
+
+    def first_order_hold(self, x):
+        pass
+
+    def zero_order_hold(self, x):
+        pass
+
+    def sinc(self, x):
+        pass
 
     def sum(self, signal):
         samples = []
@@ -133,16 +143,16 @@ class Signal:
         return self
 
     def mean_square_error(self, signal):
-        return 0
+        return sum([pow(self.samples[i] - signal.samples[i], 2) for i in range(len(self.samples))]) / len(self.samples)
 
     def signal_to_noise_ratio(self, signal):
-        return 0
+        return 10 * log10(sum([pow(i, 2) for i in self.samples]) / sum([pow(self.samples[i] - signal.samples[i], 2) for i in range(len(self.samples))]))
 
     def max_signal_to_noise_ratio(self, signal):
-        return 0
+        return 10 * log10(max(self.samples) / self.mean_square_error(signal))
 
     def max_difference(self, signal):
-        return 0
+        return max([abs(self.samples[i] - signal.samples[i]) for i in range(len(self.samples))])
 
     def serialize(self, filename=None):
         if filename is None:
