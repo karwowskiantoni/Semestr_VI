@@ -35,9 +35,9 @@ LOUDNESS = 0.5
 LOUDNESS_MULTIPLIER = 0.1
 
 
-def butterfly_with_params(measured_parameter=None):
+def butterfly_with_params(colour, measured_parameter=None):
     results = []
-    for i in tqdm(range(STEPS), ncols=100, colour="#2684ff"):
+    for i in tqdm(range(STEPS), ncols=100, colour=colour):
         results.append(butterfly_optimization_algorithm(
             function=FUNCTION,
             domain=DOMAIN,
@@ -52,9 +52,9 @@ def butterfly_with_params(measured_parameter=None):
     return results
 
 
-def bat_with_params(measured_parameter=None):
+def bat_with_params(colour, measured_parameter=None):
     results = []
-    for i in tqdm(range(STEPS), ncols=100, colour="#f5459a"):
+    for i in tqdm(range(STEPS), ncols=100, colour=colour):
         results.append(bat_optimization_algorithm(
             function=FUNCTION,
             domain=DOMAIN,
@@ -74,10 +74,12 @@ def bat_with_params(measured_parameter=None):
 if __name__ == '__main__':
     x_values = [i_function(i) for i in range(STEPS)]
 
-    result_sets_1 = [butterfly_with_params() for _ in range(10)]
-    result_sets_2 = [bat_with_params() for _ in range(10)]
+    result_sets_1 = [butterfly_with_params("#2684FF") for _ in range(6)]
+    result_sets_2 = [bat_with_params("#9838AB") for _ in range(6)]
+    result_sets_3 = [butterfly_with_params("#F5459A") for _ in range(6)]
 
     plt.plot(x_values, np.array(result_sets_1).mean(axis=0), "#2684FF")
+    plt.plot(x_values, np.array(result_sets_3).mean(axis=0), "#9838AB")
     plt.plot(x_values, np.array(result_sets_2).mean(axis=0), "#F5459A")
 
     plt.title(FUNCTION.__name__ + " function")

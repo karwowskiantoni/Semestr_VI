@@ -58,6 +58,7 @@ command_2 = {
     'choices': ["sample",
                 "quantize",
                 "interpolate",
+                "plot",
                 "compare",
                 "exit"]
 }
@@ -138,8 +139,8 @@ A = {
 T = {
     'type': "input",
     "name": "T",
-    "default": "2",
-    "message": "Enter the signal interval (T)",
+    "default": "0.5",
+    "message": "Enter the signal frequency (f)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
