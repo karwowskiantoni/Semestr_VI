@@ -111,11 +111,11 @@ divisions = {
     'choices': ["5", "10", "15", "20", "25"],
     'filter': lambda val: int(val)
 }
-samples_number = {
+new_f = {
     'type': "input",
-    "name": "samples_number",
-    "message": "enter number of samples for new signal",
-    "default": "5",
+    "name": "new frequency",
+    "message": "enter sampling frequency for new signal",
+    "default": "60",
     "validate": IntegerValidator,
     "filter": lambda val: int(val)
 }

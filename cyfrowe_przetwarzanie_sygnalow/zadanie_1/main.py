@@ -7,7 +7,7 @@ from functions import uniform_noise, sinus, half_rectified_sinus, \
     unit_jump, unit_impulse, noise_impulse, gauss_noise
 from questions import signal_type, t1, f, d, A, \
     T, kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, \
-    command_2, samples_number
+    command_2, new_f
 
 
 def ask(question):
@@ -78,11 +78,11 @@ if __name__ == '__main__':
             signal = Signal.deserialize(ask(existing_signal()))
             chosen_type = ask(interpolation_type)
             if chosen_type == "zero order hold":
-                interpolated = signal.interpolate_zero(ask(samples_number))
+                interpolated = signal.interpolate_zero(ask(new_f))
             elif chosen_type == "first order hold":
-                interpolated = signal.interpolate_first(ask(samples_number))
+                interpolated = signal.interpolate_first(ask(new_f))
             else:
-                interpolated = signal.interpolate_sin(ask(samples_number))
+                interpolated = signal.interpolate_sin(ask(new_f))
             interpolated.print_plot()
             interpolated.serialize(ask(name_with_default(interpolated.type)))
 

@@ -1,4 +1,6 @@
 import json as js
+from copy import deepcopy
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -31,23 +33,49 @@ class Signal:
         samples = step * np.round(np.array(self.samples)/step)
         return Signal(self.parameters, list(samples), self.type + "_quantized_round_" + str(level))
 
-    def interpolate_zero(self, samples_number):
-        return self
+    def interpolate_zero(self, new_frequency):
+        parameters = deepcopy(self.parameters)
+        parameters.f = new_frequency
+        return Signal(parameters, Signal.sample(self.zero_order_hold, parameters), "zero_order_hold_" + self.type)
 
-    def interpolate_first(self, samples_number):
-        return self
+    def interpolate_first(self, new_frequency):
+        parameters = deepcopy(self.parameters)
+        parameters.f = new_frequency
+        return Signal(parameters, Signal.sample(self.first_order_hold, parameters), "first_order_hold_" + self.type)
 
-    def interpolate_sin(self, samples_number):
-        return self
+    def interpolate_sin(self, new_frequency):
+        parameters = deepcopy(self.parameters)
+        parameters.f = new_frequency
+        return Signal(parameters, Signal.sample(self.interpolate_sinc, parameters), "interpolate_sinc_" + self.type)
 
-    def first_order_hold(self, x):
-        pass
+    def zero_order_hold(self, params, t):
+        T = 1 / self.parameters.f
+        return sum([self.samples[i] * self.rect((t - (T/2) - (i*T) ) / T) for i in range(len(self.samples))])
 
-    def zero_order_hold(self, x):
-        pass
+    def first_order_hold(self, params, t):
+        T = 1 / self.parameters.f
+        return sum([self.samples[i] * self.tri((t - (i * T)) / T) for i in range(len(self.samples))])
+
+    def interpolate_sinc(self, params, t):
+        T = 1 / self.parameters.f
+        return sum([self.samples[i] * self.sinc((t/T)-i) for i in range(len(self.samples))])
+
+    def rect(self, t):
+        if abs(t) > 1/2:
+            return 0
+        elif abs(t) == 1/2:
+            return 1/2
+        else:
+            return 1
+
+    def tri(self, x):
+        return max(1 - abs(x), 0)
 
     def sinc(self, x):
-        pass
+        if x == 0:
+            return 1
+        else:
+            return np.sin(np.pi * x) / (np.pi * x)
 
     def sum(self, signal):
         samples = []
