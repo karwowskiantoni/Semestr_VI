@@ -36,12 +36,33 @@ class ZeroToOneValidator(Validator):
                                   cursor_position=len(document.text))
 
 
-command_type = {
+command_1 = {
     'type': 'list',
     'name': 'command_type',
     'message': 'choose option:',
-    'choices': ["generate", "sum", "difference", "product", "divide", "plot", "hist", "stat", "exit"]
+    'choices': ["generate",
+                "sum",
+                "difference",
+                "product",
+                "divide",
+                "plot",
+                "hist",
+                "stat",
+                "exit"]
 }
+
+command_2 = {
+    'type': 'list',
+    'name': 'command_type',
+    'message': 'choose option:',
+    'choices': ["sample",
+                "quantize",
+                "interpolate",
+                "plot",
+                "compare",
+                "exit"]
+}
+
 signal_type = {
     'type': 'list',
     'name': 'signal_type',
@@ -58,26 +79,54 @@ signal_type = {
                 "unit impulse",
                 "noise impulse"]
 }
-available_signals = {
+existing_signal_unfilled = {
     'type': 'list',
     'name': 'available_signals',
     'message': 'choose one of available signals:',
-    'choices': [file.replace(".signal", "") for file in listdir("signals") if file.__contains__(".signal")]
+    'choices': []
 }
 
 
-def generate_available_signals():
-    signals = available_signals
-    signals['choices'] = [file.replace(".signal", "") for file in listdir("signals") if file.__contains__(".signal")]
-    return signals
+def existing_signal():
+    question = existing_signal_unfilled
+    question['choices'] = [file.replace(".signal", "") for file in listdir("signals") if file.__contains__(".signal")]
+    return question
 
 
+interpolation_type = {
+    'type': 'list',
+    'name': 'interpolation_type',
+    'message': 'choose interpolation type:',
+    'choices': ["zero order hold", "first order hold", "sinc function"]
+}
+quantize_type = {
+    'type': 'list',
+    'name': 'quantize_type',
+    'message': 'choose quantization type:',
+    'choices': ["flat", "round"]
+}
 divisions = {
     'type': 'list',
     'name': 'divisions',
     'message': 'select histogram number of divisions',
     'choices': ["5", "10", "15", "20", "25"],
     'filter': lambda val: int(val)
+}
+new_f = {
+    'type': "input",
+    "name": "new frequency",
+    "message": "enter sampling frequency for new signal",
+    "default": "60",
+    "validate": IntegerValidator,
+    "filter": lambda val: int(val)
+}
+level = {
+    'type': "input",
+    "name": "level",
+    "message": "Enter the quantization level",
+    "default": "5",
+    "validate": IntegerValidator,
+    "filter": lambda val: int(val)
 }
 A = {
     'type': "input",
@@ -90,8 +139,8 @@ A = {
 T = {
     'type': "input",
     "name": "T",
-    "default": "2",
-    "message": "Enter the signal interval (T)",
+    "default": "0.5",
+    "message": "Enter the signal frequency (f)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
@@ -131,9 +180,9 @@ f = {
     'type': "input",
     "name": "f",
     "default": "60",
-    "message": "Enter the signal frequency (f)",
-    "validate": IntegerValidator,
-    "filter": lambda val: int(val)
+    "message": "enter sampling frequency (f)",
+    "validate": FloatValidator,
+    "filter": lambda val: float(val)
 }
 p = {
     'type': "input",
@@ -168,7 +217,7 @@ name = {
 }
 
 
-def get_name(default):
-    selected_name = name
-    name['default'] = default
-    return selected_name
+def name_with_default(default):
+    question = name
+    question['default'] = default
+    return question
