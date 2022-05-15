@@ -1,11 +1,10 @@
 from typing import List
-
-from decorator import np_cache
+from numba import njit
 
 SPHERE_DOMAIN = tuple((-100, 100))
 
 
-@np_cache
+@njit()
 def sphere(params: List):
     return sum([x**2 for x in params])
 
@@ -13,6 +12,6 @@ def sphere(params: List):
 ROSENBROCK_DOMAIN = tuple((-2.048, 2.048))
 
 
-@np_cache
-def rosenbrock(params):
-    return sum([100 * (params[i + 1] - params[i]**2)**2 + (params[i] - 1)**2 for i in range(len(params) - 1)])
+@njit()
+def rosenbrock(x):
+    return sum(100.0*(x[1:]-x[:-1]**2.0)**2.0 + (1-x[:-1])**2.0)
