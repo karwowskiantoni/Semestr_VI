@@ -3,7 +3,7 @@ import numpy as np
 from swarm.Particle import Particle
 
 
-def genetic_learning_particle_swarm_optimization_algorithm(
+def gl_pso(
         function,
         dimensions_number,
         inertia_weight,

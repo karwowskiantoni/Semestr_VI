@@ -46,7 +46,7 @@ SCHWEFEL_DOMAIN = tuple((-10, 10))
 
 @njit()
 def schwefel(x):
-    return np.prod(np.abs(x)**2) + np.prod(np.abs(x))
+    return np.sum(np.abs(x)**2) + np.prod(np.abs(x))
 
 
 ROSENBROCK_DOMAIN = tuple((-2.048, 2.048))
