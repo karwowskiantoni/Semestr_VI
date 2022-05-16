@@ -2,7 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-from functions import rosenbrock, ROSENBROCK_DOMAIN, sphere, SPHERE_DOMAIN
+from functions import \
+    rosenbrock, ROSENBROCK_DOMAIN, \
+    sphere, SPHERE_DOMAIN, \
+    step, STEP_DOMAIN, \
+    quartic, QUARTIC_DOMAIN, \
+    exponential, EXPONENTIAL_DOMAIN, \
+    f_two, F_TWO_DOMAIN, \
+    schwefel, SCHWEFEL_DOMAIN
 
 # RUN CONFIGURATION
 from swarm.swarm import genetic_learning_particle_swarm_optimization_algorithm
@@ -13,8 +20,8 @@ END = 55
 i_function = lambda i: int( ((END - BEGIN) / STEPS) * i) + BEGIN
 
 # COMMON ATTRIBUTES
-FUNCTION = rosenbrock
-DOMAIN = ROSENBROCK_DOMAIN
+FUNCTION = schwefel
+DOMAIN = SCHWEFEL_DOMAIN
 DIMENSIONS_NUMBER = 20
 POPULATION_SIZE = 50
 ITERATION_NUMBER = 35
@@ -84,7 +91,7 @@ if __name__ == '__main__':
     genetic_swarm_obl_result_sets = []
     genetic_swarm_de_result_sets = []
 
-    for i in range(20):
+    for i in range(5):
         genetic_swarm_result_sets.append(genetic_learning_swarm_with_params())
         genetic_swarm_obl_result_sets.append(genetic_learning_swarm_obl_with_params())
         genetic_swarm_de_result_sets.append(genetic_learning_swarm_de_mutation_with_params())
