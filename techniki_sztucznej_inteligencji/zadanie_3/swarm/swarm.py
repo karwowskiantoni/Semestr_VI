@@ -11,12 +11,15 @@ def genetic_learning_particle_swarm_optimization_algorithm(
         stopping_gap,
         domain,
         population_size,
-        iteration_number):
+        iteration_number,
+        obl=False,
+        de_mutation=False):
     global_best_position = [0] * dimensions_number
-    swarm = np.array([Particle(function, dimensions_number, domain, inertia_weight, stopping_gap)
+    swarm = np.array([Particle(dimensions_number, domain)
              for _ in range(population_size)])
 
     global_best_adaptation = np.inf
+    lower_bound, upper_bound = domain
 
     for particle in swarm:
         if particle.best_adaptation < global_best_adaptation:
@@ -26,12 +29,12 @@ def genetic_learning_particle_swarm_optimization_algorithm(
     for _ in range(iteration_number):
         for particle in swarm:
             particle.crossover(swarm, global_best_position)
-            particle.mutate(mutation_probability)
-            particle.evaluate_adaptation()
-            particle.selection(global_best_position)
+            particle.mutate(swarm, mutation_probability, lower_bound, upper_bound, de_mutation)
+            particle.evaluate_adaptation(function)
+            particle.selection(global_best_position, stopping_gap, function, obl)
 
-            particle.calculate_new_velocity(0.1)
-            particle.move_to_new_position()
+            particle.calculate_new_velocity(0.1, inertia_weight)
+            particle.move_to_new_position(lower_bound, upper_bound)
 
             if particle.best_adaptation < global_best_adaptation:
                 global_best_position = particle.best_position.copy()
