@@ -14,32 +14,53 @@ from functions import \
 # RUN CONFIGURATION
 from swarm.swarm import genetic_learning_particle_swarm_optimization_algorithm
 
-STEPS = 50
-BEGIN = 5
-END = 55
+STEPS = 20
+BEGIN = 7
+END = 27
 i_function = lambda i: int( ((END - BEGIN) / STEPS) * i) + BEGIN
 
 # COMMON ATTRIBUTES
-FUNCTION = schwefel
-DOMAIN = SCHWEFEL_DOMAIN
-DIMENSIONS_NUMBER = 20
-POPULATION_SIZE = 50
-ITERATION_NUMBER = 35
+FUNCTION = rosenbrock # 7 funkcji
+DOMAIN = ROSENBROCK_DOMAIN # 7 funkcji
+DIMENSIONS_NUMBER = 30 # 3 wersje
+POPULATION_SIZE = 50 # 2 wersje
+ITERATION_NUMBER = 20 # 2 wersje
+
+# wymiary(d) 30, 50, 100
+# funkcje(f) 1, 2, 3, 4, 5, 6, 7
+# population size(p) 20, 50
+# iteration number(i) 20, 50
+
+#  default 30d, 50p, 20i
+
+# gl-pso | f1 | 30d vs 50d vs 100d
+# gl-pso | f1 | 20p vs 50p
+# gl-pso | f1 | 20i vs 50i
+# gl-pso | f1 vs f5 vs f6 | *
+
+# gl-pso vs gl-pso-obl vs gl-pso-de | f1 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f2 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f3 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f4 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f5 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f6 | *
+# gl-pso vs gl-pso-obl vs gl-pso-de | f7 | *
+
 
 # SWARM ATTRIBUTES
-INERTIA_WEIGHT = 0.2
-MUTATION_PROBABILITY = 0.01
-STOPPING_GAP = 10000
-AMPLIFICATION_FACTOR = 0.45
+INERTIA_WEIGHT = 0.2 # stała
+MUTATION_PROBABILITY = 0.01 # stałe
+STOPPING_GAP = 10000 # to kurwa nie istnieje tak naprawde
+AMPLIFICATION_FACTOR = 0.45 # jest zajebisty nie ruszać
 
 
-def genetic_learning_swarm_with_params():
+def genetic_learning_swarm_with_params(customized):
     results = []
     for i in tqdm(range(STEPS), ncols=100, position=0, colour="#28732c"):
         results.append(genetic_learning_particle_swarm_optimization_algorithm(
             function=FUNCTION,
             domain=DOMAIN,
-            dimensions_number=DIMENSIONS_NUMBER,
+            dimensions_number=customized,
             iteration_number=i_function(i),
             population_size=POPULATION_SIZE,
             inertia_weight=INERTIA_WEIGHT,
@@ -86,25 +107,11 @@ def genetic_learning_swarm_de_mutation_with_params():
 if __name__ == '__main__':
 
     x_values = [i_function(i) for i in range(STEPS)]
-
-    genetic_swarm_result_sets = []
-    genetic_swarm_obl_result_sets = []
-    genetic_swarm_de_result_sets = []
-
-    for i in range(5):
-        genetic_swarm_result_sets.append(genetic_learning_swarm_with_params())
-        genetic_swarm_obl_result_sets.append(genetic_learning_swarm_obl_with_params())
-        genetic_swarm_de_result_sets.append(genetic_learning_swarm_de_mutation_with_params())
-
-    genetic_swarm_averages = np.array(genetic_swarm_result_sets).mean(axis=0)
-    genetic_swarm_obl_averages = np.array(genetic_swarm_obl_result_sets).mean(axis=0)
-    genetic_swarm_de_averages = np.array(genetic_swarm_de_result_sets).mean(axis=0)
-
-    plt.plot(x_values, genetic_swarm_averages, "#28732c")
-    plt.plot(x_values, genetic_swarm_obl_averages, "#cf2b67")
-    plt.plot(x_values, genetic_swarm_de_averages, "#3248a8")
+    plt.plot(x_values, np.array([genetic_learning_swarm_with_params(30) for _ in range(5)]).mean(axis=0), "#28732c")
+    plt.plot(x_values, np.array([genetic_learning_swarm_with_params(50) for _ in range(5)]).mean(axis=0), "#cf2b67")
+    plt.plot(x_values, np.array([genetic_learning_swarm_with_params(100) for _ in range(5)]).mean(axis=0), "#3248a8")
     plt.title(FUNCTION.__name__ + " function")
-    plt.legend(["genetic", "obl", "de_mutation"])
+    plt.legend(["30 dimensions", "50 dimensions", "100 dimensions"])
     plt.xlabel("iteration number")
     plt.ylabel("best result")
     plt.show()
