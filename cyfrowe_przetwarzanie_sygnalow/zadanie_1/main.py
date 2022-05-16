@@ -57,7 +57,7 @@ if __name__ == '__main__':
             else:
                 parameters = Parameters(**(multiple_ask([t1, f, d, A, p])))
                 signal = Signal.generate(noise_impulse, parameters)
-            signal.print_plot().serialize(ask(name_with_default(signal.type)))
+            signal.serialize(ask(name_with_default(signal.type)))
 
         elif command == "quantize":
             signal = Signal.deserialize(ask(existing_signal()))
@@ -65,7 +65,6 @@ if __name__ == '__main__':
                 quantized = signal.quantize_flat(ask(level))
             else:
                 quantized = signal.quantize_round(ask(level))
-            quantized.print_plot()
             quantized.serialize(ask(name_with_default(quantized.type)))
 
         elif command == "compare":
@@ -83,7 +82,6 @@ if __name__ == '__main__':
                 interpolated = signal.interpolate_first(ask(new_f))
             else:
                 interpolated = signal.interpolate_sin(ask(new_f))
-            interpolated.print_plot()
             interpolated.serialize(ask(name_with_default(interpolated.type)))
 
         elif command == "plot":

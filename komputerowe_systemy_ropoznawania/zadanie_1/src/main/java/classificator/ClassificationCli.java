@@ -23,20 +23,20 @@ public class ClassificationCli implements Callable<Integer> {
       names = {"-k", "--K"},
       description = "K, number of nearest neighbours considered in classification algorithm",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer K = 2;
+  private Integer K = 100;
 
   @Option(
       names = {"-p", "--pivot"},
       description =
           "pivot in which dataset is splitted into test set and training set, (value between 0 and 100)",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private Integer pivot = 50;
+  private Integer pivot = 20;
 
   @Option(
       names = {"-m", "--metric"},
       description = "distance metric used for classification, (chebyshev/euclidean/taxicab)",
       showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private String metricType = "euclidean";
+  private String metricType = "chebyshev";
 
   @Override
   public Integer call() throws Exception {

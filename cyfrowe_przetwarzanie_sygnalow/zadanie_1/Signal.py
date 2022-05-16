@@ -16,6 +16,7 @@ class Signal:
 
     @staticmethod
     def generate(function, parameters):
+        parameters.T = 1/parameters.T
         samples = Signal.sample(function, parameters)
         return Signal(parameters, samples, function.__name__)
 
