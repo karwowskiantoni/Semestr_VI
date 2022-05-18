@@ -19,28 +19,28 @@ class Individual:
 
     def mutate(self, chosen, other_individuals):
         mutant = chosen.copy()
-        for i in range(len(chosen.position)):
-            mutant.position[i] += self.amplification_factor * (other_individuals[0].position[i] - other_individuals[1].position[i])
+        for i in range(len(chosen.genome)):
+            mutant.genome[i] += self.amplification_factor * \
+                                  (other_individuals[0].genome[i] -
+                                   other_individuals[1].genome[i])
 
-            if mutant.position[i] < self.domain[0]:
-                mutant.position[i] = self.domain[0]
-            if mutant.position[i] > self.domain[1]:
-                mutant.position[i] = self.domain[1]
+            if mutant.genome[i] < self.domain[0]:
+                mutant.genome[i] = self.domain[0]
+            if mutant.genome[i] > self.domain[1]:
+                mutant.genome[i] = self.domain[1]
 
         return mutant
 
     def cross(self, mutant):
         trial = mutant.copy()
-        for i in range(len(trial.position)):
+        for i in range(len(trial.genome)):
             if random.random() <= self.crossing_factor:
-                trial.position[i] = self.genome[i]
+                trial.genome[i] = self.genome[i]
         return trial
 
     def select(self, trial):
-        if self.fitness() < trial.fitness():
-            return self
-        else:
-            return trial
+        if self.fitness() < trial.fitness(): return self
+        else: return trial
 
     def fitness(self):
         return self.fitness_function(self.genome)
