@@ -1,8 +1,9 @@
-package qualifiers;
+package qualification;
 
 import static java.lang.Math.*;
 
 public class MembershipFunctions {
+
     public static double trapezium(
             double x,
             double begin,

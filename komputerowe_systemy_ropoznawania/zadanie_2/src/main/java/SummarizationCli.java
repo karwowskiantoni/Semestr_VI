@@ -1,16 +1,18 @@
-import database.Meal;
-import database.MealDatabase;
+import qualification.MembershipLabel;
+import qualification.linguisticvariables.SatietyLinguisticVariable;
 
 import java.util.List;
 
 class SummarizationCli {
     public static void main(String... args) {
-        List<Meal> data = MealDatabase.data();
-        System.out.println(data.get(0));
-        System.out.println(data.get(1));
-        System.out.println(data.get(2));
-        System.out.println(data.get(3));
-        System.out.println(data.get(4));
+        List<Double> calc = SatietyLinguisticVariable.calculateMembership(MembershipLabel.SatietyMembershipLabel.EXTREMELY_HIGH_CALORIE);
+        int i = 0;
+        for (Double mem : calc){
+            if(mem != 0){
+                i++;
+            }
+        }
+        System.out.println(i);
     }
 }
 

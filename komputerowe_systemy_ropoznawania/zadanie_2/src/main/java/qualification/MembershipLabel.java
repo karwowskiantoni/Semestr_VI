@@ -1,8 +1,8 @@
-package qualifiers;
+package qualification;
 
-public final class MembersipLabel {
+public final class MembershipLabel {
 
-    public enum SatietyMembersipLabel {
+    public enum SatietyMembershipLabel {
         VERY_LOW_CALORIE, LOW_CALORIE, MEDIUM_CALORIE, HIGH_CALORIE, EXTREMELY_HIGH_CALORIE
     }
 
@@ -35,7 +35,7 @@ public final class MembersipLabel {
     }
 
     public enum DigestionSpeedMembershipLabel {
-        SLUGGISH, SLOW, FAST, RAPID
+        SLUGGISH, SLOW, STANDARD, FAST, RAPID
     }
 
     public enum AdaptationForDiabeticsMembershipLabel {
