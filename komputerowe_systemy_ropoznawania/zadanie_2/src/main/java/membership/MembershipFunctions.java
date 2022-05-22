@@ -1,4 +1,4 @@
-package qualification;
+package membership;
 
 import static java.lang.Math.*;
 

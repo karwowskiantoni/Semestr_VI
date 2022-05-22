@@ -1,4 +1,4 @@
-package qualification;
+package membership;
 
 public final class MembershipLabel {
 
@@ -40,5 +40,13 @@ public final class MembershipLabel {
 
     public enum AdaptationForDiabeticsMembershipLabel {
         AVOIDABLE, NEUTRAL, DESTINED_FOR_DIABETICS
+    }
+
+    public enum AbsoluteQuantifierMembershipLabel {
+        LESS_THAN_2000, ABOUT_2500, ABOUT_5000, ABOUT_6500, MORE_THAN_7000
+    }
+
+    public enum RelativeQuantifierMembershipLabel {
+        VERY_SMALL_AMOUNT, SMALL_AMOUNT, MEDIUM_AMOUNT, HIGH_AMOUNT, VERY_HIGH_AMOUNT
     }
 }
