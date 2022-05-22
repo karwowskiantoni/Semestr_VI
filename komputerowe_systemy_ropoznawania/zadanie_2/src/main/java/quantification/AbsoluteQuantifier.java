@@ -1,12 +1,9 @@
 package quantification;
 
-import database.MealDatabase;
-
 import static membership.MembershipFunctions.trapezium;
 import static membership.MembershipLabel.AbsoluteQuantifierMembershipLabel;
 
 public class AbsoluteQuantifier {
-    private final static int recordsAmount = MealDatabase.data().size();
 
     public static double calculateMembership(AbsoluteQuantifierMembershipLabel label, double sigmaCount) {
         return switch (label) {
