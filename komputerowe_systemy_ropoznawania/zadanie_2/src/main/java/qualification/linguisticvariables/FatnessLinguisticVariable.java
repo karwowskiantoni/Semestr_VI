@@ -5,8 +5,8 @@ import database.MealDatabase;
 import qualification.MembershipFunctions;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static qualification.MembershipLabel.FatnessMembershipLabel;
 
 public class FatnessLinguisticVariable {
@@ -18,27 +18,27 @@ public class FatnessLinguisticVariable {
                     .stream()
                     .map(meal ->
                             MembershipFunctions.trapezium(meal.fatness(), 0, 0, 5, 10)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case LITTLE_FAT -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.trapezium(meal.fatness(), 6, 12, 18, 20)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case FAT -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.trapezium(meal.fatness(), 15, 25, 30, 35)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case HIGH_FAT -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.trapezium(meal.fatness(), 30, 40, 50, 60)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case EXTREMELY_FAT -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.trapezium(meal.fatness(), 40, 60, 100, 100)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
         };
     }
 }

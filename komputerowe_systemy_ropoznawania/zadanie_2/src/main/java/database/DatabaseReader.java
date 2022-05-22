@@ -1,6 +1,5 @@
 package database;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -9,8 +8,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 class DatabaseReader {
     static List<String> read() {
@@ -20,9 +21,8 @@ class DatabaseReader {
             Stream<String> fileLines = Files.lines(dbPath);
             List<String> withHeadings = fileLines.toList();
             fileLines.close();
-            System.out.println(withHeadings.get(100));
-            return correctValues(withHeadings.subList(2, withHeadings.size() - 1));
 
+            return correctValues(withHeadings.subList(2, withHeadings.size() - 1));
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -38,8 +38,8 @@ class DatabaseReader {
                     return "0";
                 }
                 return attribute;
-            }).collect(Collectors.joining(";"));
-        }).collect(Collectors.toList());
+            }).collect(joining(";"));
+        }).collect(toList());
 
     }
 }

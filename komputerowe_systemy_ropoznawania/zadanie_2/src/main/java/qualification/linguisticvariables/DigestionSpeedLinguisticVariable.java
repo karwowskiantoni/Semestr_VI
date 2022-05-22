@@ -5,8 +5,8 @@ import database.MealDatabase;
 import qualification.MembershipFunctions;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static qualification.MembershipLabel.DigestionSpeedMembershipLabel;
 
 public class DigestionSpeedLinguisticVariable {
@@ -18,27 +18,27 @@ public class DigestionSpeedLinguisticVariable {
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.digestionSpeed(), 0, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case SLOW -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.digestionSpeed(), 0.3, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case STANDARD -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.digestionSpeed(), 0.5, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case FAST -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.digestionSpeed(), 0.7, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case RAPID -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.digestionSpeed(), 1, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
         };
     }
 }

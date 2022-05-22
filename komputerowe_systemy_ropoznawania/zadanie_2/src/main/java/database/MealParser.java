@@ -1,7 +1,8 @@
 package database;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 class MealParser {
     static List<Meal> parse() {
@@ -19,6 +20,6 @@ class MealParser {
                     Double.parseDouble(attributesValues[11].replace(",", ".")),
                     Double.parseDouble(attributesValues[12].replace(",", ".")),
                     Double.parseDouble(attributesValues[13].replace(",", ".")));
-        }).collect(Collectors.toList());
+        }).collect(toList());
     }
 }

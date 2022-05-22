@@ -5,8 +5,8 @@ import database.MealDatabase;
 import qualification.MembershipFunctions;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static qualification.MembershipLabel.AdaptationForDiabeticsMembershipLabel;
 
 public class AdaptationForDiabeticsLinguisticVariable {
@@ -18,17 +18,17 @@ public class AdaptationForDiabeticsLinguisticVariable {
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.adaptationForDiabetics(), 0, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case NEUTRAL -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.adaptationForDiabetics(), 0.4, 0.1)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case DESTINED_FOR_DIABETICS -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.adaptationForDiabetics(), 1, 0.2)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
         };
     }
 }

@@ -6,7 +6,8 @@ import qualification.MembershipFunctions;
 import qualification.MembershipLabel.HealthinessMembershipLabel;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class HealthinessLinguisticVariable {
     private final static List<Meal> data = MealDatabase.data();
@@ -17,17 +18,17 @@ public class HealthinessLinguisticVariable {
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.healthiness(), 0, 0.2)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case HEALTHY -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.healthiness(), 0.6, 0.13)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
             case HEALTHFUL -> data
                     .stream()
                     .map(meal ->
                             MembershipFunctions.gauss(meal.healthiness(), 1, 0.10)
-                    ).collect(Collectors.toList());
+                    ).collect(toList());
         };
     }
 }
