@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.trapezium;
-import static membership.MembershipLabel.SweetnessMembershipLabel;
+import static summarization.math.Functions.trapezium;
 
-public class SweetnessLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class Sweetness {
+    public enum Label {
+        NOT_SWEET, SWEET, VERY_SWEET, MADE_OF_SUGAR
+    }
 
-    public static List<Double> calculateMembership(SweetnessMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case NOT_SWEET -> data
                     .stream()

@@ -1,9 +1,8 @@
-package membership;
+package summarization.math;
 
 import static java.lang.Math.*;
 
-public class MembershipFunctions {
-
+public class Functions {
     public static double trapezium(
             double x,
             double begin,

@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.gauss;
-import static membership.MembershipLabel.AdaptationForDiabeticsMembershipLabel;
+import static summarization.math.Functions.gauss;
 
-public class AdaptationForDiabeticsLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class AdaptationForDiabetics {
+    public enum Label {
+        AVOIDABLE, NEUTRAL, DESTINED_FOR_DIABETICS
+    }
 
-    public static List<Double> calculateMembership(AdaptationForDiabeticsMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case AVOIDABLE -> data
                     .stream()

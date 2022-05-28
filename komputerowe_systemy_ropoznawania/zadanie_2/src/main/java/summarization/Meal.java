@@ -1,4 +1,4 @@
-package database;
+package summarization;
 
 public record Meal(String name,
                    double satiety,

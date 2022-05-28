@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
-import membership.MembershipLabel.HealthinessMembershipLabel;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.gauss;
+import static summarization.math.Functions.gauss;
 
-public class HealthinessLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class Healthiness {
+    public enum Label {
+        UNHEALTHY, HEALTHY, HEALTHFUL
+    }
 
-    public static List<Double> calculateMembership(HealthinessMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case UNHEALTHY -> data
                     .stream()

@@ -1,19 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
-import membership.MembershipFunctions;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.*;
-import static membership.MembershipLabel.DigestionSpeedMembershipLabel;
+import static summarization.math.Functions.gauss;
 
-public class DigestionSpeedLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class DigestionSpeed {
+    public enum Label {
+        SLUGGISH, SLOW, STANDARD, FAST, RAPID
+    }
 
-    public static List<Double> calculateMembership(DigestionSpeedMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case SLUGGISH -> data
                     .stream()

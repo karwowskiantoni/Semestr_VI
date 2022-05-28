@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
-import membership.MembershipLabel.AntidepressivenessMembershipLabel;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.trapezium;
+import static summarization.math.Functions.trapezium;
 
-public class AntidepressivenessLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class Antidepressiveness {
+    public enum Label {
+        NO_IMPACT_ON_DEPRESSION, LITTLE_IMPACT_ON_DEPRESSION, IMPACTFUL_ON_DEPRESSION, HIGHLY_ANTIDEPRESSANT
+    }
 
-    public static List<Double> calculateMembership(AntidepressivenessMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case NO_IMPACT_ON_DEPRESSION -> data
                     .stream()

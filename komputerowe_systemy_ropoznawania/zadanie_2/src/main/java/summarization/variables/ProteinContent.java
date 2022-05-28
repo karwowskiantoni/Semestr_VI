@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.trapezium;
-import static membership.MembershipLabel.ProteinContentMembershipLabel;
+import static summarization.math.Functions.trapezium;
 
-public class ProteinContentLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class ProteinContent {
+    public enum Label {
+        LITTLE_PROTEIN, MEDIOCRE_PROTEIN, HIGH_PROTEIN
+    }
 
-    public static List<Double> calculateMembership(ProteinContentMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case LITTLE_PROTEIN -> data
                     .stream()

@@ -1,11 +1,14 @@
-package quantification;
+package summarization.quantification;
 
-import static membership.MembershipFunctions.trapezium;
-import static membership.MembershipLabel.AbsoluteQuantifierMembershipLabel;
+import static summarization.math.Functions.trapezium;
 
 public class AbsoluteQuantifier {
 
-    public static double calculateMembership(AbsoluteQuantifierMembershipLabel label, double sigmaCount) {
+    public enum Label {
+        LESS_THAN_2000, ABOUT_2500, ABOUT_5000, ABOUT_6500, MORE_THAN_7000
+    }
+
+    public static double membership(Label label, double sigmaCount) {
         return switch (label) {
             case LESS_THAN_2000 -> trapezium(sigmaCount, 0, 0, 1700, 1800);
             case ABOUT_2500 -> trapezium(sigmaCount, 1500, 1800, 3400, 3600);

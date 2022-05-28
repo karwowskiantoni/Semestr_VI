@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.trapezium;
-import static membership.MembershipLabel.AbsorptionMembershipLabel;
+import static summarization.math.Functions.trapezium;
 
-public class AbsorptionLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class Absorption {
+    public enum Label {
+        LITTLE_DIGESTED, MEDIOCRE_DIGESTED, FULLY_DIGESTED,
+    }
 
-    public static List<Double> calculateMembership(AbsorptionMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case LITTLE_DIGESTED -> data
                     .stream()

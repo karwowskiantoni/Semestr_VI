@@ -1,18 +1,18 @@
-package qualification;
+package summarization.variables;
 
-import database.Meal;
-import database.MealDatabase;
+import summarization.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static membership.MembershipFunctions.trapezium;
-import static membership.MembershipLabel.SatietyMembershipLabel;
+import static summarization.math.Functions.trapezium;
 
-public class SatietyLinguisticVariable {
-    private final static List<Meal> data = MealDatabase.data();
+public class Satiety {
+    public enum Label {
+        VERY_LOW_CALORIE, LOW_CALORIE, MEDIUM_CALORIE, HIGH_CALORIE, EXTREMELY_HIGH_CALORIE
+    }
 
-    public static List<Double> calculateMembership(SatietyMembershipLabel label) {
+    public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
             case VERY_LOW_CALORIE -> data
                     .stream()
