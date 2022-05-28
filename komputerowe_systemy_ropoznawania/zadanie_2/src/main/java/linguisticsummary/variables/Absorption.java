@@ -1,11 +1,11 @@
-package summarization.variables;
+package linguisticsummary.variables;
 
-import summarization.Meal;
+import linguisticsummary.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static summarization.math.Functions.trapezium;
+import static linguisticsummary.math.Functions.trapezium;
 
 public class Absorption {
     public enum Label {

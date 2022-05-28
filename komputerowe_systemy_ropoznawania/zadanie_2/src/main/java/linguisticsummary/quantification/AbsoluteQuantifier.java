@@ -1,6 +1,6 @@
-package summarization.quantification;
+package linguisticsummary.quantification;
 
-import static summarization.math.Functions.trapezium;
+import static linguisticsummary.math.Functions.trapezium;
 
 public class AbsoluteQuantifier {
 

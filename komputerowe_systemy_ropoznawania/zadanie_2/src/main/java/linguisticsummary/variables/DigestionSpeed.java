@@ -1,43 +1,43 @@
-package summarization.variables;
+package linguisticsummary.variables;
 
-import summarization.Meal;
+import linguisticsummary.Meal;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static summarization.math.Functions.trapezium;
+import static linguisticsummary.math.Functions.gauss;
 
-public class Fatness {
+public class DigestionSpeed {
     public enum Label {
-        ALMOST_WITHOUT_FAT, LITTLE_FAT, FAT, HIGH_FAT, EXTREMELY_FAT
+        SLUGGISH_DIGESTED, SLOW, STANDARD, FAST, RAPID
     }
 
     public static List<Double> membership(List<Meal> data, Label label) {
         return switch (label) {
-            case ALMOST_WITHOUT_FAT -> data
+            case SLUGGISH -> data
                     .stream()
                     .map(meal ->
-                            trapezium(meal.fatness(), 0, 0, 5, 10)
+                            gauss(meal.digestionSpeed(), 0, 0.1)
                     ).collect(toList());
-            case LITTLE_FAT -> data
+            case SLOW -> data
                     .stream()
                     .map(meal ->
-                            trapezium(meal.fatness(), 6, 12, 18, 20)
+                            gauss(meal.digestionSpeed(), 0.3, 0.1)
                     ).collect(toList());
-            case FAT -> data
+            case STANDARD -> data
                     .stream()
                     .map(meal ->
-                            trapezium(meal.fatness(), 15, 25, 30, 35)
+                            gauss(meal.digestionSpeed(), 0.5, 0.1)
                     ).collect(toList());
-            case HIGH_FAT -> data
+            case FAST -> data
                     .stream()
                     .map(meal ->
-                            trapezium(meal.fatness(), 30, 40, 50, 60)
+                            gauss(meal.digestionSpeed(), 0.7, 0.1)
                     ).collect(toList());
-            case EXTREMELY_FAT -> data
+            case RAPID -> data
                     .stream()
                     .map(meal ->
-                            trapezium(meal.fatness(), 40, 60, 100, 100)
+                            gauss(meal.digestionSpeed(), 1, 0.1)
                     ).collect(toList());
         };
     }

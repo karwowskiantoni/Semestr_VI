@@ -1,4 +1,4 @@
-package summarization.quantification;
+package linguisticsummary.quantification;
 
 public class RelativeQuantifier {
 

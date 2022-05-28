@@ -1,4 +1,4 @@
-package summarization;
+package linguisticsummary;
 
 public record Meal(String name,
                    double satiety,
