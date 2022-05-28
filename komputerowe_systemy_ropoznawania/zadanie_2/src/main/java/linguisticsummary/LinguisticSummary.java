@@ -1,5 +1,6 @@
 package linguisticsummary;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import linguisticsummary.variables.Quantifier;
 import linguisticsummary.variables.Variable;
 
@@ -7,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static linguisticsummary.Functions.gauss;
-import static linguisticsummary.Functions.trapezium;
+import static linguisticsummary.math.Functions.gauss;
+import static linguisticsummary.math.Functions.trapezium;
 
 class LinguisticSummary {
-    public static void main(String... args) {
+    public static void main(String... args) throws JsonProcessingException {
+        List<Meal> meals = Database.loadAll();
+
         List<Variable> variables = List.of(
                 new Variable("LITTLE DIGESTED", meal -> trapezium(meal.absorption(), 80, 80, 83, 85)),
                 new Variable("MEDIOCRE DIGESTED", meal -> trapezium(meal.absorption(), 80, 85, 94, 97)),
@@ -63,28 +66,31 @@ class LinguisticSummary {
                 new Variable("ENTIRELY WATER", meal -> trapezium(meal.wateriness(), 80, 90, 100, 100)));
 
         List<Quantifier> quantifiers = List.of(
-                new Quantifier("LESS THAN 2000", (meals) -> 0.0),
-                new Quantifier("ABOUT 2500", (meals) -> 0.0),
-                new Quantifier("ABOUT 5000", (meals) -> 0.0),
-                new Quantifier("ABOUT 6500", (meals) -> 0.0),
-                new Quantifier("MORE THAN 7000", (meals) -> 0.0),
+                new Quantifier("LESS THAN 2000", membershipDegree -> trapezium(membershipDegree, 0, 0, 1700, 1800), true),
+                new Quantifier("ABOUT 2500", membershipDegree -> trapezium(membershipDegree, 1500, 1800, 3400, 3600), true),
+                new Quantifier("ABOUT 5000", membershipDegree -> trapezium(membershipDegree, 3400, 3600, 5200, 5400), true),
+                new Quantifier("ABOUT 6500", membershipDegree -> trapezium(membershipDegree, 5200, 5400, 7000, 7200), true),
+                new Quantifier("MORE THAN 7000", membershipDegree -> trapezium(membershipDegree, 7000, 7200, 8792, 8792), true),
 
-                new Quantifier("VERY SMALL AMOUNT", (meals) -> 0.0),
-                new Quantifier("SMALL AMOUNT", (meals) -> 0.0),
-                new Quantifier("MEDIUM AMOUNT", (meals) -> 0.0),
-                new Quantifier("HIGH AMOUNT", (meals) -> 0.0),
-                new Quantifier("VERY HIGH AMOUNT", (meals) -> 0.0)
+                new Quantifier("VERY SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0, 0.1), false),
+                new Quantifier("SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0.25, 0.1), false),
+                new Quantifier("MEDIUM AMOUNT", membershipDegree -> gauss(membershipDegree, 0.5, 0.7), false),
+                new Quantifier("HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 0.75, 0.1), false),
+                new Quantifier("VERY HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 1, 0.1), false)
         );
         Qualifier qualifier = new Qualifier(getRandom(variables, 5));
-        Summarizer summarizer = new Summarizer(getRandom(variables, 5));
+        Summarizer summarizer = new Summarizer(getRandom(variables, 2));
         Summary summary = new Summary(getRandom(quantifiers, 1).get(0), qualifier, summarizer);
-        System.out.println(summary.linguinize());
+        System.out.println(summary.linguinize(meals));
+
+        //ObjectMapper mapper = new ObjectMapper();
+        //System.out.println(mapper.writeValueAsString(new Variable("LITTLE DIGESTED", meal -> trapezium(meal.absorption(), 80, 80, 83, 85))));
     }
 
     private static <T> List<T> getRandom(List<T> list, int n) {
         List<T> newList = new ArrayList<>();
         Random random = new Random();
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             newList.add(list.get(random.nextInt(list.size())));
         }
         return newList;

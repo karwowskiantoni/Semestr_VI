@@ -2,6 +2,8 @@ package linguisticsummary;
 
 import linguisticsummary.variables.Quantifier;
 
+import java.util.List;
+
 public class Summary {
     private final Quantifier quantifier;
     private final Qualifier qualifier;
@@ -13,7 +15,67 @@ public class Summary {
         this.summarizer = summarizer;
     }
 
-    public String linguinize() {
-        return quantifier.getLabel() + qualifier.linguinize() +  " of meals are " + summarizer.linguinize();
+    public String linguinize(List<Meal> meals) {
+        double degreeOfTruth = degreeOfTruth(meals);
+
+        return quantifier.getLabel() + qualifier.linguinize() + " of meals are " + summarizer.linguinize() + "  [" + degreeOfTruth + "]  ";
+    }
+
+
+    private double degreeOfTruth(List<Meal> meals) {
+        double degreeOfTruth;
+        if (quantifier.isAbsolute()) {
+            degreeOfTruth = quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
+        } else {
+            double cardinality = summarizer.cardinality(meals);
+
+            if (cardinality == 0.0) {
+                degreeOfTruth = 0.0;
+            } else {
+                degreeOfTruth = quantifier.getMembership().apply(summarizer.sigmaCount(meals) / summarizer.cardinality(meals));
+            }
+        }
+
+        return degreeOfTruth;
+    }
+
+    private double degreeOfImprecision() {
+        return 0;
+    }
+
+    private double degreeOfCovering() {
+        return 0;
+    }
+
+    private double degreeOfAppropriateness() {
+        return 0;
+    }
+
+    private double lengthOfSummary() {
+        return 0;
+    }
+
+    private double degreeOfQuantifierImprecision() {
+        return 0;
+    }
+
+    private double degreeOfQuantifierCardinality() {
+        return 0;
+    }
+
+    private double degreeOfSummarizerCardinality() {
+        return 0;
+    }
+
+    private double degreeOfQualifierImprecision() {
+        return 0;
+    }
+
+    private double degreeOfQualifierCardinality() {
+        return 0;
+    }
+
+    private double optimalSummary() {
+        return 0;
     }
 }
