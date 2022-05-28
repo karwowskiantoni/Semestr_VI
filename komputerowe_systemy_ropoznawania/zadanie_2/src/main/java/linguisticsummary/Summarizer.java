@@ -1,6 +1,7 @@
 package linguisticsummary;
 
 import linguisticsummary.variables.Variable;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ public class Summarizer {
     }
 
     public String linguinize() {
-        return variables.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
+        String sentence = variables.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
+        return sentence.substring(0, sentence.length() - 5);
     }
 }
