@@ -1,5 +1,7 @@
 package linguisticsummary;
 
+import linguisticsummary.variables.Variable;
+
 import java.util.List;
 
 import static linguisticsummary.math.Functions.gauss;
@@ -11,6 +13,7 @@ class LinguisticSummary {
                 new Variable("LITTLE DIGESTED", meal -> trapezium(meal.absorption(), 80, 80, 83, 85)),
                 new Variable("MEDIOCRE DIGESTED", meal -> trapezium(meal.absorption(), 80, 85, 94, 97)),
                 new Variable("FULLY DIGESTED", meal -> trapezium(meal.absorption(), 95, 97, 99.8, 99.8)),
+
                 new Variable("AVOIDABLE FOR DIABETICS", meal -> gauss(meal.adaptationForDiabetics(), 0, 0.1)),
                 new Variable("NEUTRAL FOR DIABETICS", meal -> gauss(meal.adaptationForDiabetics(), 0.4, 0.1)),
                 new Variable("DESTINED FOR DIABETICS", meal -> gauss(meal.adaptationForDiabetics(), 1, 0.2)),

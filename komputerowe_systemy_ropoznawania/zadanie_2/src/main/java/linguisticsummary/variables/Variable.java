@@ -1,4 +1,6 @@
-package linguisticsummary;
+package linguisticsummary.variables;
+
+import linguisticsummary.Meal;
 
 import java.util.function.Function;
 
