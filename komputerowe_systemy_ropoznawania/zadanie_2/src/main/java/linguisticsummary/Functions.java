@@ -1,4 +1,4 @@
-package linguisticsummary.math;
+package linguisticsummary;
 
 import static java.lang.Math.*;
 

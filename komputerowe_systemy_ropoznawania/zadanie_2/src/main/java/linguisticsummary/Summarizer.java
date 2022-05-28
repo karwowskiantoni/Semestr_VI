@@ -13,6 +13,6 @@ public class Summarizer {
     }
 
     public String linguinize() {
-        return variables.stream().map(variable -> variable.getLabel() + " and").collect(Collectors.joining());
+        return variables.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
     }
 }

@@ -3,10 +3,12 @@ package linguisticsummary;
 import linguisticsummary.variables.Quantifier;
 import linguisticsummary.variables.Variable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static linguisticsummary.math.Functions.gauss;
-import static linguisticsummary.math.Functions.trapezium;
+import static linguisticsummary.Functions.gauss;
+import static linguisticsummary.Functions.trapezium;
 
 class LinguisticSummary {
     public static void main(String... args) {
@@ -73,6 +75,20 @@ class LinguisticSummary {
                 new Quantifier("HIGH AMOUNT", (meals) -> 0.0),
                 new Quantifier("VERY HIGH AMOUNT", (meals) -> 0.0)
         );
+        Qualifier qualifier = new Qualifier(getRandom(variables, 5));
+        Summarizer summarizer = new Summarizer(getRandom(variables, 5));
+        Summary summary = new Summary(getRandom(quantifiers, 1).get(0), qualifier, summarizer);
+        System.out.println(summary.linguinize());
+    }
+
+    private static <T> List<T> getRandom(List<T> list, int n) {
+        List<T> newList = new ArrayList<>();
+        Random random = new Random();
+        for(int i = 0; i < n; i++) {
+            newList.add(list.get(random.nextInt(list.size())));
+        }
+        return newList;
     }
 }
+
 
