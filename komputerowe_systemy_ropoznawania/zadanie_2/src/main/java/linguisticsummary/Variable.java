@@ -10,4 +10,12 @@ public class Variable {
         this.label = label;
         this.membership = membership;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public Function<Meal, Double> getMembership() {
+        return membership;
+    }
 }

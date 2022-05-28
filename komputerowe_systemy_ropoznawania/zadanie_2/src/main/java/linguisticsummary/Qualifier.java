@@ -1,4 +1,4 @@
 package linguisticsummary;
 
-public class Qualifier extends FuzzySet {
+public class Qualifier {
 }
