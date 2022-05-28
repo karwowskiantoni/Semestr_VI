@@ -1,5 +1,6 @@
 package linguisticsummary;
 
+import linguisticsummary.variables.Quantifier;
 import linguisticsummary.variables.Variable;
 
 import java.util.List;
@@ -58,6 +59,20 @@ class LinguisticSummary {
                 new Variable("HYDRATING", meal -> trapezium(meal.wateriness(), 15, 25, 40, 50)),
                 new Variable("WATER RICH", meal -> trapezium(meal.wateriness(), 30, 60, 80, 90)),
                 new Variable("ENTIRELY WATER", meal -> trapezium(meal.wateriness(), 80, 90, 100, 100)));
+
+        List<Quantifier> quantifiers = List.of(
+                new Quantifier("LESS THAN 2000", (meals) -> 0.0),
+                new Quantifier("ABOUT 2500", (meals) -> 0.0),
+                new Quantifier("ABOUT 5000", (meals) -> 0.0),
+                new Quantifier("ABOUT 6500", (meals) -> 0.0),
+                new Quantifier("MORE THAN 7000", (meals) -> 0.0),
+
+                new Quantifier("VERY SMALL AMOUNT", (meals) -> 0.0),
+                new Quantifier("SMALL AMOUNT", (meals) -> 0.0),
+                new Quantifier("MEDIUM AMOUNT", (meals) -> 0.0),
+                new Quantifier("HIGH AMOUNT", (meals) -> 0.0),
+                new Quantifier("VERY HIGH AMOUNT", (meals) -> 0.0)
+        );
     }
 }
 

@@ -4,12 +4,13 @@ import linguisticsummary.Meal;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Quantifier {
     private final String label;
-    private final BiFunction<Meal, List<Meal>, Double> membership;
+    private final Function<List<Meal>, Double> membership;
 
-    public Quantifier(String label, BiFunction<Meal, List<Meal>, Double> membership) {
+    public Quantifier(String label, Function<List<Meal>, Double> membership) {
         this.label = label;
         this.membership = membership;
     }
@@ -18,7 +19,7 @@ public class Quantifier {
         return label;
     }
 
-    public BiFunction<Meal, List<Meal>, Double> getMembership() {
+    public Function<List<Meal>, Double> getMembership() {
         return membership;
     }
 }
