@@ -23,14 +23,14 @@ class LinguisticSummary {
         List<Summary> allSummaries = new ArrayList<>();
         for(List<Variable> variables: findCombinations(allVariables.stream().limit(10).toList(), 3)) {
             for(Quantifier quantifier: allQuantifiers) {
-                allSummaries.add(new Summary(quantifier, new Qualifier(new ArrayList<>()), new Summarizer(variables)));
+                allSummaries.add(new Summary(meals, quantifier, new Qualifier(new ArrayList<>()), new Summarizer(variables)));
             }
         }
-        allSummaries.sort(Comparator.comparingDouble(o -> o.optimalSummary(meals)));
+        allSummaries.sort(Comparator.comparingDouble(Summary::optimalSummary));
         Collections.reverse(allSummaries);
         allSummaries.stream().limit(20).forEach(summary -> {
-            System.out.println(summary.linguinize(meals));
-            System.out.println(summary.measures(meals));
+            System.out.println(summary.linguinize());
+            System.out.println(summary.measures());
         });
     }
 
