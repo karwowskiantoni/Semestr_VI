@@ -2,10 +2,13 @@ package linguisticsummary.calculation;
 
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.Quantifier;
+import linguisticsummary.model.Variable;
 
 import java.util.List;
 
 import static linguisticsummary.calculation.FuzzySets.sigmaCount;
+
+import static java.lang.Math.*;
 
 public class Summary {
     private final Quantifier quantifier;
@@ -47,7 +50,9 @@ public class Summary {
     }
 
     private double degreeOfImprecision(List<Meal> meals) {
-        return 0;
+        List<Variable> variables = summarizer.getVariables();
+        Double multipliedDegreesOfFuzziness = variables.stream().map(variable -> FuzzySets.degreeOfFuzziness(variable, meals)).reduce(1.0, (a, b) -> a * b);
+        return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (variables.size() * 1.0)));
     }
 
     private double degreeOfCovering(List<Meal> meals) {
