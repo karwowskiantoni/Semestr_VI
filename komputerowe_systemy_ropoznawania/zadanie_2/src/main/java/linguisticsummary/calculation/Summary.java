@@ -33,7 +33,7 @@ public class Summary {
                 "imprecision " + degreeOfImprecision(meals) + System.lineSeparator() +
                 "covering: " + degreeOfCovering(meals) + System.lineSeparator() +
                 "appropriateness: " + degreeOfAppropriateness(meals) + System.lineSeparator() +
-                "length of summary: " + lengthOfSummary(meals) + System.lineSeparator() +
+                "length of summary: " + lengthOfSummary() + System.lineSeparator() +
                 "quantifier imprecision: " + degreeOfQuantifierImprecision(meals) + System.lineSeparator() +
                 "quantifier cardinality: " + degreeOfQuantifierCardinality(meals) + System.lineSeparator() +
                 "summarizer cardinality: " + degreeOfSummarizerCardinality(meals) + System.lineSeparator() +
@@ -60,16 +60,18 @@ public class Summary {
 
     private double degreeOfCovering(List<Meal> meals) {
         List<Variable> allVariables = Stream.concat(summarizer.getVariables().stream(), qualifier.getVariables().stream()).toList();
-        List<Double> conorm = tConorm(allVariables, meals);
-        return (double) support(conorm) / meals.size();
+        return support(allVariables, meals).stream().mapToDouble(Double::doubleValue).sum() / meals.size();
     }
 
     private double degreeOfAppropriateness(List<Meal> meals) {
-        return 0;
+        List<Double> degreesOfFuzziness = summarizer.getVariables().stream().map(variable -> degreeOfFuzziness(variable, meals)).toList();
+        double multiplicatedSupports = degreesOfFuzziness.stream().mapToDouble(Double::doubleValue).reduce(1.0, (a, b) -> a * b);
+        return abs(multiplicatedSupports - degreeOfCovering(meals));
+
     }
 
-    private double lengthOfSummary(List<Meal> meals) {
-        return 0;
+    private double lengthOfSummary() {
+        return 2 * pow(0.5, summarizer.getVariables().size());
     }
 
     private double degreeOfQuantifierImprecision(List<Meal> meals) {
@@ -90,6 +92,10 @@ public class Summary {
 
     private double degreeOfQualifierCardinality(List<Meal> meals) {
         return 0;
+    }
+
+    private double lengthOfSQualifier() {
+        return 2 * pow(0.5, qualifier.getVariables().size());
     }
 
     private double optimalSummary(List<Meal> meals) {
