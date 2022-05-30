@@ -10,9 +10,7 @@ import linguisticsummary.database.QuantifierDatabase;
 import linguisticsummary.database.VariableDatabase;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 class LinguisticSummary {
     public static void main(String... args) throws IOException, ClassNotFoundException {
@@ -38,6 +36,7 @@ class LinguisticSummary {
         }
         return newList;
     }
+
 }
 
 

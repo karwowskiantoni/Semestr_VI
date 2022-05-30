@@ -1,0 +1,116 @@
+@startuml
+class linguisticsummary.LinguisticSummary {
++ {static} void main(String)
+- {static} List<T> getRandom(List<T>,int)
+}
+class linguisticsummary.model.Quantifier {
+- String label
+- SerializableFunction membership
+- boolean absolute
++ String getLabel()
++ SerializableFunction getMembership()
++ boolean isAbsolute()
+}
+class linguisticsummary.model.Meal {
+- String name
+- double satiety
+- double wateriness
+- double absorption
+- double proteinContent
+- double fatness
+- double sweetness
+- double antidepressiveness
+- double healthiness
+- double digestionSpeed
+- double adaptationForDiabetics
++ String name()
++ double satiety()
++ double wateriness()
++ double absorption()
++ double proteinContent()
++ double fatness()
++ double sweetness()
++ double antidepressiveness()
++ double healthiness()
++ double digestionSpeed()
++ double adaptationForDiabetics()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+class linguisticsummary.model.Variable {
+- String label
+- SerializableFunction membership
++ String getLabel()
++ Function<Meal,Double> getMembership()
+}
+interface linguisticsummary.database.Database {
++ {static} List<T> loadAll()
+}
+class linguisticsummary.database.Initialization {
++ {static} void initialize()
+- {static} double trapezium(double,double,double,double,double)
+- {static} double gauss(double,double,double)
+}
+class linguisticsummary.calculation.Summary {
+- Quantifier quantifier
+- Qualifier qualifier
+- Summarizer summarizer
++ String linguinize(List<Meal>)
++ String measures(List<Meal>)
+- double degreeOfTruth(List<Meal>)
+- double degreeOfImprecision(List<Meal>)
+- double degreeOfCovering(List<Meal>)
+- double degreeOfAppropriateness(List<Meal>)
+- double lengthOfSummary(List<Meal>)
+- double degreeOfQuantifierImprecision(List<Meal>)
+- double degreeOfQuantifierCardinality(List<Meal>)
+- double degreeOfSummarizerCardinality(List<Meal>)
+- double degreeOfQualifierImprecision(List<Meal>)
+- double degreeOfQualifierCardinality(List<Meal>)
+- double optimalSummary(List<Meal>)
+}
+class linguisticsummary.calculation.Qualifier {
+- List<Variable> variables
++ List<Variable> getVariables()
++ String linguinize()
+}
+class linguisticsummary.database.QuantifierDatabase {
++ {static} List<Quantifier> loadAll()
++ {static} void saveAll(List<Quantifier>)
+- {static} void serialize(Quantifier)
+- {static} Quantifier deserialize(File)
+- {static} void createIfNotExists(File)
+}
+class linguisticsummary.database.VariableDatabase {
++ {static} List<Variable> loadAll()
++ {static} void saveAll(List<Variable>)
+- {static} void serialize(Variable)
+- {static} Variable deserialize(File)
+- {static} void createIfNotExists(File)
+}
+class linguisticsummary.database.MealDatabase {
++ {static} List<Meal> loadAll()
+- {static} List<String> readCsv()
+- {static} List<String> correctValues(List<String>)
+}
+class linguisticsummary.calculation.FuzzySets {
++ {static} double sigmaCount(Variable,List<Meal>)
++ {static} double sigmaCount(List<Variable>,List<Meal>)
++ {static} double degreeOfFuzziness(Variable,List<Meal>)
++ {static} double degreeOfFuzziness(List<Variable>,List<Meal>)
+- {static} List<Double> tConorm(List<Variable>,List<Meal>)
+- {static} List<Double> minFromColumns(List<List<Double>>)
+}
+class linguisticsummary.calculation.Summarizer {
+- List<Variable> variables
++ List<Variable> getVariables()
++ String linguinize()
+}
+linguisticsummary.database.Database <|.. linguisticsummary.database.QuantifierDatabase
+linguisticsummary.database.Database <|.. linguisticsummary.database.VariableDatabase
+linguisticsummary.database.Database <|.. linguisticsummary.database.MealDatabase
+
+@enduml
