@@ -59,7 +59,7 @@ public class Summary {
 
     public String measures() {
         return "truth: " + degreeOfTruth + System.lineSeparator() +
-                "imprecision " +degreeOfImprecision + System.lineSeparator() +
+                "imprecision " + degreeOfImprecision + System.lineSeparator() +
                 "covering: " + degreeOfCovering + System.lineSeparator() +
                 "appropriateness: " + degreeOfAppropriateness + System.lineSeparator() +
                 "length of summary: " + lengthOfSummary + System.lineSeparator() +
@@ -84,7 +84,11 @@ public class Summary {
 
     private double degreeOfImprecision() {
         List<Variable> variables = summarizer.getVariables();
-        Double multipliedDegreesOfFuzziness = variables.stream().map(variable -> degreeOfFuzziness(variable, meals)).reduce(1.0, (a, b) -> a * b);
+        Double multipliedDegreesOfFuzziness = variables
+                .stream()
+                .map(variable ->
+                        degreeOfFuzziness(variable, meals)
+                ).reduce(1.0, (a, b) -> a * b);
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (variables.size() * 1.0)));
     }
 
@@ -94,9 +98,14 @@ public class Summary {
     }
 
     private double degreeOfAppropriateness() {
-        List<Double> degreesOfFuzziness = summarizer.getVariables().stream().map(variable -> degreeOfFuzziness(variable, meals)).toList();
-        double multiplicatedSupports = degreesOfFuzziness.stream().mapToDouble(Double::doubleValue).reduce(1.0, (a, b) -> a * b);
-        return abs(multiplicatedSupports - degreeOfCovering());
+        List<Double> degreesOfFuzziness = summarizer
+                .getVariables()
+                .stream()
+                .map(variable ->
+                        degreeOfFuzziness(variable, meals)
+                ).toList();
+        double supportProduct = degreesOfFuzziness.stream().mapToDouble(Double::doubleValue).reduce(1.0, (a, b) -> a * b);
+        return abs(supportProduct - degreeOfCovering());
     }
 
     private double lengthOfSummary() {
@@ -104,6 +113,7 @@ public class Summary {
     }
 
     private double degreeOfQuantifierImprecision() {
+//        todo potrzeba parametrow funkcji kwantyfikatora
         return 0;
     }
 
@@ -120,7 +130,13 @@ public class Summary {
     }
 
     private double degreeOfQualifierCardinality() {
-        return 0;
+        double qualifierCardinalityProduct = qualifier
+                .getVariables()
+                .stream()
+                .map(variable ->
+                        sigmaCount(variable, meals) / meals.size()
+                ).reduce(1.0, (a, b) -> a * b);
+        return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getVariables().size() * 1.0)));
     }
 
     private double lengthOfQualifier() {

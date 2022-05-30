@@ -17,7 +17,7 @@ public class Summarizer {
     }
 
     public String linguinize() {
-        String sentence = " are " + variables.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
+        String sentence = "are " + variables.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
         return sentence.substring(0, sentence.length() - 5);
     }
 
