@@ -16,19 +16,20 @@ public class Summary {
     }
 
     public String linguinize(List<Meal> meals) {
-        double degreeOfTruth = degreeOfTruth(meals);
-
-        return quantifier.getLabel() + qualifier.linguinize() + " of meals are " + summarizer.linguinize() + "  [" + degreeOfTruth + "]  ";
+        return quantifier.getLabel() + qualifier.linguinize() + " of meals are " + summarizer.linguinize() + "  [" + degreeOfTruth(meals) + "]  ";
     }
 
 
     private double degreeOfTruth(List<Meal> meals) {
-        double degreeOfTruth;
         if (quantifier.isAbsolute()) {
             return quantifier.getMembership().apply(summarizer.sigmaCount(meals));
         } else {
             return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
         }
+    }
+
+    private double degreeOfFuziness() {
+        return 0;
     }
 
     private double degreeOfImprecision() {
