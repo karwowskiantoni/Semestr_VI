@@ -38,14 +38,4 @@ public class Summarizer {
 
         return sigmaCount;
     }
-
-    public double cardinality(List<Meal> meals) {
-        return variables.stream().map(variable ->
-                meals.stream().map(meal ->
-                        variable
-                                .getMembership()
-                                .apply(meal)
-                        ).reduce(0.0, Double::sum)
-        ).reduce(0.0, Double::sum);
-    }
 }

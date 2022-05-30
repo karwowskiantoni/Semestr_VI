@@ -25,18 +25,10 @@ public class Summary {
     private double degreeOfTruth(List<Meal> meals) {
         double degreeOfTruth;
         if (quantifier.isAbsolute()) {
-            degreeOfTruth = quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
+            return quantifier.getMembership().apply(summarizer.sigmaCount(meals));
         } else {
-            double cardinality = summarizer.cardinality(meals);
-
-            if (cardinality == 0.0) {
-                degreeOfTruth = 0.0;
-            } else {
-                degreeOfTruth = quantifier.getMembership().apply(summarizer.sigmaCount(meals) / summarizer.cardinality(meals));
-            }
+            return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
         }
-
-        return degreeOfTruth;
     }
 
     private double degreeOfImprecision() {

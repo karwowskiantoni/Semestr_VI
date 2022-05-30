@@ -79,7 +79,7 @@ class LinguisticSummary {
                 new Quantifier("VERY HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 1, 0.1), false)
         );
         Qualifier qualifier = new Qualifier(getRandom(variables, 5));
-        Summarizer summarizer = new Summarizer(getRandom(variables, 2));
+        Summarizer summarizer = new Summarizer(getRandom(variables, 1));
         Summary summary = new Summary(getRandom(quantifiers, 1).get(0), qualifier, summarizer);
         System.out.println(summary.linguinize(meals));
 
