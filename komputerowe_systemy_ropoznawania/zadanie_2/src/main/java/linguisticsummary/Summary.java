@@ -16,16 +16,28 @@ public class Summary {
     }
 
     public String linguinize(List<Meal> meals) {
+        if(qualifier == null){
+            return quantifier.getLabel() + " of meals are " + summarizer.linguinize() + "  [" + degreeOfTruth(meals) + "]  ";
+        }
         return quantifier.getLabel() + qualifier.linguinize() + " of meals are " + summarizer.linguinize() + "  [" + degreeOfTruth(meals) + "]  ";
     }
 
 
     private double degreeOfTruth(List<Meal> meals) {
-        if (quantifier.isAbsolute()) {
-            return quantifier.getMembership().apply(summarizer.sigmaCount(meals));
+        if(qualifier == null){
+            if (quantifier.isAbsolute()) {
+                return quantifier.getMembership().apply(summarizer.sigmaCount(meals));
+            } else {
+                return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
+            }
         } else {
-            return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
+            double qualifierSigmaCount = qualifier.sigmaCount(meals);
+            if(qualifierSigmaCount == 0){
+                return 0;
+            }
+            return quantifier.getMembership().apply(summarizer.sigmaCount(meals)/qualifierSigmaCount);
         }
+
     }
 
     private double degreeOfFuziness() {
