@@ -122,7 +122,13 @@ public class Summary {
     }
 
     private double degreeOfSummarizerCardinality() {
-        return 0;
+        double summarizerCardinalityProduct = summarizer
+                .getVariables()
+                .stream()
+                .map(variable ->
+                        sigmaCount(variable, meals) / meals.size()
+                ).reduce(1.0, (a, b) -> a * b);
+        return 1 - round(pow(summarizerCardinalityProduct, 1 / (summarizer.getVariables().size() * 1.0)));
     }
 
     private double degreeOfQualifierImprecision() {
