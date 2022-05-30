@@ -23,7 +23,11 @@ public class FuzzySets {
         return tConorm(variables, meals).stream().mapToDouble(value -> value).filter(value -> value > 0).count() / (meals.size() * 1.0);
     }
 
-    private static List<Double> tConorm(List<Variable> variables, List<Meal> meals) {
+    public static long support(List<Double> conorm) {
+        return conorm.stream().filter(value -> value > 0).count();
+    }
+
+    public static List<Double> tConorm(List<Variable> variables, List<Meal> meals) {
         List<List<Double>> list = variables
                 .stream().map(variable ->
                         meals.stream().map(meal ->
