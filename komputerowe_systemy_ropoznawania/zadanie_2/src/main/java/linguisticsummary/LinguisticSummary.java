@@ -23,10 +23,11 @@ class LinguisticSummary {
         List<Variable> variables = VariableDatabase.loadAll();
 
         Quantifier quantifier = getRandom(quantifiers, 1).get(0);
-        Qualifier qualifier = new Qualifier(getRandom(variables, 3));
-        Summarizer summarizer = new Summarizer(getRandom(variables, 2));
+        Qualifier qualifier = new Qualifier(getRandom(variables, 1));
+        Summarizer summarizer = new Summarizer(getRandom(variables, 1));
         Summary summary = new Summary(quantifier, qualifier, summarizer);
         System.out.println(summary.linguinize(meals));
+        System.out.println(summary.measures(meals));
     }
 
     private static <T> List<T> getRandom(List<T> list, int n) {

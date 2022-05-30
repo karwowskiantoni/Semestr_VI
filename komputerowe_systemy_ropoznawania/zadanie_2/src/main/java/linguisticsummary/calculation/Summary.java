@@ -5,6 +5,8 @@ import linguisticsummary.model.Quantifier;
 
 import java.util.List;
 
+import static linguisticsummary.calculation.FuzzySets.sigmaCount;
+
 public class Summary {
     private final Quantifier quantifier;
     private final Qualifier qualifier;
@@ -35,18 +37,12 @@ public class Summary {
     }
 
     private double degreeOfTruth(List<Meal> meals) {
-        if (qualifier.getVariables().size() == 0) {
-            if (quantifier.isAbsolute()) {
-                return quantifier.getMembership().apply(summarizer.sigmaCount(meals));
-            } else {
-                return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / meals.size());
-            }
+        if (qualifier.getVariables().size() == 0 && quantifier.isAbsolute()) {
+            return quantifier.getMembership().apply(sigmaCount(summarizer.getVariables(), meals));
+        } else if (qualifier.getVariables().size() == 0) {
+            return quantifier.getMembership().apply(sigmaCount(summarizer.getVariables(), meals) / meals.size());
         } else {
-            double qualifierSigmaCount = qualifier.sigmaCount(meals);
-            if (qualifierSigmaCount == 0) {
-                return 0;
-            }
-            return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / qualifierSigmaCount);
+            return quantifier.getMembership().apply(sigmaCount(summarizer.getVariables(), meals) / sigmaCount(qualifier.getVariables(), meals));
         }
     }
 

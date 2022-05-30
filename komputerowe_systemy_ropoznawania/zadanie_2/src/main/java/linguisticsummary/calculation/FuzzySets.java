@@ -6,26 +6,24 @@ import linguisticsummary.model.Variable;
 import java.util.List;
 import java.util.stream.IntStream;
 
-abstract public class FuzzySets {
-    protected final List<Variable> variables;
-
-    public FuzzySets(List<Variable> variables) {
-        this.variables = variables;
+public class FuzzySets {
+    public static double sigmaCount(Variable variable, List<Meal> meals) {
+        return meals.stream().mapToDouble(meal -> variable.getMembership().apply(meal)).sum();
     }
 
-    public List<Variable> getVariables() {
-        return variables;
+    public static double sigmaCount(List<Variable> variables, List<Meal> meals) {
+        return tConorm(variables, meals).stream().mapToDouble(value -> value).sum();
     }
 
-    public double sigmaCount(List<Meal> meals) {
-        return tConorm(meals).stream().mapToDouble(value -> value).sum();
+    public static double degreeOfFuzziness(Variable variable, List<Meal> meals) {
+        return meals.stream().mapToDouble(meal -> variable.getMembership().apply(meal)).filter(value -> value > 0).count() / (meals.size() * 1.0);
     }
 
-    public double degreeOfFuzziness(List<Meal> meals) {
-        return tConorm(meals).stream().mapToDouble(value -> value).filter(value -> value > 0).count() / (meals.size() * 1.0);
+    public static double degreeOfFuzziness(List<Variable> variables, List<Meal> meals) {
+        return tConorm(variables, meals).stream().mapToDouble(value -> value).filter(value -> value > 0).count() / (meals.size() * 1.0);
     }
 
-    public List<Double> tConorm(List<Meal> meals) {
+    private static List<Double> tConorm(List<Variable> variables, List<Meal> meals) {
         List<List<Double>> list = variables
                 .stream().map(variable ->
                         meals.stream().map(meal ->
