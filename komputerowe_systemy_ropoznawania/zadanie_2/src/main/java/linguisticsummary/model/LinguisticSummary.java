@@ -80,9 +80,6 @@ class LinguisticSummary {
         Summarizer summarizer = new Summarizer(getRandom(variables, 1));
         Summary summary = new Summary(getRandom(quantifiers, 1).get(0), qualifier, summarizer);
         System.out.println(summary.linguinize(meals));
-
-        //ObjectMapper mapper = new ObjectMapper();
-        //System.out.println(mapper.writeValueAsString(new Variable("LITTLE DIGESTED", meal -> trapezium(meal.absorption(), 80, 80, 83, 85))));
     }
 
     private static <T> List<T> getRandom(List<T> list, int n) {
