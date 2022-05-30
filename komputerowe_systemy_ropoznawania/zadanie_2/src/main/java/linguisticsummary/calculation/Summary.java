@@ -126,17 +126,25 @@ public class Summary {
     }
 
     private double degreeOfQualifierImprecision() {
-        return 0;
+        if (qualifier.getVariables().size() == 0) {
+            return 0;
+        } else {
+            return 1 - round(pow(degreeOfFuzziness(qualifier.getVariables(), meals), 1 / (qualifier.getVariables().size() * 1.0)));
+        }
     }
 
     private double degreeOfQualifierCardinality() {
-        double qualifierCardinalityProduct = qualifier
-                .getVariables()
-                .stream()
-                .map(variable ->
-                        sigmaCount(variable, meals) / meals.size()
-                ).reduce(1.0, (a, b) -> a * b);
-        return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getVariables().size() * 1.0)));
+        if(qualifier.getVariables().size() == 0){
+            return 0;
+        } else {
+            double qualifierCardinalityProduct = qualifier
+                    .getVariables()
+                    .stream()
+                    .map(variable ->
+                            sigmaCount(variable, meals) / meals.size()
+                    ).reduce(1.0, (a, b) -> a * b);
+            return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getVariables().size() * 1.0)));
+        }
     }
 
     private double lengthOfQualifier() {
