@@ -76,7 +76,7 @@ public class Summary {
 
     private double degreeOfQuantifierImprecision(List<Meal> meals) {
 //        quantifier.
-        return  1;
+        return 1;
     }
 
     private double degreeOfQuantifierCardinality(List<Meal> meals) {
@@ -99,11 +99,11 @@ public class Summary {
         return 2 * pow(0.5, qualifier.getVariables().size());
     }
 
-    private double optimalSummary(List<Meal> meals) {
-        return 0.6 * degreeOfTruth(meals) +
-                0.1*degreeOfImprecision(meals) +
-                0.1*degreeOfCovering(meals) +
-                0.1*degreeOfAppropriateness(meals) +
-                0.1*lengthOfSummary();
+    public double optimalSummary(List<Meal> meals) {
+        return 0.4 * degreeOfTruth(meals) +
+                0.3 * degreeOfImprecision(meals) +
+                0.1 * degreeOfCovering(meals) +
+                0.1 * degreeOfAppropriateness(meals) +
+                0.1 * lengthOfSummary();
     }
 }
