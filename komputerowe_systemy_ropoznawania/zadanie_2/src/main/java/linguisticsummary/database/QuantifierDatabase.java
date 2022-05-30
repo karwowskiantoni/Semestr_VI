@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class QuantifierDatabase {
+public class QuantifierDatabase implements Database<Quantifier> {
     public static List<Quantifier> loadAll() {
         File folder = new File("./src/main/resources/quantifiers/");
         File[] listOfFiles = folder.listFiles();

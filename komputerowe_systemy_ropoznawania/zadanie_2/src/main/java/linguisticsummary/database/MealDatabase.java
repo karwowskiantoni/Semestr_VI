@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class MealDatabase {
+public class MealDatabase implements Database<Meal> {
     public static List<Meal> loadAll() {
         return readCsv().stream().map(record -> {
             String[] attributesValues = record.split(";");

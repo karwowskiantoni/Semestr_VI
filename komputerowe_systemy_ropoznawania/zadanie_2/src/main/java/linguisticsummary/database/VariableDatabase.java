@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class VariableDatabase {
+public class VariableDatabase implements Database<Variable> {
     public static List<Variable> loadAll() {
         File folder = new File("./src/main/resources/variables/");
         File[] listOfFiles = folder.listFiles();
