@@ -5,7 +5,6 @@ import linguisticsummary.model.Quantifier;
 import linguisticsummary.model.Variable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static linguisticsummary.calculation.FuzzySets.*;
@@ -39,6 +38,7 @@ public class Summary {
                 "summarizer cardinality: " + degreeOfSummarizerCardinality(meals) + System.lineSeparator() +
                 "qualifier imprecision: " + degreeOfQualifierImprecision(meals) + System.lineSeparator() +
                 "qualifier cardinality: " + degreeOfQualifierCardinality(meals) + System.lineSeparator() +
+                "length of quantifier: " + lengthOfQualifier() + System.lineSeparator() +
                 "optimal summary: " + optimalSummary(meals) + System.lineSeparator();
     }
 
@@ -75,7 +75,8 @@ public class Summary {
     }
 
     private double degreeOfQuantifierImprecision(List<Meal> meals) {
-        return 0;
+//        quantifier.
+        return  1;
     }
 
     private double degreeOfQuantifierCardinality(List<Meal> meals) {
@@ -94,11 +95,15 @@ public class Summary {
         return 0;
     }
 
-    private double lengthOfSQualifier() {
+    private double lengthOfQualifier() {
         return 2 * pow(0.5, qualifier.getVariables().size());
     }
 
     private double optimalSummary(List<Meal> meals) {
-        return 0;
+        return 0.6 * degreeOfTruth(meals) +
+                0.1*degreeOfImprecision(meals) +
+                0.1*degreeOfCovering(meals) +
+                0.1*degreeOfAppropriateness(meals) +
+                0.1*lengthOfSummary();
     }
 }
