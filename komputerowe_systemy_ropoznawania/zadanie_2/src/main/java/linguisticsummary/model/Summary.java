@@ -1,6 +1,6 @@
-package linguisticsummary;
+package linguisticsummary.model;
 
-import linguisticsummary.variables.Quantifier;
+import linguisticsummary.model.variables.Quantifier;
 
 import java.util.List;
 

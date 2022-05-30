@@ -1,4 +1,4 @@
-package linguisticsummary.variables;
+package linguisticsummary.model.variables;
 
 import java.util.function.Function;
 

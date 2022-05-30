@@ -1,6 +1,6 @@
-package linguisticsummary;
+package linguisticsummary.model;
 
-import linguisticsummary.variables.Variable;
+import linguisticsummary.model.variables.Variable;
 
 import java.util.List;
 import java.util.stream.Collectors;

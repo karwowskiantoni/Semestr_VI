@@ -1,6 +1,7 @@
-package linguisticsummary.math;
+package linguisticsummary.model.math;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 public class Functions {
     public static double trapezium(

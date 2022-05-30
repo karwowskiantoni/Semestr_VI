@@ -1,4 +1,4 @@
-package linguisticsummary;
+package linguisticsummary.model;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

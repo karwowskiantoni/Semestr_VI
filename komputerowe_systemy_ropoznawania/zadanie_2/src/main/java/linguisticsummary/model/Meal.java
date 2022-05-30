@@ -1,4 +1,4 @@
-package linguisticsummary;
+package linguisticsummary.model;
 
 public record Meal(String name,
                    double satiety,
