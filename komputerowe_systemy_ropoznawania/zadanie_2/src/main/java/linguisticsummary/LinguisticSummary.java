@@ -3,6 +3,7 @@ package linguisticsummary;
 import linguisticsummary.calculation.Qualifier;
 import linguisticsummary.calculation.Summarizer;
 import linguisticsummary.calculation.Summary;
+import linguisticsummary.database.Initialization;
 import linguisticsummary.model.*;
 import linguisticsummary.database.MealDatabase;
 import linguisticsummary.database.QuantifierDatabase;
