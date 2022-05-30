@@ -1,6 +1,7 @@
-package linguisticsummary.model;
+package linguisticsummary.calculation;
 
-import linguisticsummary.model.variables.Quantifier;
+import linguisticsummary.model.Meal;
+import linguisticsummary.model.Quantifier;
 
 import java.util.List;
 
@@ -16,12 +17,12 @@ public class Summary {
     }
 
     public String linguinize(List<Meal> meals) {
-        return quantifier.getLabel() + qualifier.linguinize() + " of meals " + summarizer.linguinize();
+        return quantifier.getLabel() + " of meals" + qualifier.linguinize() + summarizer.linguinize();
     }
 
     public String measures(List<Meal> meals) {
         return "degree of truth: " + degreeOfTruth(meals) + System.lineSeparator() +
-                "degree of truth: " + degreeOfTruth(meals) + System.lineSeparator() +
+                "degree of imprecision " + degreeOfTruth(meals) + System.lineSeparator() +
                 "degree of truth: " + degreeOfTruth(meals) + System.lineSeparator() +
                 "degree of truth: " + degreeOfTruth(meals) + System.lineSeparator() +
                 "degree of truth: " + degreeOfTruth(meals) + System.lineSeparator() +
@@ -51,13 +52,6 @@ public class Summary {
             }
             return quantifier.getMembership().apply(summarizer.sigmaCount(meals) / qualifierSigmaCount);
         }
-    }
-
-    private double degreeOfFuziness() {
-        if (qualifier == null) {
-
-        }
-        return 0;
     }
 
     private double degreeOfImprecision() {

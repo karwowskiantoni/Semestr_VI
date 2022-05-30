@@ -1,4 +1,6 @@
-package linguisticsummary.model;
+package linguisticsummary.database;
+
+import linguisticsummary.model.Meal;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class Database {
+public class MealDatabase {
     public static List<Meal> loadAll() {
         return readCsv().stream().map(record -> {
             String[] attributesValues = record.split(";");
@@ -34,7 +36,7 @@ public class Database {
 
     private static List<String> readCsv() {
         try {
-            Path dbPath = Paths.get(Objects.requireNonNull(Database.class.getClassLoader().getResource("database.csv")).toURI());
+            Path dbPath = Paths.get(Objects.requireNonNull(MealDatabase.class.getClassLoader().getResource("database.csv")).toURI());
             Stream<String> fileLines = Files.lines(dbPath);
             List<String> withHeadings = fileLines.toList();
             fileLines.close();

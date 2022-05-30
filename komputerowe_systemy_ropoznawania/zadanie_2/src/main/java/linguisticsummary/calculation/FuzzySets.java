@@ -1,11 +1,9 @@
-package linguisticsummary.model;
+package linguisticsummary.calculation;
 
-import linguisticsummary.model.variables.Variable;
+import linguisticsummary.model.Meal;
+import linguisticsummary.model.Variable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 abstract public class FuzzySets {
