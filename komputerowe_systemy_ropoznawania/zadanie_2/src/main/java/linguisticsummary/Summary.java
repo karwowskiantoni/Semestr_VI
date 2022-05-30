@@ -41,6 +41,9 @@ public class Summary {
     }
 
     private double degreeOfFuziness() {
+        if (qualifier == null){
+
+        }
         return 0;
     }
 

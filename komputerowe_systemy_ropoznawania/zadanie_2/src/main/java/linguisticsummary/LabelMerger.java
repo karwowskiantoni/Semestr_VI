@@ -38,4 +38,18 @@ abstract public class LabelMerger {
         }
         return sigmaCount;
     }
+
+    public double degreeOfFuzziness(List<Meal> meals){
+        List<List<Double>> memberships = variables.stream().map(variable ->
+                meals.stream().map(meal ->
+                        variable.getMembership().apply(meal)
+                ).collect(Collectors.toList())
+        ).toList();
+
+//        for (Variable variable : variables){
+//            variab
+//        }
+
+        return 0;
+    }
 }
