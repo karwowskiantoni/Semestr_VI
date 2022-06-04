@@ -3,6 +3,7 @@ package linguisticsummary.calculation;
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.Quantifier;
 import linguisticsummary.model.Variable;
+import org.apache.commons.math.analysis.integration.TrapezoidIntegrator;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -113,11 +114,18 @@ public class Summary {
     }
 
     private double degreeOfQuantifierImprecision() {
-//        todo potrzeba parametrow funkcji kwantyfikatora
-        return 0;
+        int cardinality;
+        if (quantifier.isAbsolute()) {
+            cardinality = meals.size();
+        } else {
+            cardinality = 1;
+        }
+        return 1 - ((quantifier.getDomain().getValue() - quantifier.getDomain().getKey()) / cardinality);
     }
 
     private double degreeOfQuantifierCardinality() {
+//        TrapezoidIntegrator trapezoidIntegrator = new TrapezoidIntegrator();
+//        double integralValue = 0;
         return 0;
     }
 
@@ -140,7 +148,7 @@ public class Summary {
     }
 
     private double degreeOfQualifierCardinality() {
-        if(qualifier.getVariables().size() == 0){
+        if (qualifier.getVariables().size() == 0) {
             return 0;
         } else {
             double qualifierCardinalityProduct = qualifier
