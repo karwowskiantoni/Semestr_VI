@@ -3,7 +3,10 @@ package linguisticsummary.calculation;
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.Quantifier;
 import linguisticsummary.model.Variable;
+import org.apache.commons.math.FunctionEvaluationException;
+import org.apache.commons.math.MaxIterationsExceededException;
 import org.apache.commons.math.analysis.integration.TrapezoidIntegrator;
+import org.apache.commons.math.optimization.fitting.GaussianFunction;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -124,9 +127,50 @@ public class Summary {
     }
 
     private double degreeOfQuantifierCardinality() {
-//        TrapezoidIntegrator trapezoidIntegrator = new TrapezoidIntegrator();
-//        double integralValue = 0;
-        return 0;
+        double integralValue = 0;
+        TrapezoidIntegrator integrator = new TrapezoidIntegrator();
+
+        if (quantifier.isAbsolute()) {
+            if (quantifier.isGauss()) {
+                double centerPosition = quantifier.getFunctionParams().get(0);
+                double width = quantifier.getFunctionParams().get(1);
+                try {
+                    integralValue = integrator.integrate(
+                            new GaussianFunction(0, 1, centerPosition, width),
+                            quantifier.getDomain().getKey(),
+                            quantifier.getDomain().getValue());
+                } catch (MaxIterationsExceededException | FunctionEvaluationException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Double begin = quantifier.getFunctionParams().get(0);
+                Double firstFold = quantifier.getFunctionParams().get(1);
+                Double secondFold = quantifier.getFunctionParams().get(2);
+                Double end = quantifier.getFunctionParams().get(3);
+                integralValue = ((end - begin) + (secondFold - firstFold)) / 2;
+            }
+            return integralValue / meals.size();
+        } else {
+            if (quantifier.isGauss()) {
+                double centerPosition = quantifier.getFunctionParams().get(0);
+                double width = quantifier.getFunctionParams().get(1);
+                try {
+                    integralValue = integrator.integrate(
+                            new GaussianFunction(0, 1, centerPosition, width),
+                            quantifier.getDomain().getKey(),
+                            quantifier.getDomain().getValue());
+                } catch (MaxIterationsExceededException | FunctionEvaluationException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Double begin = quantifier.getFunctionParams().get(0);
+                Double firstFold = quantifier.getFunctionParams().get(1);
+                Double secondFold = quantifier.getFunctionParams().get(2);
+                Double end = quantifier.getFunctionParams().get(3);
+                integralValue = ((end - begin) + (secondFold - firstFold)) / 2;
+            }
+            return integralValue;
+        }
     }
 
     private double degreeOfSummarizerCardinality() {

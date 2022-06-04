@@ -62,17 +62,17 @@ public class Initialization {
                 new Variable("ENTIRELY WATER", meal -> trapezium(meal.wateriness(), 80, 90, 100, 100)));
 
         List<Quantifier> quantifiers = List.of(
-                new Quantifier(new Pair(0.0,1800.0),"LESS THAN 2000", membershipDegree -> trapezium(membershipDegree, 0, 0, 1700, 1800), true),
-                new Quantifier(new Pair(1500.0,3600.0), "ABOUT 2500", membershipDegree -> trapezium(membershipDegree, 1500, 1800, 3400, 3600), true),
-                new Quantifier(new Pair(3400.0,5400.0), "ABOUT 5000", membershipDegree -> trapezium(membershipDegree, 3400, 3600, 5200, 5400), true),
-                new Quantifier(new Pair(5200.0,7200.0), "ABOUT 6500", membershipDegree -> trapezium(membershipDegree, 5200, 5400, 7000, 7200), true),
-                new Quantifier(new Pair(7000.0,8792.0), "MORE THAN 7000", membershipDegree -> trapezium(membershipDegree, 7000, 7200, 8792, 8792), true),
+                new Quantifier(new Pair(0.0,1800.0),List.of(0.0, 0.0, 1700.0, 1800.0), "LESS THAN 2000", membershipDegree -> trapezium(membershipDegree, 0, 0, 1700, 1800), true, false),
+                new Quantifier(new Pair(1500.0,3600.0), List.of(1500.0, 1800.0, 3400.0, 3600.0), "ABOUT 2500", membershipDegree -> trapezium(membershipDegree, 1500, 1800, 3400, 3600), true, false),
+                new Quantifier(new Pair(3400.0,5400.0), List.of(3400.0, 3600.0, 5200.0, 5400.0),"ABOUT 5000", membershipDegree -> trapezium(membershipDegree, 3400, 3600, 5200, 5400), true, false),
+                new Quantifier(new Pair(5200.0,7200.0), List.of(5200.0, 5400.0, 7000.0, 7200.0), "ABOUT 6500", membershipDegree -> trapezium(membershipDegree, 5200, 5400, 7000, 7200), true,false),
+                new Quantifier(new Pair(7000.0,8792.0), List.of(7000.0, 7200.0, 8792.0, 8792.0), "MORE THAN 7000", membershipDegree -> trapezium(membershipDegree, 7000, 7200, 8792, 8792), true, false),
 
-                new Quantifier(new Pair(0.0,0.35),"VERY SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0, 0.1), false),
-                new Quantifier(new Pair(0.0,0.55),"SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0.25, 0.1), false),
-                new Quantifier(new Pair(0.25,0.75),"MEDIUM AMOUNT", membershipDegree -> gauss(membershipDegree, 0.5, 0.7), false),
-                new Quantifier(new Pair(0.4,1.0),"HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 0.75, 0.1), false),
-                new Quantifier(new Pair(0.65,1.0),"VERY HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 1, 0.1), false)
+                new Quantifier(new Pair(0.0,0.35),List.of(0.0, 0.1),"VERY SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0, 0.1), false, true),
+                new Quantifier(new Pair(0.0,0.55),List.of(0.25, 0.1),"SMALL AMOUNT", membershipDegree -> gauss(membershipDegree, 0.25, 0.1), false, true),
+                new Quantifier(new Pair(0.25,0.75),List.of(0.5, 0.7),"MEDIUM AMOUNT", membershipDegree -> gauss(membershipDegree, 0.5, 0.7), false, true),
+                new Quantifier(new Pair(0.4,1.0),List.of(0.75, 0.1),"HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 0.75, 0.1), false, true),
+                new Quantifier(new Pair(0.65,1.0),List.of(1.0, 0.1),"VERY HIGH AMOUNT", membershipDegree -> gauss(membershipDegree, 1, 0.1), false, true)
         );
         VariableDatabase.saveAll(variables);
         QuantifierDatabase.saveAll(quantifiers);
