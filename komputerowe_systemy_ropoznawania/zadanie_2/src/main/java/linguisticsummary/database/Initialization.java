@@ -11,14 +11,6 @@ import static linguisticsummary.model.Label.FunctionType.TRAPEZIUM;
 
 public class Initialization {
     public static void initialize() {
-        List<Double> digestionDomain = List.of(0.0, 1.0);
-        List<Double> fatnessDomain = List.of(0.0, 100.0);
-        List<Double> healthinessDomain = List.of(0.0, 1.0);
-        List<Double> proteinDomain = List.of(0.0, 80.0);
-        List<Double> calorieDomain = List.of(0.0, 902.0);
-        List<Double> sweetDomain = List.of(0.0, 20.0);
-        List<Double> waterDomain = List.of(0.0, 100.0);
-
         List<MealLabel> mealLabels = List.of(
                 new MealLabel("LITTLE DIGESTED", TRAPEZIUM, List.of(80.0, 80.0, 83.0, 85.0), List.of(80.0, 85.0), Meal::absorption),
                 new MealLabel("MEDIOCRE DIGESTED", TRAPEZIUM, List.of(80.0, 85.0, 94.0, 97.0), List.of(80.0, 96.0), Meal::absorption),
