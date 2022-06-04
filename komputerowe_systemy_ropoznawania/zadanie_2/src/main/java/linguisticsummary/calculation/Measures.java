@@ -1,6 +1,6 @@
 package linguisticsummary.calculation;
 
-import linguisticsummary.model.LabelFunction;
+import linguisticsummary.model.Label;
 import linguisticsummary.model.Meal;
 
 import java.util.List;
@@ -8,8 +8,6 @@ import java.util.stream.Stream;
 
 import static java.lang.Math.*;
 import static java.lang.Math.pow;
-import static linguisticsummary.calculation.FuzzySets.*;
-import static linguisticsummary.model.LabelFunction.FunctionType.GAUSS;
 
 public class Measures {
     private final double degreeOfTruth;
@@ -25,7 +23,7 @@ public class Measures {
     private final double lengthOfQualifier;
     private final double optimalSummary;
 
-    public Measures(List<Meal> meals, LabelFunction<Double> quantifier, Qualifier qualifier, Summarizer summarizer, boolean isAbsolute) {
+    public Measures(List<Meal> meals, Label<Double> quantifier, Qualifier qualifier, Summarizer summarizer, boolean isAbsolute) {
         this.degreeOfTruth = degreeOfTruth(qualifier, quantifier, summarizer, meals, isAbsolute);
         this.degreeOfImprecision = degreeOfImprecision(summarizer, meals);
         this.degreeOfCovering = degreeOfCovering(summarizer, qualifier, meals);
@@ -56,7 +54,7 @@ public class Measures {
                 "optimal summary: " + optimalSummary + System.lineSeparator();
     }
 
-    private double degreeOfTruth(Qualifier qualifier, LabelFunction<Double> quantifier, Summarizer summarizer, List<Meal> meals, boolean isAbsolute) {
+    private double degreeOfTruth(Qualifier qualifier, Label<Double> quantifier, Summarizer summarizer, List<Meal> meals, boolean isAbsolute) {
         if (qualifier.getVariables().size() == 0 && isAbsolute) {
             return quantifier.getMembership().apply(sigmaCount(summarizer.getLabelFunctions(), meals));
         } else if (qualifier.getVariables().size() == 0) {
@@ -67,13 +65,13 @@ public class Measures {
     }
 
     private double degreeOfImprecision(Summarizer summarizer, List<Meal> meals) {
-        List<LabelFunction<Meal>> labelFunctions = summarizer.getLabelFunctions();
-        Double multipliedDegreesOfFuzziness = labelFunctions
+        List<Label<Meal>> labels = summarizer.getLabelFunctions();
+        Double multipliedDegreesOfFuzziness = labels
                 .stream()
                 .map(variable ->
                         degreeOfFuzziness(variable, meals)
                 ).reduce(1.0, (a, b) -> a * b);
-    return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (labelFunctions.size() * 1.0)));
+    return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (labels.size() * 1.0)));
   }
 
     private double degreeOfCovering(Summarizer summarizer, Qualifier qualifier, List<Meal> meals) {
@@ -99,11 +97,11 @@ public class Measures {
         return 2 * pow(0.5, summarizer.getLabelFunctions().size());
     }
 
-    private double degreeOfQuantifierImprecision(LabelFunction<Double> quantifier, List<Meal> meals, boolean isAbsolute) {
+    private double degreeOfQuantifierImprecision(Label<Double> quantifier, List<Meal> meals, boolean isAbsolute) {
         return 1 - ((quantifier.getDomain().get(0) - quantifier.getDomain().get(1)) / (isAbsolute ? meals.size() : 1));
     }
 
-    private double degreeOfQuantifierCardinality(LabelFunction<Double> quantifier, boolean isAbsolute, List<Meal> meals) {
+    private double degreeOfQuantifierCardinality(Label<Double> quantifier, boolean isAbsolute, List<Meal> meals) {
      return isAbsolute ? quantifier.calculateIntegral() / meals.size() : quantifier.calculateIntegral();
     }
 

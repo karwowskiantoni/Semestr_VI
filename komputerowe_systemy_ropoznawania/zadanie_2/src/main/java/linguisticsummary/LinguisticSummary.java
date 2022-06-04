@@ -16,12 +16,12 @@ class LinguisticSummary {
 
         List<Meal> meals = MealDatabase.loadAll();
         List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
-        List<LabelFunction> allLabelFunctions = VariableDatabase.loadAll();
+        List<Label> allLabels = VariableDatabase.loadAll();
 
         List<Summary> allSummaries = new ArrayList<>();
-        for(List<LabelFunction> labelFunctions : findCombinations(allLabelFunctions.stream().limit(10).toList(), 3)) {
+        for(List<Label> labels : findCombinations(allLabels.stream().limit(10).toList(), 3)) {
             for(Quantifier quantifier: allQuantifiers) {
-                allSummaries.add(new Summary(meals, quantifier, new Qualifier(new ArrayList<>()), new Summarizer(labelFunctions)));
+                allSummaries.add(new Summary(meals, quantifier, new Qualifier(new ArrayList<>()), new Summarizer(labels)));
             }
         }
         allSummaries.sort(Comparator.comparingDouble(Summary::optimalSummary));
@@ -41,21 +41,21 @@ class LinguisticSummary {
         return newList;
     }
 
-    private static void findCombinations(List<LabelFunction> labelFunctions, int i, int k, Set<List<LabelFunction>> subarrays, List<LabelFunction> out) {
-        if (labelFunctions.size() == 0 || k > labelFunctions.size()) {
+    private static void findCombinations(List<Label> labels, int i, int k, Set<List<Label>> subarrays, List<Label> out) {
+        if (labels.size() == 0 || k > labels.size()) {
             return;
         } else if (k == 0) {
             subarrays.add(new ArrayList<>(out));
             return;
-        } for (int j = i; j < labelFunctions.size(); j++) {
-            out.add(labelFunctions.get(j));
-            findCombinations(labelFunctions, j + 1, k - 1, subarrays, out);
+        } for (int j = i; j < labels.size(); j++) {
+            out.add(labels.get(j));
+            findCombinations(labels, j + 1, k - 1, subarrays, out);
             out.remove(out.size() - 1);
         }
     }
-    private static Set<List<LabelFunction>> findCombinations(List<LabelFunction> labelFunctions, int k) {
-        Set<List<LabelFunction>> subarrays = new HashSet<>();
-        findCombinations(labelFunctions, 0, k, subarrays, new ArrayList<>());
+    private static Set<List<Label>> findCombinations(List<Label> labels, int k) {
+        Set<List<Label>> subarrays = new HashSet<>();
+        findCombinations(labels, 0, k, subarrays, new ArrayList<>());
         return subarrays;
     }
 

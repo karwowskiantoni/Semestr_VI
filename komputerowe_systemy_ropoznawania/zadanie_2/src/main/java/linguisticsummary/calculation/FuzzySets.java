@@ -1,41 +1,40 @@
 package linguisticsummary.calculation;
 
 import linguisticsummary.model.Meal;
-import linguisticsummary.model.LabelFunction;
+import linguisticsummary.model.MealLabel;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class FuzzySets {
-    public static double sigmaCount(LabelFunction<Meal> labelFunction, List<Meal> meals) {
-        return meals.stream().mapToDouble(meal -> labelFunction.getMembership().apply(meal)).sum();
+    public static double sigmaCount(MealLabel mealLabel, List<Meal> meals) {
+        return meals.stream().mapToDouble(mealLabel::membership).sum();
     }
 
-    public static double sigmaCount(List<LabelFunction<Meal>> labelFunctions, List<Meal> meals) {
-        return tConorm(labelFunctions, meals).stream().mapToDouble(value -> value).sum();
+    public static double sigmaCount(List<MealLabel> mealLabels, List<Meal> meals) {
+        return tConorm(mealLabels, meals).stream().mapToDouble(value -> value).sum();
     }
 
-    public static double degreeOfFuzziness(LabelFunction<Meal> labelFunction, List<Meal> meals) {
-        return support(labelFunction, meals).size() / (meals.size() * 1.0);
+    public static double degreeOfFuzziness(MealLabel mealLabel, List<Meal> meals) {
+        return support(mealLabel, meals).size() / (meals.size() * 1.0);
     }
 
-    public static double degreeOfFuzziness(List<LabelFunction<Meal>> labelFunctions, List<Meal> meals) {
-        return support(labelFunctions, meals).size() / (meals.size() * 1.0);
+    public static double degreeOfFuzziness(List<MealLabel> mealLabels, List<Meal> meals) {
+        return support(mealLabels, meals).size() / (meals.size() * 1.0);
     }
 
-    public static List<Double> support(List<LabelFunction<Meal>> labelFunctions, List<Meal> meals) {
-        return tConorm(labelFunctions, meals).stream().filter(value -> value > 0).toList();
+    public static List<Double> support(List<MealLabel> mealLabels, List<Meal> meals) {
+        return tConorm(mealLabels, meals).stream().filter(value -> value > 0).toList();
     }
 
-    public static List<Double> support(LabelFunction<Meal> labelFunction, List<Meal> meals) {
-        return meals.stream().map( meal -> labelFunction.getMembership().apply(meal)).filter(value -> value > 0).toList();
+    public static List<Double> support(MealLabel mealLabel, List<Meal> meals) {
+    return meals.stream().map(mealLabel::membership).filter(value -> value > 0).toList();
     }
 
-    public static List<Double> tConorm(List<LabelFunction<Meal>> labelFunctions, List<Meal> meals) {
-        List<List<Double>> list = labelFunctions
-                .stream().map(variable ->
-                        meals.stream().map(meal ->
-                                variable.getMembership().apply(meal)
+    private static List<Double> tConorm(List<MealLabel> mealLabels, List<Meal> meals) {
+        List<List<Double>> list = mealLabels
+                .stream().map(mealLabel ->
+                        meals.stream().map(mealLabel::membership
                         ).toList()
                 ).toList();
         return minFromColumns(list);
