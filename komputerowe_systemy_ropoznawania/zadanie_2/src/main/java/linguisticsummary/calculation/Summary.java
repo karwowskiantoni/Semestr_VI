@@ -126,30 +126,6 @@ public class Summary {
         return 1 - ((quantifier.getDomain().getValue() - quantifier.getDomain().getKey()) / cardinality);
     }
 
-    private double calculateTrapeziumIntegral(){
-        Double begin = quantifier.getFunctionParams().get(0);
-        Double firstFold = quantifier.getFunctionParams().get(1);
-        Double secondFold = quantifier.getFunctionParams().get(2);
-        Double end = quantifier.getFunctionParams().get(3);
-        return  ((end - begin) + (secondFold - firstFold)) / 2;
-    }
-
-    private double calculateGaussIntegral(){
-        TrapezoidIntegrator integrator = new TrapezoidIntegrator();
-
-        double centerPosition = quantifier.getFunctionParams().get(0);
-        double width = quantifier.getFunctionParams().get(1);
-        try {
-            return integrator.integrate(
-                    new GaussianFunction(0, 1, centerPosition, width),
-                    quantifier.getDomain().getKey(),
-                    quantifier.getDomain().getValue());
-        } catch (MaxIterationsExceededException | FunctionEvaluationException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
     private double degreeOfQuantifierCardinality() {
         double integralValue;
 
@@ -214,4 +190,27 @@ public class Summary {
                 0.1 * lengthOfSummary;
     }
 
+    private double calculateTrapeziumIntegral(){
+        Double begin = quantifier.getFunctionParams().get(0);
+        Double firstFold = quantifier.getFunctionParams().get(1);
+        Double secondFold = quantifier.getFunctionParams().get(2);
+        Double end = quantifier.getFunctionParams().get(3);
+        return  ((end - begin) + (secondFold - firstFold)) / 2;
+    }
+
+    private double calculateGaussIntegral(){
+        TrapezoidIntegrator integrator = new TrapezoidIntegrator();
+
+        double centerPosition = quantifier.getFunctionParams().get(0);
+        double width = quantifier.getFunctionParams().get(1);
+        try {
+            return integrator.integrate(
+                    new GaussianFunction(0, 1, centerPosition, width),
+                    quantifier.getDomain().getKey(),
+                    quantifier.getDomain().getValue());
+        } catch (MaxIterationsExceededException | FunctionEvaluationException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
