@@ -2,26 +2,27 @@ package linguisticsummary.calculation;
 
 import linguisticsummary.model.Label;
 import linguisticsummary.model.Meal;
+import linguisticsummary.model.MealLabel;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Qualifier {
-    private final List<Label<Meal>> labels;
+    private final List<MealLabel> mealLabels;
 
-    public Qualifier(List<Label<Meal>> labels) {
-        this.labels = labels;
+    public Qualifier(List<MealLabel> mealLabels) {
+        this.mealLabels = mealLabels;
     }
 
-    public List<Label<Meal>> getVariables() {
-        return labels;
+    public List<MealLabel> getVariables() {
+        return mealLabels;
     }
 
     public String linguinize() {
-        if (labels.size() == 0) {
+        if (mealLabels.size() == 0) {
             return "";
         } else {
-            String sentence = " having " + labels.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
+            String sentence = " having " + mealLabels.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
             return sentence.substring(0, sentence.length() - 5);
         }
     }

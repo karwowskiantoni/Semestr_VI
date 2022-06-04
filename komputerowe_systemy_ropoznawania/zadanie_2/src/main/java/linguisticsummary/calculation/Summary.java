@@ -1,31 +1,29 @@
 package linguisticsummary.calculation;
 
-import linguisticsummary.model.Label;
 import linguisticsummary.model.Meal;
+import linguisticsummary.model.Quantifier;
 
 import java.util.List;
 
 public class Summary {
 
-    private final Label<Double> quantifier;
+    private final Quantifier quantifier;
     private final Qualifier qualifier;
     private final Summarizer summarizer;
-    private final boolean isAbsolute;
-    private Measures measures;
+    private final Measures measures;
 
-
-    public Summary(Label<Double> quantifier, Qualifier qualifier, Summarizer summarizer, Boolean isAbsolute) {
-        this.isAbsolute = isAbsolute;
-
+    public Summary(Quantifier quantifier, Qualifier qualifier, Summarizer summarizer, List<Meal> meals) {
         this.quantifier = quantifier;
         this.qualifier = qualifier;
         this.summarizer = summarizer;
+        this.measures = new Measures(meals, quantifier, qualifier, summarizer);
     }
 
-
-    public String linguinize(List<Meal> meals) {
-        measures = new Measures(meals, quantifier, qualifier, summarizer, isAbsolute);
-        return quantifier.getLabel() + " of meals " + qualifier.linguinize() + summarizer.linguinize();
+    public Measures measures() {
+        return measures;
     }
 
+    public String toString() {
+        return quantifier.getLabel() + " of meals " + qualifier.linguinize() + summarizer.linguinize() + System.lineSeparator() + measures;
+    }
 }

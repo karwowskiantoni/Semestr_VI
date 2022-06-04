@@ -5,12 +5,13 @@ import org.apache.commons.math.MaxIterationsExceededException;
 import org.apache.commons.math.analysis.integration.TrapezoidIntegrator;
 import org.apache.commons.math.optimization.fitting.GaussianFunction;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static java.lang.Math.exp;
 import static java.lang.Math.pow;
 
-public abstract class Label {
+public abstract class Label implements Serializable {
     public enum FunctionType {
         TRAPEZIUM, GAUSS
     }

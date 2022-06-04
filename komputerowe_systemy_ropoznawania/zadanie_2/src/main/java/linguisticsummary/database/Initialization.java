@@ -77,7 +77,7 @@ public class Initialization {
                 new Quantifier( "HIGH AMOUNT", GAUSS, List.of(0.75, 0.1), List.of(0.35, 0.4), false),
                 new Quantifier( "VERY HIGH AMOUNT", GAUSS, List.of(1.0, 0.1), List.of(0.65, 1.0), false)
                 );
-        MealLabelsDatabase.saveAll(mealLabels);
+        MealLabelDatabase.saveAll(mealLabels);
         QuantifierDatabase.saveAll(quantifiers);
     }
 
