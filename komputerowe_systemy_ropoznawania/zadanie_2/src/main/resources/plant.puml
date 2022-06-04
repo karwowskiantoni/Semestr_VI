@@ -84,7 +84,7 @@ class linguisticsummary.database.QuantifierDatabase {
 - {static} Quantifier deserialize(File)
 - {static} void createIfNotExists(File)
 }
-class linguisticsummary.database.VariableDatabase {
+class linguisticsummary.database.MealLabelsDatabase {
 + {static} List<Variable> loadAll()
 + {static} void saveAll(List<Variable>)
 - {static} void serialize(Variable)
@@ -110,7 +110,7 @@ class linguisticsummary.calculation.Summarizer {
 + String linguinize()
 }
 linguisticsummary.database.Database <|.. linguisticsummary.database.QuantifierDatabase
-linguisticsummary.database.Database <|.. linguisticsummary.database.VariableDatabase
+linguisticsummary.database.Database <|.. linguisticsummary.database.MealLabelsDatabase
 linguisticsummary.database.Database <|.. linguisticsummary.database.MealDatabase
 
 @enduml
