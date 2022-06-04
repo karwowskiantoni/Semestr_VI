@@ -1,35 +1,35 @@
 package linguisticsummary.database;
 
-import linguisticsummary.model.Variable;
+import linguisticsummary.model.LabelFunction;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class VariableDatabase implements Database<Variable> {
-    public static List<Variable> loadAll() {
+public class VariableDatabase implements Database<LabelFunction> {
+    public static List<LabelFunction> loadAll() {
         File folder = new File("./src/main/resources/variables/");
         File[] listOfFiles = folder.listFiles();
         return Arrays.stream(listOfFiles).map(VariableDatabase::deserialize).toList();
     }
 
-    public static void saveAll(List<Variable> variables) {
-        variables.forEach(VariableDatabase::serialize);
+    public static void saveAll(List<LabelFunction> labelFunctions) {
+        labelFunctions.forEach(VariableDatabase::serialize);
     }
 
-    private static void serialize(Variable variable) {
-        File outputFile = new File("./src/main/resources/variables/" + variable.getLabel());
+    private static void serialize(LabelFunction labelFunction) {
+        File outputFile = new File("./src/main/resources/variables/" + labelFunction.getLabel());
         createIfNotExists(outputFile);
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile))) {
-            outputStream.writeObject(variable);
+            outputStream.writeObject(labelFunction);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static Variable deserialize(File inputPath) {
+    private static LabelFunction deserialize(File inputPath) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(inputPath))) {
-            return (Variable) inputStream.readObject();
+            return (LabelFunction) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return null;
         }
