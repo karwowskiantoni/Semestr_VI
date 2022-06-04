@@ -28,7 +28,7 @@ class LinguisticSummary {
         }
         allSummaries.sort(Comparator.comparingDouble(value -> value.measures().getOptimalSummary()));
         Collections.reverse(allSummaries);
-        allSummaries.stream().limit(20).forEach(System.out::println);
+        allSummaries.stream().filter(summary -> !Double.isNaN(summary.measures().getOptimalSummary())).limit(20).forEach(System.out::println);
     }
 
     private static <T> List<T> random(List<T> list, int n) {
