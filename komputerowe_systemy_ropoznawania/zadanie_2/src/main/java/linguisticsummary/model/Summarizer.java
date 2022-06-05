@@ -1,6 +1,4 @@
-package linguisticsummary.calculation;
-
-import linguisticsummary.model.MealLabel;
+package linguisticsummary.model;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,8 +14,8 @@ public class Summarizer {
         return mealLabels;
     }
 
-    public String linguinize() {
-        String sentence = " are " + mealLabels.stream().map(variable -> variable.getLabel() + " and ").collect(Collectors.joining());
+    public String toString() {
+        String sentence = mealLabels.stream().map(label -> label + " and ").collect(Collectors.joining());
         return sentence.substring(0, sentence.length() - 5);
     }
 }

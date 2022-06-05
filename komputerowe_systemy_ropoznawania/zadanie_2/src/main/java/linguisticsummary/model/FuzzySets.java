@@ -1,4 +1,4 @@
-package linguisticsummary.calculation;
+package linguisticsummary.model;
 
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.MealLabel;

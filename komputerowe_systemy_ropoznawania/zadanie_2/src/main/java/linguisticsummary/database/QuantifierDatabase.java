@@ -18,7 +18,7 @@ public class QuantifierDatabase implements Database<Quantifier> {
     }
 
     private static void serialize(Quantifier quantifier) {
-        File outputFile = new File("./src/main/resources/quantifiers/" + quantifier.getLabel());
+        File outputFile = new File("./src/main/resources/quantifiers/" + quantifier);
         createIfNotExists(outputFile);
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile))) {
             outputStream.writeObject(quantifier);

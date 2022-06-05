@@ -19,7 +19,7 @@ public class MealLabelDatabase implements Database<Label> {
     }
 
     private static void serialize(MealLabel label) {
-        File outputFile = new File("./src/main/resources/variables/" + label.getLabel());
+        File outputFile = new File("./src/main/resources/variables/" + label);
         createIfNotExists(outputFile);
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outputFile))) {
             outputStream.writeObject(label);

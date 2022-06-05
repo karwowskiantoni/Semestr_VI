@@ -15,13 +15,14 @@ public abstract class Label implements Serializable {
     public enum FunctionType {
         TRAPEZIUM, GAUSS
     }
-    private final String label;
+
+    private final String value;
     private final FunctionType type;
     private final List<Double> params;
     private final List<Double> domain;
 
     public Label(String label, FunctionType type, List<Double> params, List<Double> domain) {
-        this.label = label;
+        this.value = label;
         this.type = type;
         this.params = params;
         this.domain = domain;
@@ -49,20 +50,15 @@ public abstract class Label implements Serializable {
         }
     }
 
-    public String getLabel() {
-        return label;
+    public String toString() {
+        return value;
     }
 
     public List<Double> getDomain() {
         return domain;
     }
 
-    private static double trapezium(
-            double x,
-            double begin,
-            double firstFold,
-            double secondFold,
-            double end) {
+    private static double trapezium(double x, double begin, double firstFold, double secondFold, double end) {
         if (x < begin) {
             return 0;
         } else if (begin <= x && x < firstFold) {

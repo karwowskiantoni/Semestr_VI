@@ -1,8 +1,8 @@
 package linguisticsummary;
 
-import linguisticsummary.calculation.Qualifier;
-import linguisticsummary.calculation.Summarizer;
-import linguisticsummary.calculation.Summary;
+import linguisticsummary.model.Qualifier;
+import linguisticsummary.model.Summarizer;
+import linguisticsummary.summary.*;
 import linguisticsummary.database.Initialization;
 import linguisticsummary.model.*;
 import linguisticsummary.database.MealDatabase;
@@ -14,8 +14,9 @@ import java.util.*;
 public class LinguisticSummary {
     public static void main(String... args) {
         Initialization.initialize();
-
         List<Meal> meals = MealDatabase.loadAll();
+        List<Meal> firstHalf = meals.subList(0, 5000);
+        List<Meal> secondHalf = meals.subList(5000, meals.size());
         List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
         List<MealLabel> allLabels = MealLabelDatabase.loadAll();
 
@@ -23,12 +24,37 @@ public class LinguisticSummary {
 
         for(List<MealLabel> labels : allCombinations(allLabels.stream().limit(10).toList(), 2)) {
             for(Quantifier quantifier: allQuantifiers) {
-                allSummaries.add(new Summary(quantifier, new Qualifier(List.of(labels.get(0))), new Summarizer(List.of(labels.get(1))), meals));
+                // single entity first form
+//                Summarizer summarizer = new Summarizer(labels);
+//                allSummaries.add(new SingleEntitySummaryFirstForm(quantifier, summarizer, meals));
+                // single entity second form
+//                Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
+//                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
+//                allSummaries.add(new SingleEntitySummarySecondForm(quantifier, qualifier, summarizer, meals));
+
+                // multiple entity first form
+//                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
+//                allSummaries.add(new MultipleEntitySummaryFirstForm(quantifier, summarizer, firstHalf, secondHalf));
+
+                // multiple entity second form
+//                Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
+//                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
+//                allSummaries.add(new MultipleEntitySummarySecondForm(quantifier, qualifier, summarizer, firstHalf, secondHalf));
+
+                // multiple entity third form
+                Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
+                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
+                allSummaries.add(new MultipleEntitySummaryThirdForm(quantifier, qualifier, summarizer, firstHalf, secondHalf));
             }
+
+            // multiple entity fourth form
+//            Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
+//            allSummaries.add(new MultipleEntitySummaryFourthForm(summarizer, firstHalf, secondHalf));
         }
-        allSummaries.sort(Comparator.comparingDouble(value -> value.measures().getOptimalSummary()));
-        Collections.reverse(allSummaries);
-        allSummaries.stream().filter(summary -> !Double.isNaN(summary.measures().getOptimalSummary())).limit(20).toList();
+//        allSummaries.sort(Comparator.comparingDouble(value -> value.measures().getOptimalSummary()));
+//        Collections.reverse(allSummaries);
+//        allSummaries.stream().filter(singleEntitySummarySecondForm -> !Double.isNaN(singleEntitySummarySecondForm.measures().getOptimalSummary())).limit(20).toList();
+        allSummaries.forEach(System.out::println);
     }
 
     private static <T> List<T> random(List<T> list, int n) {
