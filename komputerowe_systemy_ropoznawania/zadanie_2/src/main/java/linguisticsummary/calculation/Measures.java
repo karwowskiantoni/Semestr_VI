@@ -44,19 +44,28 @@ public class Measures {
     }
 
     public String toString() {
-        return "truth: " + degreeOfTruth + System.lineSeparator() +
-                "imprecision " + degreeOfImprecision + System.lineSeparator() +
-                "covering: " + degreeOfCovering + System.lineSeparator() +
-                "appropriateness: " + degreeOfAppropriateness + System.lineSeparator() +
-                "length of summary: " + lengthOfSummary + System.lineSeparator() +
-                "quantifier imprecision: " + degreeOfQuantifierImprecision + System.lineSeparator() +
-                "quantifier cardinality: " + degreeOfQuantifierCardinality + System.lineSeparator() +
-                "summarizer cardinality: " + degreeOfSummarizerCardinality + System.lineSeparator() +
-                "qualifier imprecision: " + degreeOfQualifierImprecision + System.lineSeparator() +
-                "qualifier cardinality: " + degreeOfQualifierCardinality + System.lineSeparator() +
-                "length of quantifier: " + lengthOfQualifier + System.lineSeparator() +
-                "optimal summary: " + optimalSummary + System.lineSeparator();
+        return "truth: " + formatResult(degreeOfTruth) + System.lineSeparator() +
+                "imprecision " + formatResult(degreeOfImprecision) + System.lineSeparator() +
+                "covering: " + formatResult(degreeOfCovering) + System.lineSeparator() +
+                "appropriateness: " + formatResult(degreeOfAppropriateness) + System.lineSeparator() +
+                "length of summary: " + formatResult(lengthOfSummary) + System.lineSeparator() +
+                "quantifier imprecision: " + formatResult(degreeOfQuantifierImprecision) + System.lineSeparator() +
+                "quantifier cardinality: " + formatResult(degreeOfQuantifierCardinality) + System.lineSeparator() +
+                "summarizer cardinality: " + formatResult(degreeOfSummarizerCardinality) + System.lineSeparator() +
+                "qualifier imprecision: " + formatResult(degreeOfQualifierImprecision) + System.lineSeparator() +
+                "qualifier cardinality: " + formatResult(degreeOfQualifierCardinality) + System.lineSeparator() +
+                "length of quantifier: " + formatResult(lengthOfQualifier) + System.lineSeparator() +
+                "optimal summary: " + formatResult(optimalSummary) + System.lineSeparator();
     }
+
+    private String formatResult(double val) {
+        if (val < 0.009 && val > 0.0) {
+            return "almost 0.0";
+        }
+        return String.valueOf(Math.round(val * 100.0) / 100.0);
+    }
+
+//    private String
 
     private double degreeOfTruth(Qualifier qualifier, Quantifier quantifier, Summarizer summarizer, List<Meal> meals) {
         if (qualifier.getVariables().size() == 0 && quantifier.isAbsolute()) {
@@ -75,25 +84,25 @@ public class Measures {
                 .map(variable ->
                         degreeOfFuzziness(variable, meals)
                 ).reduce(1.0, (a, b) -> a * b);
-    return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
-  }
+        return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
+    }
 
     private double degreeOfCovering(Summarizer summarizer, Qualifier qualifier, List<Meal> meals) {
         return support(
                 Stream.concat(
                         summarizer.getMealLabels().stream(),
                         qualifier.getVariables().stream()).toList(),
-                        meals)
+                meals)
                 .stream().mapToDouble(Double::doubleValue).sum() / meals.size();
     }
 
     private double degreeOfAppropriateness(Summarizer summarizer, Qualifier qualifier, List<Meal> meals) {
-      double supportProduct = summarizer
-              .getMealLabels()
-              .stream()
-              .map(variable -> degreeOfFuzziness(variable, meals))
-              .mapToDouble(Double::doubleValue)
-              .reduce(1.0, (a, b) -> a * b);
+        double supportProduct = summarizer
+                .getMealLabels()
+                .stream()
+                .map(variable -> degreeOfFuzziness(variable, meals))
+                .mapToDouble(Double::doubleValue)
+                .reduce(1.0, (a, b) -> a * b);
         return abs(supportProduct - degreeOfCovering(summarizer, qualifier, meals));
     }
 
@@ -102,11 +111,11 @@ public class Measures {
     }
 
     private double degreeOfQuantifierImprecision(Quantifier quantifier, List<Meal> meals) {
-        return 1 - ((quantifier.getDomain().get(0) - quantifier.getDomain().get(1)) / (quantifier.isAbsolute() ? meals.size() : 1));
+        return 1 - ((quantifier.getDomain().get(1) - quantifier.getDomain().get(0)) / (quantifier.isAbsolute() ? meals.size() : 1));
     }
 
     private double degreeOfQuantifierCardinality(Quantifier quantifier, List<Meal> meals) {
-     return quantifier.isAbsolute() ? quantifier.calculateIntegral() / meals.size() : quantifier.calculateIntegral();
+        return quantifier.isAbsolute() ? quantifier.calculateIntegral() / meals.size() : quantifier.calculateIntegral();
     }
 
     private double degreeOfSummarizerCardinality(Summarizer summarizer, List<Meal> meals) {
@@ -151,4 +160,6 @@ public class Measures {
                 0.1 * degreeOfAppropriateness +
                 0.1 * lengthOfSummary;
     }
+
+
 }
