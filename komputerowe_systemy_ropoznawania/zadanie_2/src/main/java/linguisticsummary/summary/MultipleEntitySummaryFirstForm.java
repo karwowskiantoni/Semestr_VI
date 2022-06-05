@@ -2,8 +2,6 @@ package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
 
-import java.util.List;
-
 public class MultipleEntitySummaryFirstForm implements Summary {
 
     private final Quantifier quantifier;

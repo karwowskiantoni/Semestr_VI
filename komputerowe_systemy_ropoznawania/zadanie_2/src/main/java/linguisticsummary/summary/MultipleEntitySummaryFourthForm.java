@@ -1,26 +1,23 @@
 package linguisticsummary.summary;
 
-import linguisticsummary.model.Meal;
-import linguisticsummary.model.Qualifier;
-import linguisticsummary.model.Quantifier;
-import linguisticsummary.model.Summarizer;
+import linguisticsummary.model.*;
 
 import java.util.List;
 
 public class MultipleEntitySummaryFourthForm implements Summary {
 
     private final Summarizer summarizer;
-    private final List<Meal> firstEntity;
-    private final List<Meal> secondEntity;
+    private final Entity firstEntity;
+    private final Entity secondEntity;
 
-    public MultipleEntitySummaryFourthForm(Summarizer summarizer, List<Meal> firstEntity, List<Meal> secondEntity) {
+    public MultipleEntitySummaryFourthForm(Summarizer summarizer, Entity firstEntity, Entity secondEntity) {
         this.summarizer = summarizer;
         this.firstEntity = firstEntity;
         this.secondEntity = secondEntity;
     }
 
     public String toString() {
-        return "more meals from first group than meals from second group are " + summarizer;
+        return "more " + firstEntity + " than " + secondEntity + " are " + summarizer;
     }
 
     public double degreeOfTruth() {

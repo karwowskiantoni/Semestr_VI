@@ -1,5 +1,6 @@
 package linguisticsummary.summary;
 
+import linguisticsummary.model.Entity;
 import linguisticsummary.model.Summarizer;
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.Quantifier;
@@ -13,16 +14,16 @@ public class SingleEntitySummaryFirstForm implements Summary {
 
     private final Quantifier quantifier;
     private final Summarizer summarizer;
-    private final List<Meal> entity;
+    private final Entity entity;
 
-    public SingleEntitySummaryFirstForm(Quantifier quantifier, Summarizer summarizer, List<Meal> entity) {
+    public SingleEntitySummaryFirstForm(Quantifier quantifier, Summarizer summarizer, Entity entity) {
         this.quantifier = quantifier;
         this.summarizer = summarizer;
         this.entity = entity;
     }
 
     public String toString() {
-        return quantifier + " of entity are " + summarizer;
+        return quantifier + " of " + entity + " are " + summarizer;
     }
 
     public double degreeOfTruth(Quantifier quantifier, Summarizer summarizer, List<Meal> entity) {
@@ -38,7 +39,7 @@ public class SingleEntitySummaryFirstForm implements Summary {
                 .getMealLabels()
                 .stream()
                 .map(variable ->
-                        degreeOfFuzziness(variable, entity)
+                        degreeOfFuzziness(variable, entity.getMeals())
                 ).reduce(1.0, (a, b) -> a * b);
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
     }
@@ -59,20 +60,20 @@ public class SingleEntitySummaryFirstForm implements Summary {
         double summarizerCardinalityProduct = summarizer
                 .getMealLabels()
                 .stream()
-                .map(variable -> sigmaCount(variable, entity) / entity.size())
+                .map(variable -> sigmaCount(variable, entity.getMeals()) / entity.size())
                 .reduce(1.0, (a, b) -> a * b);
         return 1 - round(pow(summarizerCardinalityProduct, 1 / (summarizer.getMealLabels().size() * 1.0)));
     }
 
     public double degreeOfCovering() {
-        return support(summarizer.getMealLabels(), entity).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
+        return support(summarizer.getMealLabels(), entity.getMeals()).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
     }
 
     public double degreeOfAppropriateness() {
         double supportProduct = summarizer
                 .getMealLabels()
                 .stream()
-                .map(variable -> degreeOfFuzziness(variable, entity))
+                .map(variable -> degreeOfFuzziness(variable, entity.getMeals()))
                 .mapToDouble(Double::doubleValue)
                 .reduce(1.0, (a, b) -> a * b);
         return abs(supportProduct - degreeOfCovering());

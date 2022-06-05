@@ -14,9 +14,9 @@ import java.util.*;
 public class LinguisticSummary {
     public static void main(String... args) {
         Initialization.initialize();
-        List<Meal> meals = MealDatabase.loadAll();
-        List<Meal> firstHalf = meals.subList(0, 5000);
-        List<Meal> secondHalf = meals.subList(5000, meals.size());
+        Entity all = new Entity(MealDatabase.loadAll(), "meals");
+        Entity left = new Entity(all.getMeals().subList(0, 5000), "Antoni's dishes");
+        Entity right = new Entity(all.getMeals().subList(5000, all.size()), "Michal's dishes");
         List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
         List<MealLabel> allLabels = MealLabelDatabase.loadAll();
 
@@ -44,7 +44,7 @@ public class LinguisticSummary {
                 // multiple entity third form
                 Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
                 Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-                allSummaries.add(new MultipleEntitySummaryThirdForm(quantifier, qualifier, summarizer, firstHalf, secondHalf));
+                allSummaries.add(new MultipleEntitySummaryThirdForm(quantifier, qualifier, summarizer, left, right));
             }
 
             // multiple entity fourth form

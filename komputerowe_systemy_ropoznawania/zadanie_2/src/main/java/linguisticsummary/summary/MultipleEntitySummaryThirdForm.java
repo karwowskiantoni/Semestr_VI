@@ -1,9 +1,6 @@
 package linguisticsummary.summary;
 
-import linguisticsummary.model.Meal;
-import linguisticsummary.model.Qualifier;
-import linguisticsummary.model.Quantifier;
-import linguisticsummary.model.Summarizer;
+import linguisticsummary.model.*;
 
 import java.util.List;
 
@@ -12,10 +9,10 @@ public class MultipleEntitySummaryThirdForm implements Summary {
     private final Quantifier quantifier;
     private final Qualifier qualifier;
     private final Summarizer summarizer;
-    private final List<Meal> firstEntity;
-    private final List<Meal> secondEntity;
+    private final Entity firstEntity;
+    private final Entity secondEntity;
 
-    public MultipleEntitySummaryThirdForm(Quantifier quantifier, Qualifier qualifier, Summarizer summarizer, List<Meal> firstEntity, List<Meal> secondEntity) {
+    public MultipleEntitySummaryThirdForm(Quantifier quantifier, Qualifier qualifier, Summarizer summarizer, Entity firstEntity, Entity secondEntity) {
         this.quantifier = quantifier;
         this.qualifier = qualifier;
         this.summarizer = summarizer;
@@ -24,7 +21,7 @@ public class MultipleEntitySummaryThirdForm implements Summary {
     }
 
     public String toString() {
-        return quantifier + " of meals from first group having " + qualifier + " in comparison to second group are " + summarizer;
+        return quantifier + " of " + firstEntity + " having " + qualifier + " in comparison to " + secondEntity + " are " + summarizer;
     }
 
     public double degreeOfTruth() {

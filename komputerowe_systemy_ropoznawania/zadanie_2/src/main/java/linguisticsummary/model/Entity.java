@@ -18,4 +18,8 @@ public class Entity {
     public String toString() {
         return name;
     }
+
+    public int size() {
+        return meals.size();
+    }
 }

@@ -28,26 +28,26 @@ public class Controller {
     @FXML
     private TextArea summariesList;
 
-    @FXML
-    protected void generateSummaries() {
-        Initialization.initialize();
-
-        List<Meal> meals = MealDatabase.loadAll();
-        List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
-        List<MealLabel> allLabels = MealLabelDatabase.loadAll();
-
-        List<SingleEntitySummarySecondForm> allSummaries = new ArrayList<>();
-
-        for(List<MealLabel> labels : allCombinations(allLabels.stream().limit(10).toList(), 2)) {
-            for(Quantifier quantifier: allQuantifiers) {
-                allSummaries.add(new SingleEntitySummarySecondForm(quantifier, new Qualifier(List.of(labels.get(0))), new Summarizer(List.of(labels.get(1))), meals));
-            }
-        }
+//    @FXML
+//    protected void generateSummaries() {
+//        Initialization.initialize();
+//
+//        List<Meal> meals = MealDatabase.loadAll();
+//        List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
+//        List<MealLabel> allLabels = MealLabelDatabase.loadAll();
+//
+//        List<SingleEntitySummarySecondForm> allSummaries = new ArrayList<>();
+//
+//        for(List<MealLabel> labels : allCombinations(allLabels.stream().limit(10).toList(), 2)) {
+//            for(Quantifier quantifier: allQuantifiers) {
+//                allSummaries.add(new SingleEntitySummarySecondForm(quantifier, new Qualifier(List.of(labels.get(0))), new Summarizer(List.of(labels.get(1))), meals));
+//            }
+//        }
 //        allSummaries.sort(Comparator.comparingDouble(value -> value.measures().getOptimalSummary()));
 //        Collections.reverse(allSummaries);
 
 //        var best = allSummaries.stream().filter(singleEntitySummarySecondForm -> !Double.isNaN(singleEntitySummarySecondForm.measures().getOptimalSummary())).limit(20).toList();
 //        String text = best.stream().map(SingleEntitySummarySecondForm::toString).collect(Collectors.joining("\n"));
 //        summariesList.setText(text);
-    }
+//    }
 }
