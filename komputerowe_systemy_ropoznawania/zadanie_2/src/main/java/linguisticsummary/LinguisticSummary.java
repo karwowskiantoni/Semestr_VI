@@ -11,7 +11,7 @@ import linguisticsummary.database.MealLabelDatabase;
 
 import java.util.*;
 
-class LinguisticSummary {
+public class LinguisticSummary {
     public static void main(String... args) {
         Initialization.initialize();
 
@@ -28,7 +28,7 @@ class LinguisticSummary {
         }
         allSummaries.sort(Comparator.comparingDouble(value -> value.measures().getOptimalSummary()));
         Collections.reverse(allSummaries);
-        allSummaries.stream().filter(summary -> !Double.isNaN(summary.measures().getOptimalSummary())).limit(20).forEach(System.out::println);
+        allSummaries.stream().filter(summary -> !Double.isNaN(summary.measures().getOptimalSummary())).limit(20).toList();
     }
 
     private static <T> List<T> random(List<T> list, int n) {
@@ -40,7 +40,7 @@ class LinguisticSummary {
         return newList;
     }
 
-    private static <T> Set<List<T>> allCombinations(List<T> objects, int k) {
+    public static <T> Set<List<T>> allCombinations(List<T> objects, int k) {
         Set<List<T>> subarrays = new HashSet<>();
         recursiveSearch(objects, 0, k, subarrays, new ArrayList<>());
         return subarrays;
