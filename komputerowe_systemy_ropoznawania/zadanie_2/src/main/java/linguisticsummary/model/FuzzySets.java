@@ -1,8 +1,5 @@
 package linguisticsummary.model;
 
-import linguisticsummary.model.Meal;
-import linguisticsummary.model.MealLabel;
-
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -28,7 +25,7 @@ public class FuzzySets {
     }
 
     public static List<Double> support(MealLabel mealLabel, List<Meal> meals) {
-    return meals.stream().map(mealLabel::membership).filter(value -> value > 0).toList();
+        return meals.stream().map(mealLabel::membership).filter(value -> value > 0).toList();
     }
 
     private static List<Double> tConorm(List<MealLabel> mealLabels, List<Meal> meals) {

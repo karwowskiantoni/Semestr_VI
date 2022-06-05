@@ -10,7 +10,7 @@ public class Qualifier {
         this.mealLabels = mealLabels;
     }
 
-    public List<MealLabel> getVariables() {
+    public List<MealLabel> getLabels() {
         return mealLabels;
     }
 

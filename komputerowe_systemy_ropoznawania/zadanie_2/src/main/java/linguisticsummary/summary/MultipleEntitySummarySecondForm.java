@@ -2,9 +2,12 @@ package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class MultipleEntitySummarySecondForm implements Summary  {
+import static linguisticsummary.model.FuzzySets.sigmaCount;
+
+public class MultipleEntitySummarySecondForm implements Summary {
 
     private final Quantifier quantifier;
     private final Qualifier qualifier;
@@ -25,6 +28,15 @@ public class MultipleEntitySummarySecondForm implements Summary  {
     }
 
     public double degreeOfTruth() {
-        return 0.0;
+        return quantifier.membership(
+                (sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size()) /
+                        (
+                                (sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size())
+                                        + (sigmaCount(
+                                        Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
+                                        secondEntity.getMeals()
+                                ) / secondEntity.size())
+                        )
+        );
     }
 }

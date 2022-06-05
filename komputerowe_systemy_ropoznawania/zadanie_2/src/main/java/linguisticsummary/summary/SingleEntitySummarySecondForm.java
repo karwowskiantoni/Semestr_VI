@@ -25,11 +25,7 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     public double degreeOfTruth() {
-        if (quantifier.isAbsolute()) {
-            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / sigmaCount(qualifier.getVariables(), entity.getMeals())) / entity.size();
-        } else {
-            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / sigmaCount(qualifier.getVariables(), entity.getMeals()));
-        }
+        return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
     }
 
     public double degreeOfImprecision() {
@@ -64,12 +60,12 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     public double lengthOfQualifier() {
-        return 2 * pow(0.5, qualifier.getVariables().size());
+        return 2 * pow(0.5, qualifier.getLabels().size());
     }
 
     public double degreeOfCovering() {
       return support(
-              Stream.concat(summarizer.getMealLabels().stream(), qualifier.getVariables().stream()).toList(),
+              Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
               entity.getMeals()
       ).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
     }
@@ -85,16 +81,16 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     public double degreeOfQualifierImprecision() {
-        return 1 - round(pow(degreeOfFuzziness(qualifier.getVariables(), entity.getMeals()), 1 / (qualifier.getVariables().size() * 1.0)));
+        return 1 - round(pow(degreeOfFuzziness(qualifier.getLabels(), entity.getMeals()), 1 / (qualifier.getLabels().size() * 1.0)));
     }
 
     public double degreeOfQualifierCardinality() {
             double qualifierCardinalityProduct = qualifier
-                    .getVariables()
+                    .getLabels()
                     .stream()
                     .map(variable ->
                             sigmaCount(variable, entity.getMeals()) / entity.size()
                     ).reduce(1.0, (a, b) -> a * b);
-            return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getVariables().size() * 1.0)));
+            return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getLabels().size() * 1.0)));
     }
 }

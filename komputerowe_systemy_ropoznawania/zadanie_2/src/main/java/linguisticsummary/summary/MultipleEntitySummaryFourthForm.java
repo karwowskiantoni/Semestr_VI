@@ -4,6 +4,8 @@ import linguisticsummary.model.*;
 
 import java.util.List;
 
+import static linguisticsummary.model.FuzzySets.*;
+
 public class MultipleEntitySummaryFourthForm implements Summary {
 
     private final Summarizer summarizer;
@@ -21,6 +23,11 @@ public class MultipleEntitySummaryFourthForm implements Summary {
     }
 
     public double degreeOfTruth() {
-        return 0.0;
+        return 1 - Math.min(1,
+                (1 -
+                        sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size() +
+                        sigmaCount(summarizer.getMealLabels(), secondEntity.getMeals()) / secondEntity.size()
+                )
+        );
     }
 }

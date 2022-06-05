@@ -3,6 +3,9 @@ package linguisticsummary.summary;
 import linguisticsummary.model.*;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import static linguisticsummary.model.FuzzySets.sigmaCount;
 
 public class MultipleEntitySummaryThirdForm implements Summary {
 
@@ -25,6 +28,18 @@ public class MultipleEntitySummaryThirdForm implements Summary {
     }
 
     public double degreeOfTruth() {
-        return 0.0;
+        return quantifier.membership(
+                (sigmaCount(
+                        Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
+                        firstEntity.getMeals()
+                ) / firstEntity.size()) /
+                        (
+                                (sigmaCount(
+                                        Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
+                                        firstEntity.getMeals())
+                                        / firstEntity.size())
+                                        + (sigmaCount(summarizer.getMealLabels(), secondEntity.getMeals()) / secondEntity.size())
+                        )
+        );
     }
 }
