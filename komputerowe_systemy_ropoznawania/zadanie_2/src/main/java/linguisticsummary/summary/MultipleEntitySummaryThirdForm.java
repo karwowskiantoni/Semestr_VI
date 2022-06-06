@@ -2,7 +2,6 @@ package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static linguisticsummary.model.FuzzySets.sigmaCount;
@@ -25,6 +24,10 @@ public class MultipleEntitySummaryThirdForm implements Summary {
 
     public String toString() {
         return quantifier + " of " + firstEntity + " having " + qualifier + " in comparison to " + secondEntity + " are " + summarizer;
+    }
+
+    public Row toRow() {
+        return null;
     }
 
     public double degreeOfTruth() {

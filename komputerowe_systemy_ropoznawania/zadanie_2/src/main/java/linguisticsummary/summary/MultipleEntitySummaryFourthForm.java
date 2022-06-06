@@ -2,8 +2,6 @@ package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
 
-import java.util.List;
-
 import static linguisticsummary.model.FuzzySets.*;
 
 public class MultipleEntitySummaryFourthForm implements Summary {
@@ -20,6 +18,10 @@ public class MultipleEntitySummaryFourthForm implements Summary {
 
     public String toString() {
         return "more " + firstEntity + " than " + secondEntity + " are " + summarizer;
+    }
+
+    public Row toRow() {
+        return null;
     }
 
     public double degreeOfTruth() {

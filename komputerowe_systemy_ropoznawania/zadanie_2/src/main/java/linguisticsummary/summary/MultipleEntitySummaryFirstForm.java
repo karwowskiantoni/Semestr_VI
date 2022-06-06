@@ -22,6 +22,10 @@ public class MultipleEntitySummaryFirstForm implements Summary {
         return quantifier + " of" + firstEntity + " in comparison to " + secondEntity + " are " + summarizer;
     }
 
+    public Row toRow() {
+        return null;
+    }
+
     public double degreeOfTruth() {
         return quantifier.membership(
                 (sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size()) /

@@ -1,4 +1,4 @@
-package linguisticsummary.view;
+package linguisticsummary.summary;
 
 public class Row {
     private final String summary;

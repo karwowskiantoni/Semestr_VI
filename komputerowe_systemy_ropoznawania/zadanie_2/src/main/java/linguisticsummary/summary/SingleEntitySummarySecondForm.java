@@ -24,11 +24,41 @@ public class SingleEntitySummarySecondForm implements Summary {
         return quantifier + " of " + entity + " having " + qualifier + " are " + summarizer;
     }
 
-    public double degreeOfTruth() {
+    public Row toRow() {
+        double truth = degreeOfTruth();
+        double imprecision = degreeOfImprecision();
+        double covering = degreeOfCovering();
+        double appropriateness = degreeOfAppropriateness();
+        double lengthOfSummary = lengthOfSummary();
+        return new Row(
+                toString(),
+                formatResult(truth),
+                formatResult(imprecision),
+                formatResult(covering),
+                formatResult(appropriateness),
+                formatResult(lengthOfSummary),
+                formatResult(degreeOfQuantifierImprecision()),
+                formatResult(degreeOfQuantifierCardinality()),
+                formatResult(degreeOfSummarizerCardinality()),
+                formatResult(degreeOfQualifierImprecision()),
+                formatResult(degreeOfQualifierCardinality()),
+                formatResult(lengthOfQualifier()),
+                formatResult((0.5 * truth) + (0.2 * imprecision) + (0.1 * covering) + (0.1 * appropriateness) + (0.1 * lengthOfSummary))
+        );
+    }
+
+    private String formatResult(double val) {
+        if (val < 0.009 && val > 0.0) {
+            return "almost 0.0";
+        }
+        return String.valueOf(Math.round(val * 100.0) / 100.0);
+    }
+
+    private double degreeOfTruth() {
         return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
     }
 
-    public double degreeOfImprecision() {
+    private double degreeOfImprecision() {
         Double multipliedDegreesOfFuzziness = summarizer
                 .getMealLabels()
                 .stream()
@@ -38,19 +68,19 @@ public class SingleEntitySummarySecondForm implements Summary {
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
     }
 
-    public double lengthOfSummary() {
+    private double lengthOfSummary() {
         return 2 * pow(0.5, summarizer.getMealLabels().size());
     }
 
-    public double degreeOfQuantifierImprecision() {
+    private double degreeOfQuantifierImprecision() {
         return 1 - ((quantifier.getDomain().get(1) - quantifier.getDomain().get(0)) / (quantifier.isAbsolute() ? entity.size() : 1));
     }
 
-    public double degreeOfQuantifierCardinality() {
+    private double degreeOfQuantifierCardinality() {
         return quantifier.isAbsolute() ? quantifier.calculateIntegral() / entity.size() : quantifier.calculateIntegral();
     }
 
-    public double degreeOfSummarizerCardinality() {
+    private double degreeOfSummarizerCardinality() {
         double summarizerCardinalityProduct = summarizer
                 .getMealLabels()
                 .stream()
@@ -59,18 +89,18 @@ public class SingleEntitySummarySecondForm implements Summary {
         return 1 - round(pow(summarizerCardinalityProduct, 1 / (summarizer.getMealLabels().size() * 1.0)));
     }
 
-    public double lengthOfQualifier() {
+    private double lengthOfQualifier() {
         return 2 * pow(0.5, qualifier.getLabels().size());
     }
 
-    public double degreeOfCovering() {
+    private double degreeOfCovering() {
       return support(
               Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
               entity.getMeals()
       ).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
     }
 
-    public double degreeOfAppropriateness() {
+    private double degreeOfAppropriateness() {
         double supportProduct = summarizer
                 .getMealLabels()
                 .stream()
@@ -80,11 +110,11 @@ public class SingleEntitySummarySecondForm implements Summary {
         return abs(supportProduct - degreeOfCovering());
     }
 
-    public double degreeOfQualifierImprecision() {
+    private double degreeOfQualifierImprecision() {
         return 1 - round(pow(degreeOfFuzziness(qualifier.getLabels(), entity.getMeals()), 1 / (qualifier.getLabels().size() * 1.0)));
     }
 
-    public double degreeOfQualifierCardinality() {
+    private double degreeOfQualifierCardinality() {
             double qualifierCardinalityProduct = qualifier
                     .getLabels()
                     .stream()

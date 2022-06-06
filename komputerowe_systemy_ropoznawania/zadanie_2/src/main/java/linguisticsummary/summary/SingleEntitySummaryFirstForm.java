@@ -26,6 +26,10 @@ public class SingleEntitySummaryFirstForm implements Summary {
         return quantifier + " of " + entity + " are " + summarizer;
     }
 
+    public Row toRow() {
+        return null;
+    }
+
     public double degreeOfTruth(Quantifier quantifier, Summarizer summarizer, List<Meal> entity) {
         if (quantifier.isAbsolute()) {
             return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity));
