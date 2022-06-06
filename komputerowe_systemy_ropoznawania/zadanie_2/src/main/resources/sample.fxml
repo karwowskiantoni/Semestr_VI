@@ -31,12 +31,9 @@
                         <TableColumn prefWidth="69.0" text="Optimal" />
                     </columns>
                   </TableView>
-                  <MenuButton fx:id="select1" layoutX="31.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Select">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                  </MenuButton>
+                  <MenuButton fx:id="quantifierMenu" layoutX="31.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="quantifier"></MenuButton>
+                  <MenuButton fx:id="qualifierMenu" layoutX="31.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="qualifier"></MenuButton>
+                  <MenuButton fx:id="summarizerMenu" layoutX="31.0" layoutY="160.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="summarizer"></MenuButton>
                </children></AnchorPane>
       </content>
     </Tab>
