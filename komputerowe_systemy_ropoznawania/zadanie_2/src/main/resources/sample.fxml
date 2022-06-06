@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="650.0" text="KSR" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="linguisticsummary.view.Controller">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="568.0" prefWidth="751.0">
-         <children>
-            <Button fx:id="randomSummariesButton" layoutX="396.0" layoutY="143.0" mnemonicParsing="false" onAction="#generateSummaries" prefHeight="125.0" prefWidth="208.0" text="Generate the best summaries" />
-            <TextArea fx:id="summariesList" layoutX="35.0" layoutY="25.0" prefHeight="367.0" prefWidth="327.0" />
-         </children></AnchorPane>
-  </content>
-</TitledPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="841.0" prefWidth="1307.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/18">
+  <tabs>
+    <Tab text="Untitled Tab 1">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="792.0" prefWidth="1254.0">
+               <children>
+                  <TableView fx:id="table" layoutX="165.0" layoutY="24.0" prefHeight="750.0" prefWidth="1095.0">
+                    <columns>
+                      <TableColumn prefWidth="514.0" text="Summary" />
+                      <TableColumn minWidth="0.0" prefWidth="35.0" text="T1" />
+                        <TableColumn prefWidth="44.0" text="T2" />
+                        <TableColumn prefWidth="48.0" text="T3" />
+                        <TableColumn prefWidth="47.0" text="T4" />
+                        <TableColumn prefWidth="50.0" text="T5" />
+                        <TableColumn prefWidth="47.0" text="T6" />
+                        <TableColumn prefWidth="50.0" text="T7" />
+                        <TableColumn prefWidth="46.0" text="T8" />
+                        <TableColumn prefWidth="43.0" text="T9" />
+                        <TableColumn prefWidth="46.0" text="T10" />
+                        <TableColumn prefWidth="55.0" text="T11" />
+                        <TableColumn prefWidth="69.0" text="Optimal" />
+                    </columns>
+                  </TableView>
+                  <MenuButton fx:id="select1" layoutX="31.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Select">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>
