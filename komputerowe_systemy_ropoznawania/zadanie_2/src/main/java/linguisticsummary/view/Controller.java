@@ -16,6 +16,8 @@ import linguisticsummary.summary.*;
 
 import java.util.*;
 
+import static linguisticsummary.view.Controller.SummaryType.SINGLE_ENTITY_SUMMARY_FIRST_FORM;
+
 public class Controller {
   @FXML public Button generate;
   @FXML public Button type;
@@ -49,7 +51,7 @@ public class Controller {
 
   List<Quantifier> allQuantifiers;
   List<MealLabel> allLabels;
-  SummaryType summaryType = SummaryType.SINGLE_ENTITY_SUMMARY_FIRST_FORM;
+  SummaryType summaryType = SINGLE_ENTITY_SUMMARY_FIRST_FORM;
 
   public void initialize() {
     Initialization.initialize();
@@ -76,8 +78,15 @@ public class Controller {
   }
 
   private void update() {
-    quantifierMenu.getItems().clear();
-    allQuantifiers.forEach(
+    List<Quantifier> filteredQuantifiers;
+      if (summaryType == SINGLE_ENTITY_SUMMARY_FIRST_FORM) {
+          filteredQuantifiers = allQuantifiers;
+      } else {
+          filteredQuantifiers = allQuantifiers.stream().filter(Quantifier::isRelative).toList();
+      }
+
+      quantifierMenu.getItems().clear();
+    filteredQuantifiers.forEach(
         quantifier -> {
           MenuItem item = new MenuItem(quantifier.toString());
           EventHandler<ActionEvent> event =
@@ -170,6 +179,7 @@ public class Controller {
             case MULTIPLE_ENTITY_SUMMARY_THIRD_FORM -> multipleEntityThirdForm();
             case MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM -> multipleEntityFourthForm();
         }
+        update();
     });
 
       type.setOnAction(e -> {
@@ -180,9 +190,10 @@ public class Controller {
               case MULTIPLE_ENTITY_SUMMARY_FIRST_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_SECOND_FORM;
               case MULTIPLE_ENTITY_SUMMARY_SECOND_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_THIRD_FORM;
               case MULTIPLE_ENTITY_SUMMARY_THIRD_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM;
-              case MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM -> summaryType = SummaryType.SINGLE_ENTITY_SUMMARY_FIRST_FORM;
+              case MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM -> summaryType = SINGLE_ENTITY_SUMMARY_FIRST_FORM;
           }
           type.setText(summaryType.toString());
+          update();
       });
   }
 
@@ -266,8 +277,16 @@ public class Controller {
   }
 
   private static <T> Set<List<T>> allCombinations(List<T> objects) {
+      Set<List<T>> output = new HashSet<>();
+      for(int i = 1; i <= objects.size(); i++) {
+        output.addAll(allCombinations(objects, i));
+      }
+      return output;
+  }
+
+  private static <T> Set<List<T>> allCombinations(List<T> objects, int k) {
     Set<List<T>> subarrays = new HashSet<>();
-    recursiveSearch(objects, 0, objects.size(), subarrays, new ArrayList<>());
+    recursiveSearch(objects, 0, k, subarrays, new ArrayList<>());
     return subarrays;
   }
 

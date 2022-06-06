@@ -13,4 +13,8 @@ public class Quantifier extends Label implements Serializable {
     public boolean isAbsolute() {
         return isAbsolute;
     }
+
+    public boolean isRelative() {
+        return !isAbsolute;
+    }
 }
