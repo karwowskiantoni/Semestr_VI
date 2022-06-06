@@ -1,6 +1,9 @@
 package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
+import linguisticsummary.row.MultipleEntityRow;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowSecondForm;
 
 import static linguisticsummary.model.FuzzySets.sigmaCount;
 
@@ -19,14 +22,14 @@ public class MultipleEntitySummaryFirstForm implements Summary {
     }
 
     public String toString() {
-        return quantifier + " of" + firstEntity + " in comparison to " + secondEntity + " are " + summarizer;
+        return quantifier + " of " + firstEntity + " in comparison to " + secondEntity + " are " + summarizer;
     }
 
     public Row toRow() {
-        return null;
+        return new MultipleEntityRow(toString(), formatResult(degreeOfTruth()));
     }
 
-    public double degreeOfTruth() {
+    private double degreeOfTruth() {
         return quantifier.membership(
                 (sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size()) /
                         (

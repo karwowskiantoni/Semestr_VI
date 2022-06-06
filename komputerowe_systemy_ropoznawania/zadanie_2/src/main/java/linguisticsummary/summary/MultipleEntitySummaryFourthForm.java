@@ -1,6 +1,9 @@
 package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
+import linguisticsummary.row.MultipleEntityRow;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowSecondForm;
 
 import static linguisticsummary.model.FuzzySets.*;
 
@@ -21,10 +24,10 @@ public class MultipleEntitySummaryFourthForm implements Summary {
     }
 
     public Row toRow() {
-        return null;
+        return new MultipleEntityRow(toString(), formatResult(degreeOfTruth()));
     }
 
-    public double degreeOfTruth() {
+    private double degreeOfTruth() {
         return 1 - Math.min(1,
                 (1 -
                         sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size() +

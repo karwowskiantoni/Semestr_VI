@@ -8,7 +8,10 @@ import linguisticsummary.database.MealDatabase;
 import linguisticsummary.database.MealLabelDatabase;
 import linguisticsummary.database.QuantifierDatabase;
 import linguisticsummary.model.*;
-import linguisticsummary.summary.Row;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowSecondForm;
+import linguisticsummary.summary.MultipleEntitySummaryFirstForm;
+import linguisticsummary.summary.SingleEntitySummaryFirstForm;
 import linguisticsummary.summary.SingleEntitySummarySecondForm;
 import linguisticsummary.summary.Summary;
 
@@ -20,7 +23,6 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        System.out.println("chuj");
         Initialization.initialize();
         Entity all = new Entity(MealDatabase.loadAll(), "meals");
         Entity left = new Entity(all.getMeals().subList(0, 5000), "Antoni's dishes");
@@ -30,16 +32,16 @@ public class Controller {
         List<Summary> allSummaries = new ArrayList<>();
         for(List<MealLabel> labels : allCombinations(allLabels.stream().limit(10).toList(), 2)) {
             for(Quantifier quantifier: allQuantifiers) {
-                // single entity first form
+//                 single entity first form
 //                Summarizer summarizer = new Summarizer(labels);
-//                allSummaries.add(new SingleEntitySummaryFirstForm(quantifier, summarizer, meals));
-                // single entity second form
+//                allSummaries.add(new SingleEntitySummaryFirstForm(quantifier, summarizer, all));
+//                 single entity second form
                 Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
                 Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
                 allSummaries.add(new SingleEntitySummarySecondForm(quantifier, qualifier, summarizer, all));
 //                 multiple entity first form
 //                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-//                allSummaries.add(new MultipleEntitySummaryFirstForm(quantifier, summarizer, firstHalf, secondHalf));
+//                allSummaries.add(new MultipleEntitySummaryFirstForm(quantifier, summarizer, left, right));
                 // multiple entity second form
 //                Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
 //                Summarizer summarizer = new Summarizer(List.of(labels.get(1)));

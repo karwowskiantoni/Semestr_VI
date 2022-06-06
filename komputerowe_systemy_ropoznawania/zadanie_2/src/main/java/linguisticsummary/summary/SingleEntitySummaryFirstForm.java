@@ -4,6 +4,9 @@ import linguisticsummary.model.Entity;
 import linguisticsummary.model.Summarizer;
 import linguisticsummary.model.Meal;
 import linguisticsummary.model.Quantifier;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowFirstForm;
+import linguisticsummary.row.SingleEntityRowSecondForm;
 
 import java.util.List;
 
@@ -27,18 +30,34 @@ public class SingleEntitySummaryFirstForm implements Summary {
     }
 
     public Row toRow() {
-        return null;
+        double truth = degreeOfTruth();
+        double imprecision = degreeOfImprecision();
+        double covering = degreeOfCovering();
+        double appropriateness = degreeOfAppropriateness();
+        double lengthOfSummary = lengthOfSummary();
+        return new SingleEntityRowFirstForm(
+                toString(),
+                formatResult(truth),
+                formatResult(imprecision),
+                formatResult(covering),
+                formatResult(appropriateness),
+                formatResult(lengthOfSummary),
+                formatResult(degreeOfQuantifierImprecision()),
+                formatResult(degreeOfQuantifierCardinality()),
+                formatResult(degreeOfSummarizerCardinality()),
+                formatResult((0.5 * truth) + (0.2 * imprecision) + (0.1 * covering) + (0.1 * appropriateness) + (0.1 * lengthOfSummary))
+        );
     }
 
-    public double degreeOfTruth(Quantifier quantifier, Summarizer summarizer, List<Meal> entity) {
+    private double degreeOfTruth() {
         if (quantifier.isAbsolute()) {
-            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity));
+            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()));
         } else {
-            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity) / entity.size());
+            return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / entity.size());
         }
     }
 
-    public double degreeOfImprecision() {
+    private double degreeOfImprecision() {
         Double multipliedDegreesOfFuzziness = summarizer
                 .getMealLabels()
                 .stream()
@@ -48,19 +67,19 @@ public class SingleEntitySummaryFirstForm implements Summary {
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
     }
 
-    public double lengthOfSummary() {
+    private double lengthOfSummary() {
         return 2 * pow(0.5, summarizer.getMealLabels().size());
     }
 
-    public double degreeOfQuantifierImprecision() {
+    private double degreeOfQuantifierImprecision() {
         return 1 - ((quantifier.getDomain().get(1) - quantifier.getDomain().get(0)) / (quantifier.isAbsolute() ? entity.size() : 1));
     }
 
-    public double degreeOfQuantifierCardinality() {
+    private double degreeOfQuantifierCardinality() {
         return quantifier.isAbsolute() ? quantifier.calculateIntegral() / entity.size() : quantifier.calculateIntegral();
     }
 
-    public double degreeOfSummarizerCardinality() {
+    private double degreeOfSummarizerCardinality() {
         double summarizerCardinalityProduct = summarizer
                 .getMealLabels()
                 .stream()
@@ -69,11 +88,11 @@ public class SingleEntitySummaryFirstForm implements Summary {
         return 1 - round(pow(summarizerCardinalityProduct, 1 / (summarizer.getMealLabels().size() * 1.0)));
     }
 
-    public double degreeOfCovering() {
+    private double degreeOfCovering() {
         return support(summarizer.getMealLabels(), entity.getMeals()).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
     }
 
-    public double degreeOfAppropriateness() {
+    private double degreeOfAppropriateness() {
         double supportProduct = summarizer
                 .getMealLabels()
                 .stream()

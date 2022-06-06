@@ -1,6 +1,8 @@
 package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowSecondForm;
 
 import java.util.stream.Stream;
 
@@ -30,7 +32,7 @@ public class SingleEntitySummarySecondForm implements Summary {
         double covering = degreeOfCovering();
         double appropriateness = degreeOfAppropriateness();
         double lengthOfSummary = lengthOfSummary();
-        return new Row(
+        return new SingleEntityRowSecondForm(
                 toString(),
                 formatResult(truth),
                 formatResult(imprecision),
@@ -47,15 +49,7 @@ public class SingleEntitySummarySecondForm implements Summary {
         );
     }
 
-    private String formatResult(double val) {
-        if (val < 0.009 && val > 0.0) {
-            return "almost 0.0";
-        }
-        return String.valueOf(Math.round(val * 100.0) / 100.0);
-    }
-
     private double degreeOfTruth() {
-
         return quantifier.membership(sigmaCount(Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
     }
 

@@ -1,6 +1,9 @@
 package linguisticsummary.summary;
 
 import linguisticsummary.model.*;
+import linguisticsummary.row.MultipleEntityRow;
+import linguisticsummary.row.Row;
+import linguisticsummary.row.SingleEntityRowSecondForm;
 
 import java.util.stream.Stream;
 
@@ -27,10 +30,10 @@ public class MultipleEntitySummaryThirdForm implements Summary {
     }
 
     public Row toRow() {
-        return null;
+        return new MultipleEntityRow(toString(), formatResult(degreeOfTruth()));
     }
 
-    public double degreeOfTruth() {
+    private double degreeOfTruth() {
         return quantifier.membership(
                 (sigmaCount(
                         Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
