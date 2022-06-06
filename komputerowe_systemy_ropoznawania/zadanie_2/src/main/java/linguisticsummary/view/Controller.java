@@ -3,9 +3,8 @@ package linguisticsummary.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
+import javafx.geometry.Orientation;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import linguisticsummary.database.Initialization;
 import linguisticsummary.database.MealDatabase;
@@ -18,22 +17,44 @@ import linguisticsummary.summary.*;
 import java.util.*;
 
 public class Controller {
-  @FXML private TableView<Row> table;
+  @FXML public Button generate;
+  @FXML public Button type;
 
-  @FXML private MenuButton summarizerMenu;
+  enum SummaryType {
+    SINGLE_ENTITY_SUMMARY_FIRST_FORM,
+    SINGLE_ENTITY_SUMMARY_SECOND_FORM,
+    MULTIPLE_ENTITY_SUMMARY_FIRST_FORM,
+    MULTIPLE_ENTITY_SUMMARY_SECOND_FORM,
+    MULTIPLE_ENTITY_SUMMARY_THIRD_FORM,
+    MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM,
+  }
+
+  @FXML public TableView<Row> table;
+  @FXML public MenuButton quantifierMenu;
+  @FXML public MenuButton summarizerMenu;
+  @FXML public MenuButton qualifierMenu;
+
+  @FXML public ToolBar quantifierToolBar;
+  @FXML public ToolBar summarizerToolBar;
+  @FXML public ToolBar qualifierToolBar;
 
   List<Quantifier> chosenQuantifiers = new ArrayList<>();
-  List<MealLabel> chosenLabels = new ArrayList<>();
+  List<MealLabel> chosenQualifierLabels = new ArrayList<>();
+  List<MealLabel> chosenSummarizerLabels = new ArrayList<>();
 
-  Entity all = new Entity(MealDatabase.loadAll(), "meals");
-  Entity left = new Entity(all.getMeals().subList(0, 5000), "Antoni's dishes");
-  Entity right = new Entity(all.getMeals().subList(5000, all.size()), "Michal's dishes");
+  Entity allMeals = new Entity(MealDatabase.loadAll(), "meals");
+  Entity antoniMeals = new Entity(allMeals.getMeals().subList(0, 5000), "Antoni's dishes");
+  Entity michalMeals =
+      new Entity(allMeals.getMeals().subList(5000, allMeals.size()), "Michal's dishes");
+
+  List<Quantifier> allQuantifiers;
+  List<MealLabel> allLabels;
+  SummaryType summaryType = SummaryType.SINGLE_ENTITY_SUMMARY_FIRST_FORM;
 
   public void initialize() {
     Initialization.initialize();
-    List<Quantifier> allQuantifiers = QuantifierDatabase.loadAll();
-    List<MealLabel> allLabels = MealLabelDatabase.loadAll();
-    List<Summary> allSummaries = new ArrayList<>();
+    allQuantifiers = QuantifierDatabase.loadAll();
+    allLabels = MealLabelDatabase.loadAll();
     table.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("summary"));
     table.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("T1"));
     table.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("T2"));
@@ -47,22 +68,130 @@ public class Controller {
     table.getColumns().get(10).setCellValueFactory(new PropertyValueFactory<>("T10"));
     table.getColumns().get(11).setCellValueFactory(new PropertyValueFactory<>("T11"));
     table.getColumns().get(12).setCellValueFactory(new PropertyValueFactory<>("optimal"));
+    quantifierToolBar.setOrientation(Orientation.VERTICAL);
+    qualifierToolBar.setOrientation(Orientation.VERTICAL);
+    summarizerToolBar.setOrientation(Orientation.VERTICAL);
+    type.setText(summaryType.toString());
+    update();
+  }
 
+  private void update() {
+    quantifierMenu.getItems().clear();
+    allQuantifiers.forEach(
+        quantifier -> {
+          MenuItem item = new MenuItem(quantifier.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                chosenQuantifiers.add(quantifier);
+                allQuantifiers.remove(quantifier);
+                update();
+              };
+          item.setOnAction(event);
+          quantifierMenu.getItems().add(item);
+        });
+
+    quantifierToolBar.getItems().clear();
+    chosenQuantifiers.forEach(
+        quantifier -> {
+          Button button = new Button(quantifier.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                allQuantifiers.add(quantifier);
+                chosenQuantifiers.remove(quantifier);
+                update();
+              };
+          button.setOnAction(event);
+          quantifierToolBar.getItems().add(button);
+        });
+
+    summarizerMenu.getItems().clear();
     allLabels.forEach(
-            mealLabel -> {
-              MenuItem item = new MenuItem(mealLabel.toString());
-              EventHandler<ActionEvent> event = e -> System.out.println(mealLabel);
-              item.setOnAction(event);
-              summarizerMenu.getItems().add(item);
-            });
+        label -> {
+          MenuItem item = new MenuItem(label.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                chosenSummarizerLabels.add(label);
+                allLabels.remove(label);
+                update();
+              };
+          item.setOnAction(event);
+          summarizerMenu.getItems().add(item);
+        });
+
+    summarizerToolBar.getItems().clear();
+    chosenSummarizerLabels.forEach(
+        label -> {
+          Button button = new Button(label.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                allLabels.add(label);
+                chosenSummarizerLabels.remove(label);
+                update();
+              };
+          button.setOnAction(event);
+          summarizerToolBar.getItems().add(button);
+        });
+
+    qualifierMenu.getItems().clear();
+    allLabels.forEach(
+        label -> {
+          MenuItem item = new MenuItem(label.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                chosenQualifierLabels.add(label);
+                allLabels.remove(label);
+                update();
+              };
+          item.setOnAction(event);
+          qualifierMenu.getItems().add(item);
+        });
+
+    qualifierToolBar.getItems().clear();
+    chosenQualifierLabels.forEach(
+        label -> {
+          Button button = new Button(label.toString());
+          EventHandler<ActionEvent> event =
+              e -> {
+                allLabels.add(label);
+                chosenQualifierLabels.remove(label);
+                update();
+              };
+          button.setOnAction(event);
+          qualifierToolBar.getItems().add(button);
+        });
+
+    generate.setOnAction(e -> {
+        table.getItems().clear();
+        switch (summaryType) {
+            case SINGLE_ENTITY_SUMMARY_FIRST_FORM -> singleEntityFirstForm();
+            case SINGLE_ENTITY_SUMMARY_SECOND_FORM -> singleEntitySecondForm();
+            case MULTIPLE_ENTITY_SUMMARY_FIRST_FORM -> multipleEntityFirstForm();
+            case MULTIPLE_ENTITY_SUMMARY_SECOND_FORM -> multipleEntitySecondForm();
+            case MULTIPLE_ENTITY_SUMMARY_THIRD_FORM -> multipleEntityThirdForm();
+            case MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM -> multipleEntityFourthForm();
+        }
+    });
+
+      type.setOnAction(e -> {
+          table.getItems().clear();
+          switch (summaryType) {
+              case SINGLE_ENTITY_SUMMARY_FIRST_FORM -> summaryType = SummaryType.SINGLE_ENTITY_SUMMARY_SECOND_FORM;
+              case SINGLE_ENTITY_SUMMARY_SECOND_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_FIRST_FORM;
+              case MULTIPLE_ENTITY_SUMMARY_FIRST_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_SECOND_FORM;
+              case MULTIPLE_ENTITY_SUMMARY_SECOND_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_THIRD_FORM;
+              case MULTIPLE_ENTITY_SUMMARY_THIRD_FORM -> summaryType = SummaryType.MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM;
+              case MULTIPLE_ENTITY_SUMMARY_FOURTH_FORM -> summaryType = SummaryType.SINGLE_ENTITY_SUMMARY_FIRST_FORM;
+          }
+          type.setText(summaryType.toString());
+      });
   }
 
   public void singleEntityFirstForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
       for (Quantifier quantifier : chosenQuantifiers) {
-        Summarizer summarizer = new Summarizer(labels);
-        allSummaries.add(new SingleEntitySummaryFirstForm(quantifier, summarizer, all));
+        Summarizer summarizer = new Summarizer(summarizerLabels);
+        allSummaries.add(new SingleEntitySummaryFirstForm(quantifier, summarizer, allMeals));
       }
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
@@ -70,11 +199,14 @@ public class Controller {
 
   public void singleEntitySecondForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
-      for (Quantifier quantifier : chosenQuantifiers) {
-        Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
-        Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-        allSummaries.add(new SingleEntitySummarySecondForm(quantifier, qualifier, summarizer, all));
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
+      for (List<MealLabel> qualifierLabels : allCombinations(chosenQualifierLabels)) {
+        for (Quantifier quantifier : chosenQuantifiers) {
+          Summarizer summarizer = new Summarizer(summarizerLabels);
+          Qualifier qualifier = new Qualifier(qualifierLabels);
+          allSummaries.add(
+              new SingleEntitySummarySecondForm(quantifier, qualifier, summarizer, allMeals));
+        }
       }
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
@@ -82,10 +214,11 @@ public class Controller {
 
   public void multipleEntityFirstForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
       for (Quantifier quantifier : chosenQuantifiers) {
-        Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-        allSummaries.add(new MultipleEntitySummaryFirstForm(quantifier, summarizer, left, right));
+        Summarizer summarizer = new Summarizer(summarizerLabels);
+        allSummaries.add(
+            new MultipleEntitySummaryFirstForm(quantifier, summarizer, antoniMeals, michalMeals));
       }
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
@@ -93,12 +226,15 @@ public class Controller {
 
   public void multipleEntitySecondForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
-      for (Quantifier quantifier : chosenQuantifiers) {
-        Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
-        Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-        allSummaries.add(
-            new MultipleEntitySummarySecondForm(quantifier, qualifier, summarizer, left, right));
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
+      for (List<MealLabel> qualifierLabels : allCombinations(chosenQualifierLabels)) {
+        for (Quantifier quantifier : chosenQuantifiers) {
+          Summarizer summarizer = new Summarizer(summarizerLabels);
+          Qualifier qualifier = new Qualifier(qualifierLabels);
+          allSummaries.add(
+              new MultipleEntitySummarySecondForm(
+                  quantifier, qualifier, summarizer, antoniMeals, michalMeals));
+        }
       }
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
@@ -106,11 +242,15 @@ public class Controller {
 
   public void multipleEntityThirdForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
-      for (Quantifier quantifier : chosenQuantifiers) {
-        Qualifier qualifier = new Qualifier(List.of(labels.get(0)));
-        Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-        allSummaries.add(new MultipleEntitySummaryThirdForm(quantifier, qualifier, summarizer, left, right));
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
+      for (List<MealLabel> qualifierLabels : allCombinations(chosenQualifierLabels)) {
+        for (Quantifier quantifier : chosenQuantifiers) {
+          Summarizer summarizer = new Summarizer(summarizerLabels);
+          Qualifier qualifier = new Qualifier(qualifierLabels);
+          allSummaries.add(
+              new MultipleEntitySummaryThirdForm(
+                  quantifier, qualifier, summarizer, antoniMeals, michalMeals));
+        }
       }
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
@@ -118,16 +258,16 @@ public class Controller {
 
   public void multipleEntityFourthForm() {
     List<Summary> allSummaries = new ArrayList<>();
-    for (List<MealLabel> labels : allCombinations(chosenLabels, 2)) {
-                  Summarizer summarizer = new Summarizer(List.of(labels.get(1)));
-                  allSummaries.add(new MultipleEntitySummaryFourthForm(summarizer, left, right));
+    for (List<MealLabel> summarizerLabels : allCombinations(chosenSummarizerLabels)) {
+      Summarizer summarizer = new Summarizer(summarizerLabels);
+      allSummaries.add(new MultipleEntitySummaryFourthForm(summarizer, antoniMeals, michalMeals));
     }
     allSummaries.stream().map(Summary::toRow).forEach(row -> table.getItems().add(row));
   }
 
-  private static <T> Set<List<T>> allCombinations(List<T> objects, int k) {
+  private static <T> Set<List<T>> allCombinations(List<T> objects) {
     Set<List<T>> subarrays = new HashSet<>();
-    recursiveSearch(objects, 0, k, subarrays, new ArrayList<>());
+    recursiveSearch(objects, 0, objects.size(), subarrays, new ArrayList<>());
     return subarrays;
   }
 

@@ -6,12 +6,13 @@ import linguisticsummary.model.MealLabel;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MealLabelDatabase implements Database<Label> {
     public static List<MealLabel> loadAll() {
         File folder = new File("./src/main/resources/variables/");
         File[] listOfFiles = folder.listFiles();
-        return Arrays.stream(listOfFiles).map(MealLabelDatabase::deserialize).toList();
+        return Arrays.stream(listOfFiles).map(MealLabelDatabase::deserialize).collect(Collectors.toList());
     }
 
     public static void saveAll(List<MealLabel> labels) {

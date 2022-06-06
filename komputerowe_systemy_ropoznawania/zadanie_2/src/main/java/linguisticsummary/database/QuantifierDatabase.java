@@ -5,12 +5,13 @@ import linguisticsummary.model.Quantifier;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuantifierDatabase implements Database<Quantifier> {
     public static List<Quantifier> loadAll() {
         File folder = new File("./src/main/resources/quantifiers/");
         File[] listOfFiles = folder.listFiles();
-        return Arrays.stream(listOfFiles).map(QuantifierDatabase::deserialize).toList();
+        return Arrays.stream(listOfFiles).map(QuantifierDatabase::deserialize).collect(Collectors.toList());
     }
 
     public static void saveAll(List<Quantifier> quantifiers) {
