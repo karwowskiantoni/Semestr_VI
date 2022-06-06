@@ -55,7 +55,8 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     private double degreeOfTruth() {
-        return quantifier.membership(sigmaCount(summarizer.getMealLabels(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
+
+        return quantifier.membership(sigmaCount(Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
     }
 
     private double degreeOfImprecision() {
