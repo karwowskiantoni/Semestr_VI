@@ -6,8 +6,7 @@ from functions import uniform_noise, sinus, half_rectified_sinus, \
     rectified_sinus, rectangular, symmetrical_rectangular, triangular, \
     unit_jump, unit_impulse, noise_impulse, gauss_noise
 from questions import signal_type, t1, f, d, A, \
-    T, kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, \
-    command_2, new_f
+    T, kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, command_type, new_f
 
 
 def ask(question):
@@ -20,8 +19,8 @@ def multiple_ask(questions):
 
 if __name__ == '__main__':
     while True:
-        command = ask(command_2)
-        if command == "generate" or command == "sample":
+        command = ask(command_type)
+        if command == "sample":
             function = ask(signal_type)
 
             if function == "uniform noise":
@@ -85,27 +84,22 @@ if __name__ == '__main__':
             interpolated.serialize(ask(name_with_default(interpolated.type)))
 
         elif command == "plot":
-            Signal.deserialize(ask(existing_signal())).print_plot()
-        elif command == "hist":
-            Signal.deserialize(ask(existing_signal())).print_histogram(ask(divisions))
-        elif command == "stat":
-            Signal.deserialize(ask(existing_signal())).print_stats()
+            signal = Signal.deserialize(ask(existing_signal()))
+            signal.print_plot()
+            signal.print_histogram(ask(divisions))
+            signal.print_stats()
 
         elif command == "sum":
             signal = Signal.deserialize(ask(existing_signal())).sum(Signal.deserialize(ask(existing_signal())))
-            signal.print_plot()
             signal.serialize(ask(name_with_default(signal.type)))
         elif command == "difference":
             signal = Signal.deserialize(ask(existing_signal())).difference(Signal.deserialize(ask(existing_signal())))
-            signal.print_plot()
             signal.serialize(ask(name_with_default(signal.type)))
         elif command == "product":
             signal = Signal.deserialize(ask(existing_signal())).product(Signal.deserialize(ask(existing_signal())))
-            signal.print_plot()
             signal.serialize(ask(name_with_default(signal.type)))
         elif command == "divide":
             signal = Signal.deserialize(ask(existing_signal())).divide(Signal.deserialize(ask(existing_signal())))
-            signal.print_plot()
             signal.serialize(ask(name_with_default(signal.type)))
 
         elif command == "exit":

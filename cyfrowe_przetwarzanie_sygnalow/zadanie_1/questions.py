@@ -36,28 +36,17 @@ class ZeroToOneValidator(Validator):
                                   cursor_position=len(document.text))
 
 
-command_1 = {
-    'type': 'list',
-    'name': 'command_type',
-    'message': 'choose option:',
-    'choices': ["generate",
-                "sum",
-                "difference",
-                "product",
-                "divide",
-                "plot",
-                "hist",
-                "stat",
-                "exit"]
-}
-
-command_2 = {
+command_type = {
     'type': 'list',
     'name': 'command_type',
     'message': 'choose option:',
     'choices': ["sample",
                 "quantize",
                 "interpolate",
+                "sum",
+                "difference",
+                "product",
+                "divide",
                 "plot",
                 "compare",
                 "exit"]

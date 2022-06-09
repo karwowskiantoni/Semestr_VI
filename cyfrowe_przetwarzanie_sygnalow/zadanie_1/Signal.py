@@ -214,7 +214,3 @@ class Signal:
 
 def print_yellow(text):
     print('\033[93m' + text + '\033[0m')
-
-# if self.type == "unit_impulse" or self.type == "noise_impulse":
-#     plt.scatter([i / self.parameters.f for i in range(len(self.samples))], self.samples, s=1)
-# else:
