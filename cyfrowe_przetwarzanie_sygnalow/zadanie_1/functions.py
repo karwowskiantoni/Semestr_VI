@@ -10,40 +10,46 @@ def gauss_noise(params, x):
 
 
 def sinus(params, x):
-    return params.A * np.sin(2 * np.pi / params.T * (x - params.t1))
+    T = 1 / params.signal_f
+    return params.A * np.sin(2 * np.pi / T * (x - params.t1))
 
 
 def half_rectified_sinus(params, x):
-    return 1 / 2 * params.A * ((np.sin((2 * np.pi) / params.T * (x - params.t1)))
-                               + np.abs(np.sin((2 * np.pi) / params.T * (x - params.t1))))
+    T = 1 / params.signal_f
+    return 1 / 2 * params.A * ((np.sin((2 * np.pi) / T * (x - params.t1)))
+                               + np.abs(np.sin((2 * np.pi) / T * (x - params.t1))))
 
 
 def rectified_sinus(params, x):
-    return params.A * np.abs(np.sin((2 * np.pi) / params.T * (x - params.t1)))
+    T = 1 / params.signal_f
+    return params.A * np.abs(np.sin((2 * np.pi) / T * (x - params.t1)))
 
 
 def rectangular(params, x):
-    kT = (params.T * int(x / params.T))
-    if kT + params.t1 <= x < (params.kw * params.T) + kT + params.t1:
+    T = 1 / params.signal_f
+    kT = (T * int(x / T))
+    if kT + params.t1 <= x < (params.kw * T) + kT + params.t1:
         return params.A
     else:
         return 0
 
 
 def symmetrical_rectangular(params, x):
-    kT = (params.T * int(x / params.T))
-    if kT + params.t1 <= x < (params.kw * params.T) + kT + params.t1:
+    T = 1 / params.signal_f
+    kT = (T * int(x / T))
+    if kT + params.t1 <= x < (params.kw * T) + kT + params.t1:
         return params.A
     else:
         return -params.A
 
 
 def triangular(params, x):
-    kT = (params.T * int(x / params.T))
-    if kT + params.t1 <= x < (params.kw * params.T) + kT + params.t1:
-        return (params.A / (params.kw * params.T)) * (x - kT - params.t1)
+    T = 1 / params.signal_f
+    kT = (T * int(x / T))
+    if kT + params.t1 <= x < (params.kw * T) + kT + params.t1:
+        return (params.A / (params.kw * T)) * (x - kT - params.t1)
     else:
-        return -(params.A / (params.T * (1 - params.kw))) * (x - kT - params.t1) + (params.A / (1 - params.kw))
+        return -(params.A / (T * (1 - params.kw))) * (x - kT - params.t1) + (params.A / (1 - params.kw))
 
 
 def unit_jump(parameters, x):
@@ -56,7 +62,7 @@ def unit_jump(parameters, x):
 
 
 def unit_impulse(params, x):
-    if int(x * params.f) == params.ns:
+    if int(x * params.sampling_f) == params.ns:
         return params.A
     else:
         return 0
@@ -67,4 +73,20 @@ def noise_impulse(params, x):
         return params.A
     else:
         return 0
+
+
+def blackman_window(params, x):
+    shit = (2 * np.pi * x) / params.M
+    return 0.42 - (0.5 * np.cos(shit)) + 0.08 * np.cos(2*shit)
+
+
+def impulse_response(params, x):
+    K = params.sampling_f / params.cutoff_f
+    shit = np.pi * (x - (params.M - 1) / 2)
+    if x == (params.M - 1) / 2:
+        return 2/K
+    else:
+        return np.sin((2 * shit)/K) / shit
+
+
 

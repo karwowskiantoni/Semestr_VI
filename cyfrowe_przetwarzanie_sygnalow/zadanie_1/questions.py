@@ -47,6 +47,9 @@ command_type = {
                 "difference",
                 "product",
                 "divide",
+                "convolve",
+                "correlate",
+                "filter low pass rectangular",
                 "plot",
                 "compare",
                 "exit"]
@@ -66,7 +69,8 @@ signal_type = {
                 "triangular",
                 "unit jump",
                 "unit impulse",
-                "noise impulse"]
+                "noise impulse",
+                "impulse response"]
 }
 existing_signal_unfilled = {
     'type': 'list',
@@ -125,11 +129,11 @@ A = {
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
-T = {
+signal_f = {
     'type': "input",
-    "name": "T",
+    "name": "signal_f",
     "default": "0.5",
-    "message": "Enter the signal frequency (f)",
+    "message": "Enter the signal frequency (signal_f)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
@@ -149,6 +153,22 @@ d = {
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
+M = {
+    'type': "input",
+    "name": "M",
+    "default": "40",
+    "message": "Enter filter order (M)",
+    "validate": FloatValidator,
+    "filter": lambda val: float(val)
+}
+cutoff_f = {
+    'type': "input",
+    "name": "cutoff_f",
+    "default": "30",
+    "message": "enter cutoff frequency (cutoff_f)",
+    "validate": FloatValidator,
+    "filter": lambda val: float(val)
+}
 kw = {
     'type': "input",
     "name": "kw",
@@ -165,11 +185,11 @@ ts = {
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }
-f = {
+sampling_f = {
     'type': "input",
-    "name": "f",
+    "name": "sampling_f",
     "default": "60",
-    "message": "enter sampling frequency (f)",
+    "message": "enter sampling frequency (sampling_f)",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
 }

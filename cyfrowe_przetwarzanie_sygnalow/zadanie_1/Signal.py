@@ -6,6 +6,7 @@ import numpy as np
 
 from math import log10
 from Parameters import Parameters
+from functions import impulse_response
 
 
 class Signal:
@@ -16,14 +17,35 @@ class Signal:
 
     @staticmethod
     def generate(function, parameters):
-        parameters.T = 1/parameters.T
         samples = Signal.sample(function, parameters)
         return Signal(parameters, samples, function.__name__)
 
     @staticmethod
     def sample(function, parameters):
-        return [function(parameters, x / parameters.f) for x in range(int((parameters.d - parameters.t1) * parameters.f))]
+        return [function(parameters, x / parameters.sampling_f) for x in range(int((parameters.d - parameters.t1) * parameters.sampling_f))]
 
+    def convolve(self, signal):
+        return Signal(self.parameters, np.convolve(self.samples, signal.samples).tolist(), self.type + " convolved with " + signal.type)
+
+    def correlate(self, signal):
+        return Signal(self.parameters, np.convolve(self.samples, signal.samples[::-1]).tolist(), self.type + " correlated with " + signal.type)
+
+    def filter_low_pass_rectangular(self, M, cutoff_f):
+        params = self.parameters.copy()
+        params.M = M
+        params.cutoff_f = cutoff_f
+        return self.convolve(Signal.generate(impulse_response, params))
+
+    # def filter_mid_pass_rectangular(self):
+    #     self.convolve(Signal.generate(filter_function, self.parameters))
+    #
+    # def filter_low_pass_blackman(self):
+    #     self.convolve(Signal.generate(filter_function, self.parameters))
+    #
+    # def filter_mid_pass_blackman(self):
+    #     self.convolve(Signal.generate(filter_function, self.parameters))
+
+    @staticmethod
     def quantize_flat(self, level):
         step = (max(self.samples) - min(self.samples)) / level
         samples = step * np.floor(np.array(self.samples)/step)
@@ -36,29 +58,29 @@ class Signal:
 
     def interpolate_zero(self, new_frequency):
         parameters = deepcopy(self.parameters)
-        parameters.f = new_frequency
+        parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.zero_order_hold, parameters), "zero_order_hold_" + self.type)
 
     def interpolate_first(self, new_frequency):
         parameters = deepcopy(self.parameters)
-        parameters.f = new_frequency
+        parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.first_order_hold, parameters), "first_order_hold_" + self.type)
 
     def interpolate_sin(self, new_frequency):
         parameters = deepcopy(self.parameters)
-        parameters.f = new_frequency
+        parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.interpolate_sinc, parameters), "interpolate_sinc_" + self.type)
 
     def zero_order_hold(self, params, t):
-        T = 1 / self.parameters.f
+        T = 1 / self.parameters.sampling_f
         return sum([self.samples[i] * self.rect((t - (T/2) - (i*T) ) / T) for i in range(len(self.samples))])
 
     def first_order_hold(self, params, t):
-        T = 1 / self.parameters.f
+        T = 1 / self.parameters.sampling_f
         return sum([self.samples[i] * self.tri((t - (i * T)) / T) for i in range(len(self.samples))])
 
     def interpolate_sinc(self, params, t):
-        T = 1 / self.parameters.f
+        T = 1 / self.parameters.sampling_f
         return sum([self.samples[i] * self.sinc((t/T)-i) for i in range(len(self.samples))])
 
     def rect(self, t):
@@ -107,9 +129,9 @@ class Signal:
 
     def print_plot(self, signal=None):
         plt.figure().suptitle(self.type)
-        plt.plot([i / self.parameters.f for i in range(len(self.samples))], self.samples)
+        plt.plot([i / self.parameters.sampling_f for i in range(len(self.samples))], self.samples)
         if signal is not None:
-            plt.plot([i / signal.parameters.f for i in range(len(signal.samples))], signal.samples)
+            plt.plot([i / signal.parameters.sampling_f for i in range(len(signal.samples))], signal.samples)
 
         plt.savefig("plots/" + self.type)
         plt.show()
@@ -165,8 +187,8 @@ class Signal:
             return self
         print_yellow("--------------comparison--------------")
         print_yellow("| mean square error: " + str(self.mean_square_error(signal)))
-        print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
-        print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
+        # print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
+        # print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
         print_yellow("| max difference: " + str(self.max_difference(signal)))
         print_yellow("--------------------------------------")
         return self
@@ -197,15 +219,17 @@ class Signal:
             signal = Signal(
                 Parameters(
                     A=dictionary['parameters']['A'],
-                    T=dictionary['parameters']['T'],
+                    signal_f=dictionary['parameters']['signal_f'],
                     t1=dictionary['parameters']['t1'],
                     d=dictionary['parameters']['d'],
                     kw=dictionary['parameters']['kw'],
                     ts=dictionary['parameters']['ts'],
-                    f=dictionary['parameters']['f'],
+                    sampling_f=dictionary['parameters']['sampling_f'],
                     p=dictionary['parameters']['p'],
                     n1=dictionary['parameters']['n1'],
-                    ns=dictionary['parameters']['ns']
+                    ns=dictionary['parameters']['ns'],
+                    M=dictionary['parameters']['M'],
+                    cutoff_f=dictionary['parameters']['cutoff_f'],
                 ),
                 dictionary['samples'],
                 dictionary['type'])

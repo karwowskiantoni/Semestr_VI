@@ -4,9 +4,10 @@ from Parameters import Parameters
 from Signal import Signal
 from functions import uniform_noise, sinus, half_rectified_sinus, \
     rectified_sinus, rectangular, symmetrical_rectangular, triangular, \
-    unit_jump, unit_impulse, noise_impulse, gauss_noise
-from questions import signal_type, t1, f, d, A, \
-    T, kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, command_type, new_f
+    unit_jump, unit_impulse, noise_impulse, gauss_noise, impulse_response
+from questions import signal_type, t1, d, A, \
+    kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, \
+    command_type, new_f, M, sampling_f, signal_f, cutoff_f
 
 
 def ask(question):
@@ -24,37 +25,40 @@ if __name__ == '__main__':
             function = ask(signal_type)
 
             if function == "uniform noise":
-                parameters = Parameters(**multiple_ask([t1, f, d, A]))
+                parameters = Parameters(**multiple_ask([t1, sampling_f, d, A]))
                 signal = Signal.generate(uniform_noise, parameters)
             elif function == "gauss noise":
-                parameters = Parameters(**(multiple_ask([t1, f, d])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d])))
                 signal = Signal.generate(gauss_noise, parameters)
             elif function == "sinus":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f])))
                 signal = Signal.generate(sinus, parameters)
             elif function == "half rectified sinus":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f])))
                 signal = Signal.generate(half_rectified_sinus, parameters)
             elif function == "rectified sinus":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f])))
                 signal = Signal.generate(rectified_sinus, parameters)
             elif function == "rectangular":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T, kw])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f, kw])))
                 signal = Signal.generate(rectangular, parameters)
             elif function == "symmetrical rectangular":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T, kw])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f, kw])))
                 signal = Signal.generate(symmetrical_rectangular, parameters)
             elif function == "triangular":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, T, kw])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, signal_f, kw])))
                 signal = Signal.generate(triangular, parameters)
             elif function == "unit jump":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, ts])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, ts])))
                 signal = Signal.generate(unit_jump, parameters)
             elif function == "unit impulse":
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, ns])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, ns])))
                 signal = Signal.generate(unit_impulse, parameters)
+            elif function == "impulse response":
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, M, cutoff_f])))
+                signal = Signal.generate(impulse_response, parameters)
             else:
-                parameters = Parameters(**(multiple_ask([t1, f, d, A, p])))
+                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, p])))
                 signal = Signal.generate(noise_impulse, parameters)
             signal.serialize(ask(name_with_default(signal.type)))
 
@@ -65,6 +69,23 @@ if __name__ == '__main__':
             else:
                 quantized = signal.quantize_round(ask(level))
             quantized.serialize(ask(name_with_default(quantized.type)))
+
+        elif command == "convolve":
+            signal = Signal.deserialize(ask(existing_signal()))
+            signal_2 = Signal.deserialize(ask(existing_signal()))
+            convolved = signal.convolve(signal_2)
+            convolved.serialize(ask(name_with_default(convolved.type)))
+
+        elif command == "correlate":
+            signal = Signal.deserialize(ask(existing_signal()))
+            signal_2 = Signal.deserialize(ask(existing_signal()))
+            correlated = signal.correlate(signal_2)
+            correlated.serialize(ask(name_with_default(correlated.type)))
+
+        elif command == "filter low pass rectangular":
+            signal = Signal.deserialize(ask(existing_signal()))
+            filtered = signal.filter_low_pass_rectangular(**(multiple_ask([M, cutoff_f])))
+            filtered.serialize(ask(name_with_default(filtered.type)))
 
         elif command == "compare":
             signal = Signal.deserialize(ask(existing_signal()))
@@ -86,7 +107,7 @@ if __name__ == '__main__':
         elif command == "plot":
             signal = Signal.deserialize(ask(existing_signal()))
             signal.print_plot()
-            signal.print_histogram(ask(divisions))
+            # signal.print_histogram(ask(divisions))
             signal.print_stats()
 
         elif command == "sum":
