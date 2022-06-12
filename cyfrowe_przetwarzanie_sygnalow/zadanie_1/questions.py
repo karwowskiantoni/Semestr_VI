@@ -50,6 +50,9 @@ command_type = {
                 "convolve",
                 "correlate",
                 "filter low pass rectangular",
+                "filter mid pass rectangular",
+                "filter low pass blackman",
+                "filter mid pass blackman",
                 "plot",
                 "compare",
                 "exit"]

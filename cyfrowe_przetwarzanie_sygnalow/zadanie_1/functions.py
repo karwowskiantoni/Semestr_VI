@@ -77,16 +77,17 @@ def noise_impulse(params, x):
 
 def blackman_window(params, x):
     shit = (2 * np.pi * x) / params.M
-    return 0.42 - (0.5 * np.cos(shit)) + 0.08 * np.cos(2*shit)
+    return 0.42 - (0.5 * np.cos(shit)) + 0.08 * np.cos(2 * shit)
 
 
-def impulse_response(params, x):
-    K = params.sampling_f / params.cutoff_f
-    shit = np.pi * (x - (params.M - 1) / 2)
-    if x == (params.M - 1) / 2:
-        return 2/K
+def low_pass_to_mid_pass(x):
+    return 2 * np.sin(np.pi * (x / 2))
+
+
+def impulse_response(M, cutoff_f, sampling_f, x):
+    K = sampling_f / cutoff_f
+    mid_M = (M - 1) / 2
+    if x == mid_M:
+        return 2 / K
     else:
-        return np.sin((2 * shit)/K) / shit
-
-
-
+        return np.sin((2 * np.pi * (x - mid_M)) / K) / (np.pi * (x - mid_M))

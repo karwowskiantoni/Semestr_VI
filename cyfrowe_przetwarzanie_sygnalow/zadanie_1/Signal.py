@@ -6,7 +6,7 @@ import numpy as np
 
 from math import log10
 from Parameters import Parameters
-from functions import impulse_response
+from functions import impulse_response, low_pass_to_mid_pass, blackman_window
 
 
 class Signal:
@@ -22,38 +22,59 @@ class Signal:
 
     @staticmethod
     def sample(function, parameters):
-        return [function(parameters, x / parameters.sampling_f) for x in range(int((parameters.d - parameters.t1) * parameters.sampling_f))]
+        return [function(parameters, x / parameters.sampling_f) for x in
+                range(int((parameters.d - parameters.t1) * parameters.sampling_f))]
 
-    def convolve(self, signal):
-        return Signal(self.parameters, np.convolve(self.samples, signal.samples).tolist(), self.type + " convolved with " + signal.type)
+    def convolve(self, samples):
+        return Signal(self.parameters, np.convolve(self.samples, samples).tolist(), self.type + " convolved")
 
     def correlate(self, signal):
-        return Signal(self.parameters, np.convolve(self.samples, signal.samples[::-1]).tolist(), self.type + " correlated with " + signal.type)
+        return Signal(self.parameters, np.convolve(self.samples, signal.samples[::-1]).tolist(),
+                      self.type + " correlated with " + signal.type)
+
+    def filter(self, M, cutoff_f, window, mode):
+        response = [impulse_response(M, cutoff_f, self.parameters.sampling_f, x) * window(x) * mode(x) for x in range(int(M) - 1)]
+
+        plt.figure().suptitle("impulse response")
+        plt.plot([i for i in range(int(M) - 1)], response)
+        plt.show()
+
+        return Signal(self.parameters, np.convolve(self.samples, response).tolist(), self.type + " filtered low pass rectangular")
 
     def filter_low_pass_rectangular(self, M, cutoff_f):
-        params = self.parameters.copy()
-        params.M = M
-        params.cutoff_f = cutoff_f
-        return self.convolve(Signal.generate(impulse_response, params))
+        return self.filter(M, cutoff_f, lambda x: 1, lambda x: 1)
 
-    # def filter_mid_pass_rectangular(self):
-    #     self.convolve(Signal.generate(filter_function, self.parameters))
-    #
-    # def filter_low_pass_blackman(self):
-    #     self.convolve(Signal.generate(filter_function, self.parameters))
-    #
-    # def filter_mid_pass_blackman(self):
-    #     self.convolve(Signal.generate(filter_function, self.parameters))
+    def filter_mid_pass_rectangular(self, M, cutoff_f):
+        return self.filter(M, cutoff_f, lambda x: 1, low_pass_to_mid_pass)
+
+    def filter_low_pass_blackman(self, M, cutoff_f):
+        return self.filter(M, cutoff_f, blackman_window, lambda x: 1)
+
+    def filter_mid_pass_blackman(self, M, cutoff_f):
+        return self.filter(M, cutoff_f, blackman_window, low_pass_to_mid_pass)
+
+    def rotate_sec(self, seconds):
+        times = self.parameters.sampling_f * seconds
+        self.rotate_times(times)
+
+    def rotate_times(self, times):
+        for _ in range(times):
+            self.rotate_once()
+
+    def rotate_once(self):
+        g = self.samples[0]
+        self.samples.pop(0)
+        self.samples.append(g)
 
     @staticmethod
     def quantize_flat(self, level):
         step = (max(self.samples) - min(self.samples)) / level
-        samples = step * np.floor(np.array(self.samples)/step)
+        samples = step * np.floor(np.array(self.samples) / step)
         return Signal(self.parameters, list(samples), self.type + "_quantized_flat_" + str(level))
 
     def quantize_round(self, level):
         step = (max(self.samples) - min(self.samples)) / level
-        samples = step * np.round(np.array(self.samples)/step)
+        samples = step * np.round(np.array(self.samples) / step)
         return Signal(self.parameters, list(samples), self.type + "_quantized_round_" + str(level))
 
     def interpolate_zero(self, new_frequency):
@@ -73,7 +94,7 @@ class Signal:
 
     def zero_order_hold(self, params, t):
         T = 1 / self.parameters.sampling_f
-        return sum([self.samples[i] * self.rect((t - (T/2) - (i*T) ) / T) for i in range(len(self.samples))])
+        return sum([self.samples[i] * self.rect((t - (T / 2) - (i * T)) / T) for i in range(len(self.samples))])
 
     def first_order_hold(self, params, t):
         T = 1 / self.parameters.sampling_f
@@ -81,13 +102,13 @@ class Signal:
 
     def interpolate_sinc(self, params, t):
         T = 1 / self.parameters.sampling_f
-        return sum([self.samples[i] * self.sinc((t/T)-i) for i in range(len(self.samples))])
+        return sum([self.samples[i] * self.sinc((t / T) - i) for i in range(len(self.samples))])
 
     def rect(self, t):
-        if abs(t) > 1/2:
+        if abs(t) > 1 / 2:
             return 0
-        elif abs(t) == 1/2:
-            return 1/2
+        elif abs(t) == 1 / 2:
+            return 1 / 2
         else:
             return 1
 
@@ -127,9 +148,12 @@ class Signal:
                 samples.append(self.samples[i] / signal.samples[i])
         return Signal(self.parameters, samples, self.type + "_divide_" + signal.type)
 
+    def X(self):
+        return [i / self.parameters.sampling_f for i in range(len(self.samples))]
+
     def print_plot(self, signal=None):
         plt.figure().suptitle(self.type)
-        plt.plot([i / self.parameters.sampling_f for i in range(len(self.samples))], self.samples)
+        plt.plot(self.X, self.samples)
         if signal is not None:
             plt.plot([i / signal.parameters.sampling_f for i in range(len(signal.samples))], signal.samples)
 
@@ -197,7 +221,8 @@ class Signal:
         return sum([pow(self.samples[i] - signal.samples[i], 2) for i in range(len(self.samples))]) / len(self.samples)
 
     def signal_to_noise_ratio(self, signal):
-        return 10 * log10(sum([pow(i, 2) for i in self.samples]) / sum([pow(self.samples[i] - signal.samples[i], 2) for i in range(len(self.samples))]))
+        return 10 * log10(sum([pow(i, 2) for i in self.samples]) / sum(
+            [pow(self.samples[i] - signal.samples[i], 2) for i in range(len(self.samples))]))
 
     def max_signal_to_noise_ratio(self, signal):
         return 10 * log10(max(self.samples) / self.mean_square_error(signal))

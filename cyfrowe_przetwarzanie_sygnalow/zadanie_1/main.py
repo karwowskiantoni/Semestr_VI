@@ -4,9 +4,9 @@ from Parameters import Parameters
 from Signal import Signal
 from functions import uniform_noise, sinus, half_rectified_sinus, \
     rectified_sinus, rectangular, symmetrical_rectangular, triangular, \
-    unit_jump, unit_impulse, noise_impulse, gauss_noise, impulse_response
+    unit_jump, unit_impulse, noise_impulse, gauss_noise
 from questions import signal_type, t1, d, A, \
-    kw, p, ns, ts, existing_signal, divisions, name_with_default, level, quantize_type, interpolation_type, \
+    kw, p, ns, ts, existing_signal, name_with_default, level, quantize_type, interpolation_type, \
     command_type, new_f, M, sampling_f, signal_f, cutoff_f
 
 
@@ -54,9 +54,6 @@ if __name__ == '__main__':
             elif function == "unit impulse":
                 parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, ns])))
                 signal = Signal.generate(unit_impulse, parameters)
-            elif function == "impulse response":
-                parameters = Parameters(**(multiple_ask([t1, sampling_f, d, M, cutoff_f])))
-                signal = Signal.generate(impulse_response, parameters)
             else:
                 parameters = Parameters(**(multiple_ask([t1, sampling_f, d, A, p])))
                 signal = Signal.generate(noise_impulse, parameters)
@@ -73,7 +70,7 @@ if __name__ == '__main__':
         elif command == "convolve":
             signal = Signal.deserialize(ask(existing_signal()))
             signal_2 = Signal.deserialize(ask(existing_signal()))
-            convolved = signal.convolve(signal_2)
+            convolved = signal.convolve(signal_2.samples)
             convolved.serialize(ask(name_with_default(convolved.type)))
 
         elif command == "correlate":
@@ -85,6 +82,21 @@ if __name__ == '__main__':
         elif command == "filter low pass rectangular":
             signal = Signal.deserialize(ask(existing_signal()))
             filtered = signal.filter_low_pass_rectangular(**(multiple_ask([M, cutoff_f])))
+            filtered.serialize(ask(name_with_default(filtered.type)))
+
+        elif command == "filter mid pass rectangular":
+            signal = Signal.deserialize(ask(existing_signal()))
+            filtered = signal.filter_mid_pass_rectangular(**(multiple_ask([M, cutoff_f])))
+            filtered.serialize(ask(name_with_default(filtered.type)))
+
+        elif command == "filter low pass blackman":
+            signal = Signal.deserialize(ask(existing_signal()))
+            filtered = signal.filter_low_pass_blackman(**(multiple_ask([M, cutoff_f])))
+            filtered.serialize(ask(name_with_default(filtered.type)))
+
+        elif command == "filter mid pass blackman":
+            signal = Signal.deserialize(ask(existing_signal()))
+            filtered = signal.filter_mid_pass_blackman(**(multiple_ask([M, cutoff_f])))
             filtered.serialize(ask(name_with_default(filtered.type)))
 
         elif command == "compare":
