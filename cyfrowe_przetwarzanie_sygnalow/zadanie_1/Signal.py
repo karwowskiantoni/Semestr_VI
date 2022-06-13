@@ -47,7 +47,11 @@ class Signal:
         plt.plot([i for i in range(int(M) - 1)], response)
         plt.show()
 
-        return Signal(self.parameters, np.convolve(self.samples, response).tolist(), self.type + " filtered")
+        to_cut = int(len(response)/2)
+        print(to_cut)
+        samples = np.convolve(self.samples, response).tolist()
+        samples = samples[to_cut:len(samples) - to_cut]
+        return Signal(self.parameters, samples, self.type + " filtered")
 
     def filter_low_pass_rectangular(self, M, cutoff_f):
         return self.filter(M, cutoff_f, lambda x: 1, lambda x: 1)
@@ -221,8 +225,8 @@ class Signal:
             return self
         print_yellow("--------------comparison--------------")
         print_yellow("| mean square error: " + str(self.mean_square_error(signal)))
-        # print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
-        # print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
+        print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
+        print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
         print_yellow("| max difference: " + str(self.max_difference(signal)))
         print_yellow("--------------------------------------")
         return self
