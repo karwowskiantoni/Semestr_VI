@@ -39,7 +39,7 @@ class ZeroToOneValidator(Validator):
 T = {
     'type': "input",
     "name": "T",
-    "default": "10",
+    "default": "1",
     "message": "Enter the signal T [s]",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -47,7 +47,7 @@ T = {
 d = {
     'type': "input",
     "name": "d",
-    "default": "30",
+    "default": "3",
     "message": "Enter the signal length [s]",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -55,7 +55,7 @@ d = {
 sampling_f = {
     'type': "input",
     "name": "sampling_f",
-    "default": "300",
+    "default": "500",
     "message": "enter sampling frequency [1/s]",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
@@ -63,15 +63,15 @@ sampling_f = {
 scan_interval = {
     'type': "input",
     "name": "scan_interval",
-    "default": "0.5",
-    "message": "Enter scan interval (ms)",
+    "default": "0.1",
+    "message": "Enter scan interval (s)",
     "validate": ZeroToOneValidator,
     "filter": lambda val: float(val)
 }
 signal_v = {
     'type': "input",
     "name": "signal_v",
-    "default": "100",
+    "default": "1000",
     "message": "Enter the signal velocity [m/s]",
     "validate": FloatValidator,
     "filter": lambda val: float(val)
