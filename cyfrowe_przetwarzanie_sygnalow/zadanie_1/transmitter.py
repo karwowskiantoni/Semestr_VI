@@ -48,12 +48,11 @@ receiver = transmission_signal(d, sampling_f, signal_f)
 correlation = transmitter.correlate(receiver)
 
 fig, axs = plt.subplots(3)
+axs[2].axis((0, 100, 0, 5))
 line_1, = axs[0].plot(transmitter.X(), transmitter.samples)
 line_2, = axs[0].plot(receiver.X(), receiver.samples)
 line_3, = axs[1].plot(correlation.X(), correlation.samples)
-axs[2].axis((0, 100, 0, 5))
 line_4 = axs[2].bar(0, 1, width=5).patches[0]
-
 lines = [line_1, line_2, line_3, line_4]
 
 
@@ -79,5 +78,4 @@ def animate(i):
 
 
 animation_1 = animation.FuncAnimation(fig, animate, interval=(interval*1000))
-
 plt.show()
