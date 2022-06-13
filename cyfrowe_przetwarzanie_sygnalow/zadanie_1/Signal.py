@@ -1,5 +1,4 @@
 import json as js
-from copy import deepcopy
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +13,9 @@ class Signal:
         self.parameters = parameters
         self.samples = samples
         self.type = type
+
+    def copy(self):
+        return Signal(self.parameters.copy(), self.samples.copy(), self.type)
 
     @staticmethod
     def generate(function, parameters):
@@ -32,6 +34,12 @@ class Signal:
         return Signal(self.parameters, np.convolve(self.samples, signal.samples[::-1]).tolist(),
                       self.type + " correlated with " + signal.type)
 
+    def delta_time_in_correlation(self):
+        second_half = self.samples[int(len(self.samples)/2):]
+        max_value = max(second_half)
+        index = second_half.index(max_value)
+        return index / self.parameters.sampling_f
+
     def filter(self, M, cutoff_f, window, mode):
         response = [impulse_response(M, cutoff_f, self.parameters.sampling_f, x) * window(x) * mode(x) for x in range(int(M) - 1)]
 
@@ -39,7 +47,7 @@ class Signal:
         plt.plot([i for i in range(int(M) - 1)], response)
         plt.show()
 
-        return Signal(self.parameters, np.convolve(self.samples, response).tolist(), self.type + " filtered low pass rectangular")
+        return Signal(self.parameters, np.convolve(self.samples, response).tolist(), self.type + " filtered")
 
     def filter_low_pass_rectangular(self, M, cutoff_f):
         return self.filter(M, cutoff_f, lambda x: 1, lambda x: 1)
@@ -48,14 +56,16 @@ class Signal:
         return self.filter(M, cutoff_f, lambda x: 1, low_pass_to_mid_pass)
 
     def filter_low_pass_blackman(self, M, cutoff_f):
-        return self.filter(M, cutoff_f, blackman_window, lambda x: 1)
+        return self.filter(M, cutoff_f, lambda x: blackman_window(M, x), lambda x: 1)
 
     def filter_mid_pass_blackman(self, M, cutoff_f):
-        return self.filter(M, cutoff_f, blackman_window, low_pass_to_mid_pass)
+        return self.filter(M, cutoff_f, lambda x: blackman_window(M, x), low_pass_to_mid_pass)
 
-    def rotate_sec(self, seconds):
-        times = self.parameters.sampling_f * seconds
-        self.rotate_times(times)
+    def rotate_seconds(self, seconds):
+        signal = self.copy()
+        times = signal.parameters.sampling_f * seconds
+        signal.rotate_times(int(round(times, 0)))
+        return signal
 
     def rotate_times(self, times):
         for _ in range(times):
@@ -78,17 +88,17 @@ class Signal:
         return Signal(self.parameters, list(samples), self.type + "_quantized_round_" + str(level))
 
     def interpolate_zero(self, new_frequency):
-        parameters = deepcopy(self.parameters)
+        parameters = self.parameters.copy()
         parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.zero_order_hold, parameters), "zero_order_hold_" + self.type)
 
     def interpolate_first(self, new_frequency):
-        parameters = deepcopy(self.parameters)
+        parameters = self.parameters.copy()
         parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.first_order_hold, parameters), "first_order_hold_" + self.type)
 
     def interpolate_sin(self, new_frequency):
-        parameters = deepcopy(self.parameters)
+        parameters = self.parameters.copy()
         parameters.sampling_f = new_frequency
         return Signal(parameters, Signal.sample(self.interpolate_sinc, parameters), "interpolate_sinc_" + self.type)
 
@@ -153,9 +163,9 @@ class Signal:
 
     def print_plot(self, signal=None):
         plt.figure().suptitle(self.type)
-        plt.plot(self.X, self.samples)
+        plt.plot(self.X(), self.samples)
         if signal is not None:
-            plt.plot([i / signal.parameters.sampling_f for i in range(len(signal.samples))], signal.samples)
+            plt.plot(signal.X(), signal.samples)
 
         plt.savefig("plots/" + self.type)
         plt.show()

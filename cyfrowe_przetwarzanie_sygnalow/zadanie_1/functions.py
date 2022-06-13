@@ -75,8 +75,8 @@ def noise_impulse(params, x):
         return 0
 
 
-def blackman_window(params, x):
-    shit = (2 * np.pi * x) / params.M
+def blackman_window(M, x):
+    shit = (2 * np.pi * x) / M
     return 0.42 - (0.5 * np.cos(shit)) + 0.08 * np.cos(2 * shit)
 
 
