@@ -7,7 +7,7 @@ from functions import uniform_noise, sinus, half_rectified_sinus, \
     unit_jump, unit_impulse, noise_impulse, gauss_noise
 from questions import signal_type, t1, d, A, \
     kw, p, ns, ts, existing_signal, name_with_default, level, quantize_type, interpolation_type, \
-    command_type, new_f, M, sampling_f, signal_f, cutoff_f
+    command_type, new_f, M, sampling_f, signal_f, cutoff_f, weirdo
 
 
 def ask(question):
@@ -19,6 +19,7 @@ def multiple_ask(questions):
 
 
 if __name__ == '__main__':
+    cache = None
     while True:
         command = ask(command_type)
         if command == "sample":
@@ -66,6 +67,42 @@ if __name__ == '__main__':
             else:
                 quantized = signal.quantize_round(ask(level))
             quantized.serialize(ask(name_with_default(quantized.type)))
+
+        elif command == "discrete fourier transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            cache = signal.DFT().print_plot(weirdo=ask(weirdo) == "W2")
+
+        elif command == "discrete fast fourier transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            cache = signal.FFT().print_plot(weirdo=ask(weirdo) == "W2")
+
+        elif command == "discrete cosine transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            dct = signal.DCT().print_plot()
+            dct.serialize(dct.type)
+
+        elif command == "discrete walsh-hadamard transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            fwht = signal.FWHT().print_plot()
+            fwht.serialize(fwht.type)
+
+        elif command == "discrete inverse fourier transform":
+            ifft = cache.IFFT().print_plot()
+            ifft.serialize(ifft.type)
+
+        elif command == "discrete inverse fast fourier transform":
+            ifft = cache.IFFT().print_plot()
+            ifft.serialize(ifft.type)
+
+        elif command == "discrete inverse cosine transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            idct = signal.IDCT().print_plot()
+            idct.serialize(idct.type)
+
+        elif command == "discrete inverse walsh-hadamard transform":
+            signal = Signal.deserialize(ask(existing_signal()))
+            ifwht = signal.IFWHT().print_plot()
+            ifwht.serialize(ifwht.type)
 
         elif command == "convolve":
             signal = Signal.deserialize(ask(existing_signal()))

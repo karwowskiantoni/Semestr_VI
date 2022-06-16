@@ -2,10 +2,30 @@ import json as js
 
 import matplotlib.pyplot as plt
 import numpy as np
+import timeit
+
+from numpy.fft import fft, ifft
+from scipy.fft import dct, idct
+from sympy import fwht, ifwht
+
 
 from math import log10
 from Parameters import Parameters
 from functions import impulse_response, low_pass_to_mid_pass, blackman_window
+
+
+def measure_time(func):
+    def wrapper(*args, **kwargs):
+        function_start = timeit.default_timer()
+        value = func(*args, **kwargs)
+        execution_time = timeit.default_timer() - function_start
+        print(f"{func.__name__} time: {execution_time}")
+        return value
+    return wrapper
+
+
+def print_yellow(text):
+    print('\033[93m' + text + '\033[0m')
 
 
 class Signal:
@@ -27,6 +47,42 @@ class Signal:
         return [function(parameters, x / parameters.sampling_f) for x in
                 range(int((parameters.d - parameters.t1) * parameters.sampling_f))]
 
+    @measure_time
+    def DFT(self):
+        complex_samples = []
+        N = len(self.samples)
+        for i in range(N):
+            sum = 0 + 0j
+            for n in range(N):
+                x = (2 * np.pi * i * n) / N
+                sum += self.samples[n] * (-np.cos(x) - (np.sin(x) * 1j))
+            complex_samples.append(sum/N)
+        return Signal(self.parameters, complex_samples, self.type + " dft")
+
+    @measure_time
+    def FFT(self):
+        return Signal(self.parameters, fft(self.samples), self.type + " fft")
+
+    @measure_time
+    def DCT(self):
+        return Signal(self.parameters, dct(self.samples).tolist(), self.type + " dct")
+
+    @measure_time
+    def FWHT(self):
+        return Signal(self.parameters, [float(x) for x in fwht(self.samples)], self.type + " fwht")
+
+    @measure_time
+    def IFFT(self):
+        return Signal(self.parameters, np.real(ifft(self.samples)).tolist(), self.type + " ifft")
+
+    @measure_time
+    def IDCT(self):
+        return Signal(self.parameters, idct(self.samples).tolist(), self.type + " idct")
+
+    @measure_time
+    def IFWHT(self):
+        return Signal(self.parameters, [float(x) for x in ifwht(self.samples)], self.type + " ifwht")
+
     def convolve(self, samples):
         return Signal(self.parameters, np.convolve(self.samples, samples).tolist(), self.type + " convolved")
 
@@ -35,13 +91,14 @@ class Signal:
                       self.type + " correlated with " + signal.type)
 
     def delta_time_in_correlation(self):
-        second_half = self.samples[int(len(self.samples)/2):]
+        second_half = self.samples[int(len(self.samples) / 2):]
         max_value = max(second_half)
         index = second_half.index(max_value)
         return index / self.parameters.sampling_f
 
     def filter(self, M, cutoff_f, window, mode):
-        response = [impulse_response(M, cutoff_f, self.parameters.sampling_f, x) * window(x) * mode(x) for x in range(int(M) - 1)]
+        response = [impulse_response(M, cutoff_f, self.parameters.sampling_f, x) * window(x) * mode(x) for x in
+                    range(int(M) - 1)]
 
         plt.figure().suptitle("impulse response")
         plt.plot([i for i in range(int(M) - 1)], response)
@@ -161,11 +218,24 @@ class Signal:
     def X(self):
         return [i / self.parameters.sampling_f for i in range(len(self.samples))]
 
-    def print_plot(self, signal=None):
-        plt.figure().suptitle(self.type)
-        plt.plot(self.X(), self.samples)
-        if signal is not None:
-            plt.plot(signal.X(), signal.samples)
+    def print_complex(self):
+        pass
+
+    def print_plot(self, signal=None, weirdo=False):
+        if isinstance(self.samples[0], np.complex128):
+            if weirdo:
+                fig, axs = plt.subplots(2)
+                axs[0].plot(self.X(), np.abs(self.samples))
+                axs[1].plot(self.X(), np.angle(self.samples))
+            else:
+                fig, axs = plt.subplots(2)
+                axs[0].plot(self.X(), np.real(self.samples))
+                axs[1].plot(self.X(), np.imag(self.samples))
+        else:
+            plt.figure().suptitle(self.type)
+            plt.plot(self.X(), self.samples)
+            if signal is not None:
+                plt.plot(signal.X(), signal.samples)
 
         plt.savefig("plots/" + self.type)
         plt.show()
@@ -221,8 +291,8 @@ class Signal:
             return self
         print_yellow("--------------comparison--------------")
         print_yellow("| mean square error: " + str(self.mean_square_error(signal)))
-        # print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
-        # print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
+        print_yellow("| signal to noise ratio: " + str(self.signal_to_noise_ratio(signal)))
+        print_yellow("| max signal to noise ratio: " + str(self.max_signal_to_noise_ratio(signal)))
         print_yellow("| max difference: " + str(self.max_difference(signal)))
         print_yellow("--------------------------------------")
         return self
@@ -269,7 +339,3 @@ class Signal:
                 dictionary['samples'],
                 dictionary['type'])
             return signal
-
-
-def print_yellow(text):
-    print('\033[93m' + text + '\033[0m')

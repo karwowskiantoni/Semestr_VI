@@ -4,7 +4,8 @@ import requests
 
 
 def send_to_server():
-    URL = "https://tri-beacon.herokuapp.com/users"
+    #URL = "https://tri-beacon.herokuapp.com/users"
+    URL = "http://localhost:8080/devices"
     response = requests.get(URL)
     body = response.json()
     return response.status_code

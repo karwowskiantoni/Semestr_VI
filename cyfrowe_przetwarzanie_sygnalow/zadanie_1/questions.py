@@ -49,6 +49,14 @@ command_type = {
                 "divide",
                 "convolve",
                 "correlate",
+                "discrete fourier transform",
+                "discrete fast fourier transform",
+                "discrete cosine transform",
+                "discrete walsh-hadamard transform",
+                "discrete inverse fourier transform",
+                "discrete inverse fast fourier transform",
+                "discrete inverse cosine transform",
+                "discrete inverse walsh-hadamard transform",
                 "filter low pass rectangular",
                 "filter mid pass rectangular",
                 "filter low pass blackman",
@@ -227,7 +235,12 @@ name = {
     "message": "Enter the signal name",
     "filter": lambda val: val
 }
-
+weirdo = {
+    'type': 'list',
+    'name': 'weirdo',
+    'message': 'choose plot version (W1, W2):',
+    'choices': ["W1", "W2"]
+}
 
 
 def name_with_default(default):
