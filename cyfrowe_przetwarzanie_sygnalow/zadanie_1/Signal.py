@@ -56,7 +56,7 @@ class Signal:
             for n in range(N):
                 x = (2 * np.pi * i * n) / N
                 sum += self.samples[n] * (-np.cos(x) - (np.sin(x) * 1j))
-            complex_samples.append(sum/N)
+            complex_samples.append(sum)
         return Signal(self.parameters, complex_samples, self.type + " dft")
 
     @measure_time
