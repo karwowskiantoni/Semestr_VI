@@ -20,6 +20,10 @@ public class FuzzySets {
         return support(mealLabels, meals).size() / (meals.size() * 1.0);
     }
 
+    public static double degreeOfAppropratenessHelper(MealLabel mealLabel, List<Meal> meals) {
+        return support(mealLabel, meals).stream().mapToDouble(Double::doubleValue).sum()/(meals.size() * 1.0);
+    }
+
     public static List<Double> support(List<MealLabel> mealLabels, List<Meal> meals) {
         return tConorm(mealLabels, meals).stream().filter(value -> value > 0).toList();
     }

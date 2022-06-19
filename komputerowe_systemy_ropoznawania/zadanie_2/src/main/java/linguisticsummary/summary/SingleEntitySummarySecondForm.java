@@ -89,10 +89,11 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     private double degreeOfCovering() {
-      return support(
-              Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
-              entity.getMeals()
-      ).stream().mapToDouble(Double::doubleValue).sum() / entity.size();
+        return support(
+                Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(),
+                entity.getMeals()
+        ).stream().mapToDouble(Double::doubleValue).sum() /
+                support(qualifier.getLabels(), entity.getMeals()).stream().mapToDouble(Double::doubleValue).sum();
     }
 
     private double degreeOfAppropriateness() {
@@ -110,12 +111,12 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     private double degreeOfQualifierCardinality() {
-            double qualifierCardinalityProduct = qualifier
-                    .getLabels()
-                    .stream()
-                    .map(variable ->
-                            sigmaCount(variable, entity.getMeals()) / entity.size()
-                    ).reduce(1.0, (a, b) -> a * b);
-            return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getLabels().size() * 1.0)));
+        double qualifierCardinalityProduct = qualifier
+                .getLabels()
+                .stream()
+                .map(variable ->
+                        sigmaCount(variable, entity.getMeals()) / entity.size()
+                ).reduce(1.0, (a, b) -> a * b);
+        return 1 - round(pow(qualifierCardinalityProduct, 1 / (qualifier.getLabels().size() * 1.0)));
     }
 }

@@ -7,9 +7,13 @@ public interface Summary {
     Row toRow();
 
     default String formatResult(double val) {
-        if (val < 0.009 && val > 0.0) {
-            return "0.0 (almost)";
+        if (val < 0.0000009 && val > 0.0) {
+            return "~0.0";
         }
-        return String.valueOf(Math.round(val * 100.0) / 100.0);
+        return String.valueOf(round(val));
+    }
+
+    default double round(double val){
+        return Math.round(val * 100.0) / 100.0;
     }
 }
