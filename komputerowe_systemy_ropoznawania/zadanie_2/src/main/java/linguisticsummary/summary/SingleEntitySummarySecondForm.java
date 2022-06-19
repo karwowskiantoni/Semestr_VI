@@ -100,7 +100,7 @@ public class SingleEntitySummarySecondForm implements Summary {
         double supportProduct = summarizer
                 .getMealLabels()
                 .stream()
-                .map(variable -> degreeOfFuzziness(variable, entity.getMeals()))
+                .map(variable -> degreeOfAppropratenessHelper(variable, entity.getMeals()))
                 .mapToDouble(Double::doubleValue)
                 .reduce(1.0, (a, b) -> a * b);
         return abs(supportProduct - degreeOfCovering());
