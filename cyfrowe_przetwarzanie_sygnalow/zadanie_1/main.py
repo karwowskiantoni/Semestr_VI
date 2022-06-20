@@ -110,7 +110,7 @@ if __name__ == '__main__':
             convolved = signal.convolve(signal_2.samples)
             convolved.serialize(ask(name_with_default(convolved.type)))
 
-        elif command == "correlate":
+        elif command == "correlate directly" or command == "correlate using convolve":
             signal = Signal.deserialize(ask(existing_signal()))
             signal_2 = Signal.deserialize(ask(existing_signal()))
             correlated = signal.correlate(signal_2)
