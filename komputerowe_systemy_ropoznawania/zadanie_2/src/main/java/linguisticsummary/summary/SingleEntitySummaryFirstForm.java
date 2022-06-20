@@ -1,9 +1,6 @@
 package linguisticsummary.summary;
 
-import linguisticsummary.model.Entity;
-import linguisticsummary.model.Summarizer;
-import linguisticsummary.model.Meal;
-import linguisticsummary.model.Quantifier;
+import linguisticsummary.model.*;
 import linguisticsummary.row.Row;
 import linguisticsummary.row.SingleEntityRowFirstForm;
 import linguisticsummary.row.SingleEntityRowSecondForm;
@@ -61,8 +58,7 @@ public class SingleEntitySummaryFirstForm implements Summary {
         Double multipliedDegreesOfFuzziness = summarizer
                 .getMealLabels()
                 .stream()
-                .map(variable ->
-                        degreeOfFuzziness(variable, entity.getMeals())
+                .map(FuzzySets::degreeOfFuzziness
                 ).reduce(1.0, (a, b) -> a * b);
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
     }
@@ -72,7 +68,12 @@ public class SingleEntitySummaryFirstForm implements Summary {
     }
 
     private double degreeOfQuantifierImprecision() {
-        return 1 - ((quantifier.getDomain().get(1) - quantifier.getDomain().get(0)) / (quantifier.isAbsolute() ? entity.size() : 1));
+        double supLen = quantifier.supportLength();
+        if(quantifier.isAbsolute()){
+            return 1 -  (supLen/entity.size());
+        } else {
+            return 1 - supLen;
+        }
     }
 
     private double degreeOfQuantifierCardinality() {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import static java.lang.Math.exp;
 import static java.lang.Math.pow;
+import static linguisticsummary.model.Label.FunctionType.GAUSS;
 
 public abstract class Label implements Serializable {
     public enum FunctionType {
@@ -36,7 +37,7 @@ public abstract class Label implements Serializable {
     }
 
     public double calculateIntegral() {
-        try{
+        try {
             return switch (type) {
                 case TRAPEZIUM -> ((params.get(3) - params.get(0))
                         + (params.get(2) - params.get(1))) / 2;
@@ -72,5 +73,17 @@ public abstract class Label implements Serializable {
 
     private static double gauss(double x, double centerPosition, double width) {
         return exp(-((pow(x - centerPosition, 2)) / (2 * pow(width, 2))));
+    }
+
+    public double supportLength() {
+        if (type == GAUSS) {
+            return domainLength();
+        } else {
+            return params.get(3) - params.get(0);
+        }
+    }
+
+    public double domainLength() {
+        return domain.get(1) - domain.get(0);
     }
 }

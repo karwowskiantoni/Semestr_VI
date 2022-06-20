@@ -83,18 +83,25 @@ public class Controller {
         qualifierToolBar.setOrientation(Orientation.VERTICAL);
         summarizerToolBar.setOrientation(Orientation.VERTICAL);
         type.setText(summaryType.toString());
-        antoniMeals = new Entity(allMeals
-                .getMeals()
-                .stream()
-                .filter(meal -> meal.fatness() > 30.0)
-                .toList(),
-                "More fat dishes");
+
+        antoniMeals =
+                new Entity(allMeals
+                        .getMeals()
+                        .stream()
+                        .filter(meal -> meal.healthiness() < 0.5)
+                        .toList(),
+                        "Unhealthy dishes");
+
         michalMeals = new Entity(allMeals
                 .getMeals()
                 .stream()
-                .filter(meal -> meal.fatness() < 30.0)
+                .filter(meal -> meal.healthiness() > 0.5)
                 .toList(),
-                "Less fat dishes");
+                "Healthy dishes");
+
+
+        System.out.println(antoniMeals.size());
+        System.out.println(michalMeals.size());
         update();
     }
 

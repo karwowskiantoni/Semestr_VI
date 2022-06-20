@@ -30,8 +30,8 @@ public class MultipleEntitySummaryFourthForm implements Summary {
     private double degreeOfTruth() {
         return 1 - Math.min(1,
                 (1 -
-                        sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size() +
-                        sigmaCount(summarizer.getMealLabels(), secondEntity.getMeals()) / secondEntity.size()
+                        (sigmaCount(summarizer.getMealLabels(), firstEntity.getMeals()) / firstEntity.size()) +
+                        (sigmaCount(summarizer.getMealLabels(), secondEntity.getMeals()) / secondEntity.size())
                 )
         );
     }

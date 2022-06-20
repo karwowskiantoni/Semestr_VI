@@ -50,15 +50,18 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     private double degreeOfTruth() {
-        return quantifier.membership(sigmaCount(Stream.concat(summarizer.getMealLabels().stream(), qualifier.getLabels().stream()).toList(), entity.getMeals()) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
+        return quantifier.membership(
+                sigmaCount(
+                        Stream.concat(summarizer.getMealLabels().stream(),
+                                qualifier.getLabels().stream()).toList(), entity.getMeals()
+                ) / sigmaCount(qualifier.getLabels(), entity.getMeals()));
     }
 
     private double degreeOfImprecision() {
         Double multipliedDegreesOfFuzziness = summarizer
                 .getMealLabels()
                 .stream()
-                .map(variable ->
-                        degreeOfFuzziness(variable, entity.getMeals())
+                .map(FuzzySets::degreeOfFuzziness
                 ).reduce(1.0, (a, b) -> a * b);
         return 1 - round(pow(multipliedDegreesOfFuzziness, 1.0 / (summarizer.getMealLabels().size() * 1.0)));
     }
@@ -107,7 +110,7 @@ public class SingleEntitySummarySecondForm implements Summary {
     }
 
     private double degreeOfQualifierImprecision() {
-        return 1 - round(pow(degreeOfFuzziness(qualifier.getLabels(), entity.getMeals()), 1 / (qualifier.getLabels().size() * 1.0)));
+        return 1 - round(pow(degreeOfFuzziness(qualifier.getLabels()), 1 / (qualifier.getLabels().size() * 1.0)));
     }
 
     private double degreeOfQualifierCardinality() {

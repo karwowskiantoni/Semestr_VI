@@ -3,6 +3,8 @@ package linguisticsummary.model;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static linguisticsummary.model.Label.FunctionType.GAUSS;
+
 public class FuzzySets {
     public static double sigmaCount(MealLabel mealLabel, List<Meal> meals) {
         return meals.stream().mapToDouble(mealLabel::membership).sum();
@@ -12,17 +14,16 @@ public class FuzzySets {
         return tConorm(mealLabels, meals).stream().mapToDouble(value -> value).sum();
     }
 
-    public static double degreeOfFuzziness(MealLabel mealLabel, List<Meal> meals) {
-//        return support(mealLabel, meals).size() / (mealLabel.getDomain().get(1) - mealLabel.getDomain().get(0));
-        return support(mealLabel, meals).size() / (meals.size() * 1.0);
+    public static double degreeOfFuzziness(MealLabel mealLabel) {
+        return mealLabel.supportLength() / mealLabel.domainLength();
     }
 
-    public static double degreeOfFuzziness(List<MealLabel> mealLabels, List<Meal> meals) {
-        return support(mealLabels, meals).size() / (meals.size() * 1.0);
+    public static double degreeOfFuzziness(List<MealLabel> mealLabels) {
+        return mealLabels.stream().mapToDouble(FuzzySets::degreeOfFuzziness).sum() / mealLabels.size();
     }
 
     public static double degreeOfAppropratenessHelper(MealLabel mealLabel, List<Meal> meals) {
-        return support(mealLabel, meals).stream().mapToDouble(Double::doubleValue).sum()/(meals.size() * 1.0);
+        return support(mealLabel, meals).stream().mapToDouble(Double::doubleValue).sum() / (meals.size() * 1.0);
     }
 
     public static List<Double> support(List<MealLabel> mealLabels, List<Meal> meals) {
