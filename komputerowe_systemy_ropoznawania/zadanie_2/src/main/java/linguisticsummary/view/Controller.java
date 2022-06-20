@@ -83,13 +83,18 @@ public class Controller {
         qualifierToolBar.setOrientation(Orientation.VERTICAL);
         summarizerToolBar.setOrientation(Orientation.VERTICAL);
         type.setText(summaryType.toString());
-        List<Meal> sortedByProteinContent = allMeals
+        antoniMeals = new Entity(allMeals
                 .getMeals()
                 .stream()
-                .sorted(Comparator.comparing(Meal::proteinContent))
-                .toList();
-        antoniMeals = new Entity(sortedByProteinContent.subList(0, 6000), "Antoni's dishes");
-        michalMeals = new Entity(sortedByProteinContent.subList(6000, allMeals.size()), "Michal's dishes");
+                .filter(meal -> meal.fatness() > 30.0)
+                .toList(),
+                "More fat dishes");
+        michalMeals = new Entity(allMeals
+                .getMeals()
+                .stream()
+                .filter(meal -> meal.fatness() < 30.0)
+                .toList(),
+                "Less fat dishes");
         update();
     }
 
