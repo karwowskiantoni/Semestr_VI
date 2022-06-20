@@ -13,6 +13,7 @@ public class FuzzySets {
     }
 
     public static double degreeOfFuzziness(MealLabel mealLabel, List<Meal> meals) {
+//        return support(mealLabel, meals).size() / (mealLabel.getDomain().get(1) - mealLabel.getDomain().get(0));
         return support(mealLabel, meals).size() / (meals.size() * 1.0);
     }
 
